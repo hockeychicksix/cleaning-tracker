@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Cleaning Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🏠 Cleaning Tracker</h1>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+            </div>
+            <p class="header-subtitle" id="greeting">Welcome back!</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Home</span>
+            </a>
+            <a href="week.html" class="nav-link">
+                <span class="nav-icon">📅</span>
+                <span class="nav-text">Week</span>
+            </a>
+            <a href="tasks.html" class="nav-link">
+                <span class="nav-icon">📋</span>
+                <span class="nav-text">Tasks</span>
+            </a>
+            <a href="stats.html" class="nav-link">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Stats</span>
+            </a>
+        </nav>
+
+        <!-- Quick Stats -->
+        <section class="stats-grid">
+            <div class="stat-card stat-overdue">
+                <div class="stat-icon">🔴</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="overdueCount">0</div>
+                    <div class="stat-label">Overdue</div>
+                </div>
+            </div>
+            <div class="stat-card stat-due-soon">
+                <div class="stat-icon">🟡</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="dueSoonCount">0</div>
+                    <div class="stat-label">Due Soon</div>
+                </div>
+            </div>
+            <div class="stat-card stat-on-track">
+                <div class="stat-icon">🟢</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="onTrackCount">0</div>
+                    <div class="stat-label">On Track</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Today's Tasks -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Today's Schedule</h2>
+                <a href="week.html" class="btn-link">View Week →</a>
+            </div>
+            <div id="todayTasks" class="task-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading today's tasks...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Quick Actions</h2>
+            </div>
+            <div class="quick-actions">
+                <button class="action-btn action-primary" onclick="window.location.href='week.html'">
+                    <span class="action-icon">✨</span>
+                    <span class="action-text">Smart Schedule Week</span>
+                </button>
+                <button class="action-btn action-secondary" onclick="showAddTaskModal()">
+                    <span class="action-icon">➕</span>
+                    <span class="action-text">Add New Task</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Recent Completions</h2>
+                <a href="stats.html" class="btn-link">View All →</a>
+            </div>
+            <div id="recentActivity" class="activity-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading recent activity...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAB -->
+        <button class="fab" onclick="showAddTaskModal()" aria-label="Add task">
+            <span>+</span>
+        </button>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div class="modal" id="addTaskModal">
+        <div class="modal-overlay" onclick="closeAddTaskModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Task</h3>
+                <button class="modal-close" onclick="closeAddTaskModal()">×</button>
+            </div>
+            <form id="addTaskForm" onsubmit="handleAddTask(event)">
+                <div class="form-group">
+                    <label for="taskName">Task Name</label>
+                    <input type="text" id="taskName" required placeholder="e.g., Clean kitchen counters">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskFloor">Floor</label>
+                        <select id="taskFloor">
+                            <option value="">Select...</option>
+                            <option value="First Floor">First Floor</option>
+                            <option value="Second Floor">Second Floor</option>
+                            <option value="Basement">Basement</option>
+                            <option value="Garage">Garage</option>
+                            <option value="Exterior">Exterior</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskCategory">Room</label>
+                        <input type="text" id="taskCategory" placeholder="e.g., Kitchen">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskCadence">Frequency</label>
+                        <select id="taskCadence" required>
+                            <option value="1">Daily</option>
+                            <option value="3">Every 3 days</option>
+                            <option value="7" selected>Weekly</option>
+                            <option value="14">Bi-weekly</option>
+                            <option value="30">Monthly</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskTime">Time (min)</label>
+                        <input type="number" id="taskTime" value="15" min="1" max="300">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="taskEffort">Effort Level</label>
+                    <select id="taskEffort">
+                        <option value="Low">Low</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddTaskModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/config.js"></script>
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script type="module">
+        import { loadTodayTasks, loadRecentActivity, updateStats } from './js/app.js';
+        
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            await updateStats();
+            await loadTodayTasks();
+            await loadRecentActivity();
+            
+            // Set greeting
+            const hour = new Date().getHours();
+            let greeting = 'Good evening';
+            if (hour < 12) greeting = 'Good morning';
+            else if (hour < 18) greeting = 'Good afternoon';
+            document.getElementById('greeting').textContent = greeting + '!';
+        });
+    </script>
+</body>
+</html>
