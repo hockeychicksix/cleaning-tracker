@@ -598,3 +598,581 @@ body {
         width: 95%;
     }
 }
+/* ========================================
+   WEEK VIEW STYLES - Add to style.css
+   ======================================== */
+
+/* Week Navigation */
+.week-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+
+.nav-arrow {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.25rem;
+    transition: var(--transition);
+}
+
+.nav-arrow:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.week-range {
+    font-weight: 600;
+    min-width: 150px;
+    text-align: center;
+}
+
+/* Settings Bar */
+.settings-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.setting-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.setting-value {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.setting-btn {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    opacity: 0.7;
+    transition: var(--transition);
+}
+
+.setting-btn:hover {
+    opacity: 1;
+}
+
+/* Week Grid */
+.week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+}
+
+.day-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.day-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.day-card.selected {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+}
+
+.day-card.today {
+    background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
+}
+
+.day-card.past {
+    opacity: 0.6;
+}
+
+.day-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.day-date {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.day-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 0.875rem;
+    background: var(--primary);
+    color: white;
+}
+
+.day-count.empty {
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+}
+
+.day-count.done {
+    background: var(--success);
+}
+
+/* Day Details */
+.day-details {
+    padding: 1rem;
+}
+
+.day-details-header {
+    margin-bottom: 1.5rem;
+}
+
+.day-details-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.day-details-meta {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Schedule Columns */
+.schedule-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.schedule-column {
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.column-header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+.column-header h3 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.column-header.column-todo {
+    background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
+}
+
+.column-header.column-done {
+    background: linear-gradient(135deg, rgba(39,174,96,0.1), rgba(46,213,115,0.1));
+}
+
+.column-count {
+    background: var(--bg-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.column-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 200px;
+}
+
+/* Task Cards */
+.task-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    transition: var(--transition);
+}
+
+.task-card:hover {
+    background: var(--bg-tertiary);
+}
+
+.task-card.done {
+    opacity: 0.7;
+}
+
+.task-name {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.task-name.done {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.task-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.task-btn.complete {
+    background: var(--success);
+    color: white;
+}
+
+.task-btn.complete:hover {
+    background: #229954;
+}
+
+.task-btn.reschedule {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.task-btn.reschedule:hover {
+    background: var(--border-color);
+}
+
+/* Value Card (Stats Page) */
+.value-card {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin: 1rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.value-content {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.value-title {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+}
+
+.value-amount {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.value-subtitle {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    margin-top: 0.5rem;
+}
+
+.value-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    text-align: center;
+}
+
+.value-stat {
+    padding: 1rem;
+    background: rgba(255,255,255,0.15);
+    border-radius: var(--radius-md);
+}
+
+.value-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.value-stat-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+/* Stats Grid Detailed */
+.stats-grid-detailed {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.stat-card-detailed {
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-card-icon {
+    font-size: 2rem;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.stat-card-content {
+    flex: 1;
+}
+
+.stat-card-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.stat-card-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Category List */
+.category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.category-item {
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.category-name {
+    font-weight: 600;
+}
+
+.category-count {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Activity List */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.activity-item {
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--success);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.activity-meta {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Filter Section */
+.filters-section {
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-group:last-child {
+    margin-bottom: 0;
+}
+
+.filter-group h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filter-chip {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--border-color);
+    background: var(--bg-primary);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-primary);
+}
+
+.filter-chip:hover {
+    border-color: var(--primary);
+    background: rgba(102,126,234,0.1);
+}
+
+.filter-chip.active {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-color: transparent;
+}
+
+/* Tasks Grid */
+.tasks-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Empty State Icon */
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Unscheduled List */
+.unscheduled-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Task Info */
+.task-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+/* Task Badge Floor Variant */
+.task-badge.floor {
+    background: linear-gradient(135deg, rgba(102,126,234,0.2), rgba(118,75,162,0.2));
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Modal Body */
+.modal-body {
+    margin: 1rem 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .week-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .day-card:nth-child(n+5) {
+        grid-column: span 1;
+    }
+    
+    .schedule-columns {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid-detailed {
+        grid-template-columns: 1fr;
+    }
+    
+    .value-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .settings-bar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .week-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .day-date {
+        font-size: 1.25rem;
+    }
+    
+    .value-amount {
+        font-size: 2.5rem;
+    }
+}

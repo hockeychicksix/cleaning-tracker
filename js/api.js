@@ -61,6 +61,33 @@ const supabase = {
     })
 };
 
+// Helper function to get single item
+async function selectSingle(table, column, value) {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=eq.${value}`, {
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+    });
+    const data = await response.json();
+    if (response.ok && data.length > 0) {
+        return { data: data[0], error: null };
+    }
+    return { data: null, error: response.ok ? null : data };
+}
+
+// Helper function for filtered selects
+async function selectWhere(table, column, operator, value) {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=${operator}.${value}`, {
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+    });
+    const data = await response.json();
+    return { data, error: response.ok ? null : data };
+}
+
 // ============================================
 // TASK FUNCTIONS
 // ============================================
@@ -83,11 +110,9 @@ export async function getAllTasks() {
 
 export async function getTaskById(id) {
     try {
-        const { data, error } = await supabase.from('tasks')
-            .select('*')
-            .eq('id', id)
-            .single();
+        const { data, error } = await selectSingle('tasks', 'id', id);
         if (error) throw error;
+        if (!data) return null;
         return { ...data, ...calculateTaskStatus(data) };
     } catch (error) {
         console.error('Error fetching task:', error);
@@ -104,7 +129,7 @@ export async function createTask(taskData) {
             cadence: taskData.cadence,
             effort: taskData.effort || 'Medium',
             time_estimate: taskData.time_estimate || 15,
-            priority: 100, // New tasks start with high priority
+            priority: 100,
             status: 'Not Started'
         }]);
         
@@ -123,7 +148,7 @@ export async function updateTask(id, updates) {
             .eq('id', id);
         
         if (error) throw error;
-        return data[0];
+        return data ? data[0] : null;
     } catch (error) {
         console.error('Error updating task:', error);
         throw error;
@@ -151,23 +176,30 @@ export async function completeTask(id, scheduledDate = null) {
         
         const now = new Date().toISOString();
         
-        // Update task
-        await updateTask(id, {
-            last_completed: now,
-            completion_count: (task.completion_count || 0) + 1,
-            scheduled_date: null // Clear schedule when completed
-        });
+        // Update task - need to await the update properly
+        const updateResult = await supabase.from('tasks')
+            .update({
+                last_completed: now,
+                completion_count: (task.completion_count || 0) + 1,
+                scheduled_date: null
+            })
+            .eq('id', id);
+        
+        if (updateResult.error) throw updateResult.error;
         
         // Add to history
-        await supabase.from('completion_history').insert([{
+        const historyResult = await supabase.from('completion_history').insert([{
             task_id: id,
             task_name: task.task_name,
             floor: task.floor,
             category: task.category,
             effort: task.effort,
             time_minutes: task.time_estimate,
-            scheduled_date: scheduledDate
+            scheduled_date: scheduledDate,
+            completed_at: now
         }]);
+        
+        if (historyResult.error) throw historyResult.error;
         
         return true;
     } catch (error) {
@@ -183,7 +215,7 @@ export async function scheduleTask(id, date) {
             .eq('id', id);
         
         if (error) throw error;
-        return data[0];
+        return data ? data[0] : null;
     } catch (error) {
         console.error('Error scheduling task:', error);
         throw error;
@@ -263,9 +295,7 @@ export async function getWeekSchedule(weekOffset = 0) {
 
 export async function getUnscheduledTasks() {
     try {
-        const { data, error } = await supabase.from('tasks')
-            .select('*')
-            .is('scheduled_date', null);
+        const { data, error } = await selectWhere('tasks', 'scheduled_date', 'is', 'null');
         
         if (error) throw error;
         
@@ -286,8 +316,7 @@ export async function getUnscheduledTasks() {
 export async function getStats() {
     try {
         const { data: history } = await supabase.from('completion_history')
-            .select('*')
-            .order('completed_at', { ascending: false });
+            .select('*');
         
         const { data: tasks } = await supabase.from('tasks').select('*');
         
@@ -374,12 +403,17 @@ export async function getTopCategories() {
 
 export async function getRecentCompletions(limit = 10) {
     try {
-        const { data, error } = await supabase.from('completion_history')
-            .select('*')
-            .order('completed_at', { ascending: false })
-            .limit(limit);
+        // Manual ordering since we're using raw fetch
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/completion_history?order=completed_at.desc&limit=${limit}`, {
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+        });
         
-        if (error) throw error;
+        const data = await response.json();
+        if (!response.ok) throw data;
+        
         return data;
     } catch (error) {
         console.error('Error getting recent completions:', error);
@@ -393,11 +427,7 @@ export async function getRecentCompletions(limit = 10) {
 
 export async function getSetting(key) {
     try {
-        const { data } = await supabase.from('settings')
-            .select(key)
-            .eq('id', 1)
-            .single();
-        
+        const { data } = await selectSingle('settings', 'id', 1);
         return data ? data[key] : null;
     } catch (error) {
         console.error('Error getting setting:', error);
@@ -421,13 +451,15 @@ export async function updateSetting(key, value) {
 
 export async function getSettings() {
     try {
-        const { data, error } = await supabase.from('settings')
-            .select('*')
-            .eq('id', 1)
-            .single();
+        const { data, error } = await selectSingle('settings', 'id', 1);
         
         if (error) throw error;
-        return data;
+        return data || {
+            user_name: 'there',
+            hourly_rate: 35,
+            daily_minutes: 30,
+            onboarding_completed: false
+        };
     } catch (error) {
         console.error('Error getting settings:', error);
         return {

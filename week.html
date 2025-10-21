@@ -72,9 +72,9 @@
             </div>
 
             <!-- Smart Tip -->
-            <div class="smart-tip" id="smartTip" style="display:none;">
-                <span class="tip-icon">💡</span>
-                <span class="tip-text" id="tipText"></span>
+            <div id="smartTip" style="display:none;background:var(--bg-secondary);padding:1rem;border-radius:var(--radius-md);margin-bottom:1rem;">
+                <span style="font-size:1.25rem;margin-right:0.5rem;">💡</span>
+                <span id="tipText" style="font-weight:500;"></span>
             </div>
 
             <!-- Schedule Columns -->
@@ -87,9 +87,9 @@
                     </div>
                     <div class="column-content" id="todoColumn">
                         <div class="empty-state">
-                            <div class="empty-icon">✨</div>
+                            <div class="empty-state-icon">✨</div>
                             <p>No tasks scheduled</p>
-                            <button class="btn btn-secondary" onclick="showScheduleTaskPicker()">
+                            <button class="btn btn-secondary btn-sm" onclick="showScheduleTaskPicker()">
                                 Schedule Task
                             </button>
                         </div>
@@ -104,7 +104,7 @@
                     </div>
                     <div class="column-content" id="doneColumn">
                         <div class="empty-state">
-                            <div class="empty-icon">🎯</div>
+                            <div class="empty-state-icon">🎯</div>
                             <p>No completions yet</p>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                 <h3>Schedule Task</h3>
                 <button class="modal-close" onclick="closeScheduleTaskPicker()">×</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="max-height:60vh;overflow-y:auto;">
                 <div id="unscheduledTasksList" class="unscheduled-list">
                     <div class="loading">
                         <div class="spinner"></div>

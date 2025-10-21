@@ -121,11 +121,14 @@ function selectDay(day) {
         }
     });
     
-    // Show schedule content
-    document.getElementById('scheduleContent').style.display = 'block';
+    // Show schedule content - FIX: use correct ID
+    const detailsEl = document.getElementById('dayDetails');
+    if (detailsEl) {
+        detailsEl.style.display = 'block';
+    }
     
     // Update title
-    const titleEl = document.getElementById('scheduleTitle');
+    const titleEl = document.getElementById('selectedDayTitle');
     if (titleEl) {
         let title = day.dayName;
         if (day.isToday) title += ' (Today)';
@@ -134,11 +137,11 @@ function selectDay(day) {
     }
     
     // Update subtitle
-    const subtitleEl = document.getElementById('scheduleSubtitle');
-    if (subtitleEl) {
+    const metaEl = document.getElementById('selectedDayMeta');
+    if (metaEl) {
         const taskCount = day.todoTasks.length;
         const minutes = day.totalMinutes || 0;
-        subtitleEl.textContent = `${taskCount} task${taskCount !== 1 ? 's' : ''} • ${minutes} min`;
+        metaEl.textContent = `${taskCount} task${taskCount !== 1 ? 's' : ''} • ${minutes} min`;
     }
     
     // Render columns
@@ -151,14 +154,14 @@ function selectDay(day) {
 
 function renderTodoColumn(day) {
     const column = document.getElementById('todoColumn');
-    const countEl = document.getElementById('todoSubtitle');
+    const countEl = document.getElementById('todoCount');
     
     if (!column) return;
     
     const tasks = day.todoTasks || [];
     
     if (countEl) {
-        countEl.textContent = `${tasks.length} task${tasks.length !== 1 ? 's' : ''}`;
+        countEl.textContent = `${tasks.length}`;
     }
     
     if (tasks.length === 0) {
@@ -166,7 +169,7 @@ function renderTodoColumn(day) {
             <div class="empty-state">
                 <div class="empty-state-icon">✨</div>
                 <p style="font-weight:600;margin-bottom:5px">No tasks scheduled</p>
-                <p style="font-size:12px;opacity:0.8">Click "Schedule Task" to add tasks to this day</p>
+                <p style="font-size:12px;opacity:0.8">Click "+" to add tasks to this day</p>
             </div>
         `;
         return;
@@ -202,7 +205,7 @@ function renderDoneColumn(day) {
     const tasks = day.doneTasks || [];
     
     if (countEl) {
-        countEl.textContent = `${tasks.length} task${tasks.length !== 1 ? 's' : ''}`;
+        countEl.textContent = `${tasks.length}`;
     }
     
     if (tasks.length === 0) {
@@ -229,7 +232,7 @@ function renderDoneColumn(day) {
 }
 
 function showSmartTip(day) {
-    const tipContainer = document.getElementById('scheduleTip');
+    const tipContainer = document.getElementById('smartTip');
     if (!tipContainer) return;
     
     const tasks = day.todoTasks || [];
@@ -251,13 +254,10 @@ function showSmartTip(day) {
     );
     
     if (floors[dominantFloor] >= 2) {
-        tipContainer.innerHTML = `
-            <div class="smart-tip">
-                <span class="smart-tip-text">
-                    💡 Tip: ${floors[dominantFloor]} tasks on ${dominantFloor} - start there to save time!
-                </span>
-            </div>
-        `;
+        const tipText = document.getElementById('tipText');
+        if (tipText) {
+            tipText.textContent = `${floors[dominantFloor]} tasks on ${dominantFloor} - start there to save time!`;
+        }
         tipContainer.style.display = 'block';
     } else {
         tipContainer.style.display = 'none';
