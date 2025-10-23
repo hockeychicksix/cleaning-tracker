@@ -1,5 +1,5 @@
 // js/api.js
-// Supabase API Functions
+// Supabase API Functions - FULLY FIXED VERSION
 
 import { SUPABASE_URL, SUPABASE_KEY } from './config.js';
 
@@ -30,22 +30,25 @@ const supabase = {
             const data = await response.json();
             return { data, error: response.ok ? null : data };
         },
-        update: async (values) => ({
-            eq: async (column, value) => {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=eq.${value}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(values)
-                });
-                const data = await response.json();
-                return { data, error: response.ok ? null : data };
-            }
-        }),
+        update: async (values) => {
+            // Return an object with eq function
+            return {
+                eq: async (column, value) => {
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=eq.${value}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify(values)
+                    });
+                    const data = await response.json();
+                    return { data, error: response.ok ? null : data };
+                }
+            };
+        },
         delete: async () => ({
             eq: async (column, value) => {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=eq.${value}`, {
@@ -176,8 +179,8 @@ export async function completeTask(id, scheduledDate = null) {
         
         const now = new Date().toISOString();
         
-        // Update task - need to await the update properly
-        const updateResult = await supabase.from('tasks')
+        // Update task
+        const { data: updateData, error: updateError } = await supabase.from('tasks')
             .update({
                 last_completed: now,
                 completion_count: (task.completion_count || 0) + 1,
@@ -185,10 +188,10 @@ export async function completeTask(id, scheduledDate = null) {
             })
             .eq('id', id);
         
-        if (updateResult.error) throw updateResult.error;
+        if (updateError) throw updateError;
         
         // Add to history
-        const historyResult = await supabase.from('completion_history').insert([{
+        const { data: historyData, error: historyError } = await supabase.from('completion_history').insert([{
             task_id: id,
             task_name: task.task_name,
             floor: task.floor,
@@ -199,7 +202,7 @@ export async function completeTask(id, scheduledDate = null) {
             completed_at: now
         }]);
         
-        if (historyResult.error) throw historyResult.error;
+        if (historyError) throw historyError;
         
         return true;
     } catch (error) {
