@@ -471,7 +471,7 @@ window.completeTaskFromList = async function(taskId) {
 // UTILITY FUNCTIONS
 // ============================================
 
-function showToast(message, type = 'success') {
+export function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     if (!toast) return;
     
@@ -501,6 +501,5 @@ function formatTimeAgo(dateString) {
     return formatDate(date);
 }
 
-// Make toast function global AND export it
+// Make toast function global
 window.showToast = showToast;
-export { showToast };  // ADD THIS LINE
