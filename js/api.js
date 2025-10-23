@@ -30,8 +30,7 @@ const supabase = {
             const data = await response.json();
             return { data, error: response.ok ? null : data };
         },
-        update: async (values) => {
-            // Return an object with eq function
+        update: (values) => {
             return {
                 eq: async (column, value) => {
                     const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=eq.${value}`, {
@@ -49,7 +48,7 @@ const supabase = {
                 }
             };
         },
-        delete: async () => ({
+        delete: () => ({
             eq: async (column, value) => {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=eq.${value}`, {
                     method: 'DELETE',
