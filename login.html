@@ -8,41 +8,138 @@
 </head>
 <body>
     <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, var(--primary), var(--secondary));">
-        <div class="modal-content" style="position:relative;max-width:400px;">
-            <h1 style="text-align:center;margin-bottom:2rem;">🏠 Cadence</h1>
+        <div class="modal-content" style="position:relative;max-width:400px;margin:1rem;">
+            <div style="text-align:center;margin-bottom:2rem;">
+                <h1 style="font-size:3rem;margin-bottom:0.5rem;">🏠</h1>
+                <h1 style="font-size:1.75rem;margin-bottom:0.25rem;">Cadence</h1>
+                <p style="color:var(--text-secondary);font-size:0.875rem;">Your home cleaning companion</p>
+            </div>
             
             <div id="authMode">
-                <h2 id="authTitle">Welcome Back</h2>
+                <h2 id="authTitle" style="margin-bottom:1.5rem;text-align:center;">Welcome Back</h2>
                 <form id="authForm" onsubmit="handleAuth(event)">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" required>
+                        <input type="email" id="email" required placeholder="you@example.com" autofocus>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" required minlength="6">
+                        <input type="password" id="password" required minlength="6" placeholder="At least 6 characters">
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width:100%">
+                    <button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem;" id="authButton">
                         <span id="authButtonText">Sign In</span>
                     </button>
                 </form>
                 
-                <p style="text-align:center;margin-top:1rem;color:var(--text-secondary);">
+                <p style="text-align:center;margin-top:1.5rem;color:var(--text-secondary);font-size:0.875rem;">
                     <span id="authTogglePrompt">Don't have an account?</span>
-                    <button onclick="toggleAuthMode()" style="background:none;border:none;color:var(--primary);font-weight:600;cursor:pointer;">
+                    <button onclick="toggleAuthMode()" style="background:none;border:none;color:var(--primary);font-weight:600;cursor:pointer;text-decoration:underline;margin-left:0.25rem;">
                         <span id="authToggleText">Sign Up</span>
                     </button>
                 </p>
             </div>
             
-            <div id="authError" class="empty-state" style="display:none;padding:1rem;background:#fee;border-radius:8px;color:#e74c3c;">
+            <div id="authError" style="display:none;padding:1rem;background:#fee;border-radius:8px;color:#e74c3c;margin-top:1rem;font-size:0.875rem;">
                 <span id="authErrorText"></span>
+            </div>
+            
+            <div id="authLoading" style="display:none;text-align:center;margin-top:1rem;">
+                <div class="spinner" style="margin:0 auto;"></div>
+                <p style="color:var(--text-secondary);font-size:0.875rem;margin-top:0.5rem;">Processing...</p>
             </div>
         </div>
     </div>
 
     <script type="module">
-        import { supabase } from './js/api.js';
+        import { SUPABASE_URL, SUPABASE_KEY } from './js/config.js';
+        
+        // Simple Supabase auth wrapper
+        const supabase = {
+            auth: {
+                signUp: async (credentials) => {
+                    const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(credentials)
+                    });
+                    return await response.json();
+                },
+                signInWithPassword: async (credentials) => {
+                    const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(credentials)
+                    });
+                    return await response.json();
+                },
+                getSession: async () => {
+                    const accessToken = localStorage.getItem('supabase.auth.token');
+                    if (!accessToken) return { data: { session: null } };
+                    
+                    const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const user = await response.json();
+                        return { 
+                            data: { 
+                                session: { 
+                                    user,
+                                    access_token: accessToken 
+                                } 
+                            } 
+                        };
+                    }
+                    return { data: { session: null } };
+                }
+            },
+            from: (table) => ({
+                insert: async (values) => {
+                    const accessToken = localStorage.getItem('supabase.auth.token');
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${accessToken}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify(values)
+                    });
+                    const data = await response.json();
+                    return { data, error: response.ok ? null : data };
+                },
+                select: async (columns = '*') => {
+                    const accessToken = localStorage.getItem('supabase.auth.token');
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=${columns}`, {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
+                    const data = await response.json();
+                    return { data, error: response.ok ? null : data };
+                }
+            })
+        };
+        
+        // Check if already logged in
+        (async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                window.location.href = './index.html';
+            }
+        })();
         
         let isSignUp = false;
         
@@ -52,6 +149,7 @@
             document.getElementById('authButtonText').textContent = isSignUp ? 'Sign Up' : 'Sign In';
             document.getElementById('authTogglePrompt').textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
             document.getElementById('authToggleText').textContent = isSignUp ? 'Sign In' : 'Sign Up';
+            document.getElementById('authError').style.display = 'none';
         };
         
         window.handleAuth = async (event) => {
@@ -61,50 +159,70 @@
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('authError');
             const errorText = document.getElementById('authErrorText');
+            const loadingDiv = document.getElementById('authLoading');
+            const authButton = document.getElementById('authButton');
+            
+            // Hide error, show loading
+            errorDiv.style.display = 'none';
+            loadingDiv.style.display = 'block';
+            authButton.disabled = true;
             
             try {
                 if (isSignUp) {
-                    const { data, error } = await supabase.auth.signUp({
+                    // Sign up
+                    const result = await supabase.auth.signUp({
                         email,
-                        password,
+                        password
                     });
                     
-                    if (error) throw error;
+                    if (result.error) throw new Error(result.error.message || result.error_description || 'Sign up failed');
+                    if (!result.access_token) throw new Error('Sign up failed - no token received');
+                    
+                    // Store token
+                    localStorage.setItem('supabase.auth.token', result.access_token);
                     
                     // Create settings row for new user
+                    const userId = result.user.id;
                     await supabase.from('settings').insert([{
-                        user_id: data.user.id,
+                        user_id: userId,
                         user_name: email.split('@')[0],
                         hourly_rate: 35,
                         daily_minutes: 30,
                         onboarding_completed: false
                     }]);
                     
-                    window.location.href = '/onboarding.html';
+                    window.location.href = './onboarding.html';
                 } else {
-                    const { data, error } = await supabase.auth.signInWithPassword({
+                    // Sign in
+                    const result = await supabase.auth.signInWithPassword({
                         email,
-                        password,
+                        password
                     });
                     
-                    if (error) throw error;
+                    if (result.error) throw new Error(result.error.message || result.error_description || 'Sign in failed');
+                    if (!result.access_token) throw new Error('Sign in failed - no token received');
+                    
+                    // Store token
+                    localStorage.setItem('supabase.auth.token', result.access_token);
                     
                     // Check if onboarding done
-                    const { data: settings } = await supabase
-                        .from('settings')
+                    const { data: settings } = await supabase.from('settings')
                         .select('onboarding_completed')
-                        .eq('user_id', data.user.id)
+                        .eq('user_id', result.user.id)
                         .single();
                     
                     if (settings && !settings.onboarding_completed) {
-                        window.location.href = '/onboarding.html';
+                        window.location.href = './onboarding.html';
                     } else {
-                        window.location.href = '/index.html';
+                        window.location.href = './index.html';
                     }
                 }
             } catch (error) {
+                console.error('Auth error:', error);
+                loadingDiv.style.display = 'none';
                 errorDiv.style.display = 'block';
-                errorText.textContent = error.message;
+                errorText.textContent = error.message || 'Something went wrong. Please try again.';
+                authButton.disabled = false;
             }
         };
     </script>
