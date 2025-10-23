@@ -501,5 +501,6 @@ function formatTimeAgo(dateString) {
     return formatDate(date);
 }
 
-// Make toast function global
+// Make toast function global AND export it
 window.showToast = showToast;
+export { showToast };  // ADD THIS LINE
