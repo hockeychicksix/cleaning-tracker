@@ -53,35 +53,19 @@
     <script type="module">
         import { SUPABASE_URL, SUPABASE_KEY } from './js/config.js';
         
-        // Simple Supabase auth wrapper
-        const supabase = {
-            auth: {
-                signUp: async (credentials) => {
-                    const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(credentials)
-                    });
-                    return await response.json();
-                },
-                signInWithPassword: async (credentials) => {
-                    const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(credentials)
-                    });
-                    return await response.json();
-                },
-                getSession: async () => {
-                    const accessToken = localStorage.getItem('supabase.auth.token');
-                    if (!accessToken) return { data: { session: null } };
-                    
+        console.log('Supabase URL:', SUPABASE_URL);
+        console.log('Has API Key:', !!SUPABASE_KEY);
+        
+        if (!SUPABASE_KEY || SUPABASE_KEY === '') {
+            alert('ERROR: Supabase API key is missing! Check your config.js file.');
+        }
+        
+        // Check if already logged in
+        (async () => {
+            const accessToken = localStorage.getItem('supabase.auth.token');
+            if (accessToken) {
+                // Verify token is still valid
+                try {
                     const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -90,54 +74,15 @@
                     });
                     
                     if (response.ok) {
-                        const user = await response.json();
-                        return { 
-                            data: { 
-                                session: { 
-                                    user,
-                                    access_token: accessToken 
-                                } 
-                            } 
-                        };
+                        window.location.href = './index.html';
+                        return;
                     }
-                    return { data: { session: null } };
+                } catch (error) {
+                    console.error('Session check failed:', error);
                 }
-            },
-            from: (table) => ({
-                insert: async (values) => {
-                    const accessToken = localStorage.getItem('supabase.auth.token');
-                    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${accessToken}`,
-                            'Content-Type': 'application/json',
-                            'Prefer': 'return=representation'
-                        },
-                        body: JSON.stringify(values)
-                    });
-                    const data = await response.json();
-                    return { data, error: response.ok ? null : data };
-                },
-                select: async (columns = '*') => {
-                    const accessToken = localStorage.getItem('supabase.auth.token');
-                    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=${columns}`, {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    });
-                    const data = await response.json();
-                    return { data, error: response.ok ? null : data };
-                }
-            })
-        };
-        
-        // Check if already logged in
-        (async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                window.location.href = './index.html';
+                
+                // Token invalid, clear it
+                localStorage.removeItem('supabase.auth.token');
             }
         })();
         
@@ -169,53 +114,117 @@
             
             try {
                 if (isSignUp) {
+                    console.log('Attempting sign up...');
+                    
                     // Sign up
-                    const result = await supabase.auth.signUp({
-                        email,
-                        password
+                    const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
                     });
                     
-                    if (result.error) throw new Error(result.error.message || result.error_description || 'Sign up failed');
-                    if (!result.access_token) throw new Error('Sign up failed - no token received');
+                    const result = await response.json();
+                    console.log('Sign up response:', result);
+                    
+                    if (!response.ok) {
+                        throw new Error(result.msg || result.error_description || result.message || 'Sign up failed');
+                    }
+                    
+                    // Extract token - Supabase returns it in different places
+                    const accessToken = result.access_token || result.session?.access_token;
+                    const userId = result.user?.id || result.id;
+                    
+                    if (!accessToken) {
+                        console.error('Full response:', result);
+                        throw new Error('No access token received from server');
+                    }
+                    
+                    console.log('Got token, user ID:', userId);
                     
                     // Store token
-                    localStorage.setItem('supabase.auth.token', result.access_token);
+                    localStorage.setItem('supabase.auth.token', accessToken);
                     
                     // Create settings row for new user
-                    const userId = result.user.id;
-                    await supabase.from('settings').insert([{
-                        user_id: userId,
-                        user_name: email.split('@')[0],
-                        hourly_rate: 35,
-                        daily_minutes: 30,
-                        onboarding_completed: false
-                    }]);
-                    
-                    window.location.href = './onboarding.html';
-                } else {
-                    // Sign in
-                    const result = await supabase.auth.signInWithPassword({
-                        email,
-                        password
+                    const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/settings`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${accessToken}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify({
+                            user_id: userId,
+                            user_name: email.split('@')[0],
+                            hourly_rate: 35,
+                            daily_minutes: 30,
+                            onboarding_completed: false
+                        })
                     });
                     
-                    if (result.error) throw new Error(result.error.message || result.error_description || 'Sign in failed');
-                    if (!result.access_token) throw new Error('Sign in failed - no token received');
+                    if (!settingsResponse.ok) {
+                        const settingsError = await settingsResponse.json();
+                        console.error('Settings creation failed:', settingsError);
+                    }
+                    
+                    window.location.href = './onboarding.html';
+                    
+                } else {
+                    console.log('Attempting sign in...');
+                    
+                    // Sign in
+                    const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+                    
+                    const result = await response.json();
+                    console.log('Sign in response:', result);
+                    
+                    if (!response.ok) {
+                        throw new Error(result.error_description || result.msg || result.message || 'Sign in failed');
+                    }
+                    
+                    // Extract token
+                    const accessToken = result.access_token || result.session?.access_token;
+                    const userId = result.user?.id || result.id;
+                    
+                    if (!accessToken) {
+                        console.error('Full response:', result);
+                        throw new Error('No access token received from server');
+                    }
+                    
+                    console.log('Got token, user ID:', userId);
                     
                     // Store token
-                    localStorage.setItem('supabase.auth.token', result.access_token);
+                    localStorage.setItem('supabase.auth.token', accessToken);
                     
                     // Check if onboarding done
-                    const { data: settings } = await supabase.from('settings')
-                        .select('onboarding_completed')
-                        .eq('user_id', result.user.id)
-                        .single();
+                    const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/settings?user_id=eq.${userId}&select=onboarding_completed`, {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
                     
-                    if (settings && !settings.onboarding_completed) {
-                        window.location.href = './onboarding.html';
-                    } else {
-                        window.location.href = './index.html';
+                    if (settingsResponse.ok) {
+                        const settings = await settingsResponse.json();
+                        console.log('Settings:', settings);
+                        
+                        if (settings && settings[0] && !settings[0].onboarding_completed) {
+                            window.location.href = './onboarding.html';
+                            return;
+                        }
                     }
+                    
+                    window.location.href = './index.html';
                 }
             } catch (error) {
                 console.error('Auth error:', error);
