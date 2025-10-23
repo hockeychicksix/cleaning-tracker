@@ -464,7 +464,15 @@ function groupSimilarTasks(tasks) {
 window.completeTaskFromSchedule = async function(taskId, scheduledDate) {
     try {
         await API.completeTask(taskId, scheduledDate);
-        showToast('Task completed! 🎉');
+        
+        // Check if this was the last task
+        const remainingTasks = selectedDay.todoTasks.filter(t => t.id !== taskId);
+        
+        if (remainingTasks.length === 0) {
+            showToast('🎉 All done for today! Amazing work!');
+        } else {
+            showToast('Task completed! 🎉');
+        }
         
         // Refresh schedule
         await refreshWeekSchedule();

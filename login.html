@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Cadence</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, var(--primary), var(--secondary));">
+        <div class="modal-content" style="position:relative;max-width:400px;">
+            <h1 style="text-align:center;margin-bottom:2rem;">🏠 Cadence</h1>
+            
+            <div id="authMode">
+                <h2 id="authTitle">Welcome Back</h2>
+                <form id="authForm" onsubmit="handleAuth(event)">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%">
+                        <span id="authButtonText">Sign In</span>
+                    </button>
+                </form>
+                
+                <p style="text-align:center;margin-top:1rem;color:var(--text-secondary);">
+                    <span id="authTogglePrompt">Don't have an account?</span>
+                    <button onclick="toggleAuthMode()" style="background:none;border:none;color:var(--primary);font-weight:600;cursor:pointer;">
+                        <span id="authToggleText">Sign Up</span>
+                    </button>
+                </p>
+            </div>
+            
+            <div id="authError" class="empty-state" style="display:none;padding:1rem;background:#fee;border-radius:8px;color:#e74c3c;">
+                <span id="authErrorText"></span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabase } from './js/api.js';
+        
+        let isSignUp = false;
+        
+        window.toggleAuthMode = () => {
+            isSignUp = !isSignUp;
+            document.getElementById('authTitle').textContent = isSignUp ? 'Create Account' : 'Welcome Back';
+            document.getElementById('authButtonText').textContent = isSignUp ? 'Sign Up' : 'Sign In';
+            document.getElementById('authTogglePrompt').textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
+            document.getElementById('authToggleText').textContent = isSignUp ? 'Sign In' : 'Sign Up';
+        };
+        
+        window.handleAuth = async (event) => {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('authError');
+            const errorText = document.getElementById('authErrorText');
+            
+            try {
+                if (isSignUp) {
+                    const { data, error } = await supabase.auth.signUp({
+                        email,
+                        password,
+                    });
+                    
+                    if (error) throw error;
+                    
+                    // Create settings row for new user
+                    await supabase.from('settings').insert([{
+                        user_id: data.user.id,
+                        user_name: email.split('@')[0],
+                        hourly_rate: 35,
+                        daily_minutes: 30,
+                        onboarding_completed: false
+                    }]);
+                    
+                    window.location.href = '/onboarding.html';
+                } else {
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email,
+                        password,
+                    });
+                    
+                    if (error) throw error;
+                    
+                    // Check if onboarding done
+                    const { data: settings } = await supabase
+                        .from('settings')
+                        .select('onboarding_completed')
+                        .eq('user_id', data.user.id)
+                        .single();
+                    
+                    if (settings && !settings.onboarding_completed) {
+                        window.location.href = '/onboarding.html';
+                    } else {
+                        window.location.href = '/index.html';
+                    }
+                }
+            } catch (error) {
+                errorDiv.style.display = 'block';
+                errorText.textContent = error.message;
+            }
+        };
+    </script>
+</body>
+</html>

@@ -551,6 +551,33 @@ body {
     to { transform: rotate(360deg); }
 }
 
+/* Skeleton Loaders */
+.skeleton {
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+    border-radius: var(--radius-md);
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+    height: 120px;
+    margin-bottom: 1rem;
+}
+
+.skeleton-text {
+    height: 20px;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-stat {
+    height: 80px;
+}
+
 /* Empty State */
 .empty-state {
     text-align: center;

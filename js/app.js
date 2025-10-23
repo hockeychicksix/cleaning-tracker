@@ -447,7 +447,17 @@ window.deleteTask = async function() {
 window.completeTaskFromHome = async function(taskId, scheduledDate) {
     try {
         await API.completeTask(taskId, scheduledDate);
-        showToast('Task completed! 🎉');
+        
+        // Reload to check if all tasks done
+        const schedule = await API.getWeekSchedule(0);
+        const todayDay = schedule.schedule.find(d => d.isToday);
+        
+        if (todayDay && todayDay.todoTasks.length === 0 && todayDay.doneTasks.length > 0) {
+            showToast('🎉 All done for today! Amazing work!');
+        } else {
+            showToast('Task completed! 🎉');
+        }
+        
         await loadTodayTasks();
         await updateStats();
     } catch (error) {

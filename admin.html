@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Feedback</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1>📬 Feedback Dashboard</h1>
+        </header>
+
+        <section class="section">
+            <div id="feedbackList" class="task-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading feedback...</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        // Use service role key for admin access (NEVER commit this to git)
+        const SUPABASE_SERVICE_KEY = 'your_service_role_key_here';
+        import { SUPABASE_URL } from './js/config.js';
+        
+        async function loadFeedback() {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/feedback?order=created_at.desc`, {
+                headers: {
+                    'apikey': SUPABASE_SERVICE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`
+                }
+            });
+            
+            const data = await response.json();
+            
+            const container = document.getElementById('feedbackList');
+            container.innerHTML = data.map(item => `
+                <div class="task-item">
+                    <div class="task-header">
+                        <div class="task-name">${item.type.toUpperCase()}: ${item.message.substring(0, 100)}</div>
+                    </div>
+                    <div class="task-meta">
+                        <span class="task-badge">${item.user_email}</span>
+                        <span class="task-badge">${item.page}</span>
+                        <span class="task-badge">${new Date(item.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <p style="margin-top:0.75rem;">${item.message}</p>
+                </div>
+            `).join('');
+        }
+        
+        loadFeedback();
+    </script>
+</body>
+</html>

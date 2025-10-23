@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome - Cadence</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-content">
+                <h1>🏠 Welcome to Cadence!</h1>
+            </div>
+        </header>
+
+        <section class="section">
+            <div id="step1" class="onboarding-step">
+                <h2>What should we call you?</h2>
+                <div class="form-group">
+                    <input type="text" id="userName" placeholder="Your name" autofocus>
+                </div>
+                <button class="btn btn-primary" onclick="nextStep(1)">Next →</button>
+            </div>
+
+            <div id="step2" class="onboarding-step" style="display:none;">
+                <h2>Let's add your first tasks</h2>
+                <p style="color:var(--text-secondary);margin-bottom:1.5rem;">
+                    Check the ones you want to track:
+                </p>
+                
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <label class="task-template" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-primary);border-radius:var(--radius-md);cursor:pointer;">
+                        <input type="checkbox" value='{"task_name":"Clean kitchen counters","floor":"First Floor","category":"Kitchen","cadence":1,"time_estimate":10,"effort":"Low"}' checked>
+                        <div>
+                            <div style="font-weight:600;">Clean kitchen counters</div>
+                            <div style="font-size:0.875rem;color:var(--text-secondary);">Daily • 10 min</div>
+                        </div>
+                    </label>
+                    
+                    <label class="task-template" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-primary);border-radius:var(--radius-md);cursor:pointer;">
+                        <input type="checkbox" value='{"task_name":"Vacuum living room","floor":"First Floor","category":"Living Room","cadence":3,"time_estimate":15,"effort":"Medium"}' checked>
+                        <div>
+                            <div style="font-weight:600;">Vacuum living room</div>
+                            <div style="font-size:0.875rem;color:var(--text-secondary);">Every 3 days • 15 min</div>
+                        </div>
+                    </label>
+                    
+                    <label class="task-template" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-primary);border-radius:var(--radius-md);cursor:pointer;">
+                        <input type="checkbox" value='{"task_name":"Clean bathroom sink","floor":"First Floor","category":"Bathroom","cadence":2,"time_estimate":5,"effort":"Low"}' checked>
+                        <div>
+                            <div style="font-weight:600;">Clean bathroom sink</div>
+                            <div style="font-size:0.875rem;color:var(--text-secondary);">Every 2 days • 5 min</div>
+                        </div>
+                    </label>
+                    
+                    <label class="task-template" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-primary);border-radius:var(--radius-md);cursor:pointer;">
+                        <input type="checkbox" value='{"task_name":"Mop kitchen floor","floor":"First Floor","category":"Kitchen","cadence":7,"time_estimate":20,"effort":"Medium"}'>
+                        <div>
+                            <div style="font-weight:600;">Mop kitchen floor</div>
+                            <div style="font-size:0.875rem;color:var(--text-secondary);">Weekly • 20 min</div>
+                        </div>
+                    </label>
+                    
+                    <label class="task-template" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-primary);border-radius:var(--radius-md);cursor:pointer;">
+                        <input type="checkbox" value='{"task_name":"Clean toilet","floor":"First Floor","category":"Bathroom","cadence":3,"time_estimate":10,"effort":"Low"}' checked>
+                        <div>
+                            <div style="font-weight:600;">Clean toilet</div>
+                            <div style="font-size:0.875rem;color:var(--text-secondary);">Every 3 days • 10 min</div>
+                        </div>
+                    </label>
+                    
+                    <label class="task-template" style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg-primary);border-radius:var(--radius-md);cursor:pointer;">
+                        <input type="checkbox" value='{"task_name":"Wipe down fridge","floor":"First Floor","category":"Kitchen","cadence":14,"time_estimate":15,"effort":"Medium"}'>
+                        <div>
+                            <div style="font-weight:600;">Wipe down fridge</div>
+                            <div style="font-size:0.875rem;color:var(--text-secondary);">Bi-weekly • 15 min</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <button class="btn btn-primary" onclick="nextStep(2)" style="margin-top:2rem;">Next →</button>
+            </div>
+
+            <div id="step3" class="onboarding-step" style="display:none;">
+                <h2>How much time per day?</h2>
+                <p style="color:var(--text-secondary);margin-bottom:1.5rem;">
+                    This helps us schedule tasks smartly
+                </p>
+                
+                <div class="form-group">
+                    <select id="dailyMinutes" style="font-size:1.125rem;">
+                        <option value="15">15 minutes</option>
+                        <option value="30" selected>30 minutes</option>
+                        <option value="45">45 minutes</option>
+                        <option value="60">1 hour</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-primary" onclick="finishOnboarding()" style="margin-top:2rem;">
+                    Let's Go! 🚀
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module">
+        import { supabase } from './js/api.js';
+        import { createTask, updateSetting } from './js/api.js';
+        import { showToast } from './js/app.js';
+        
+        let userName = '';
+        let selectedTasks = [];
+        
+        window.nextStep = async (currentStep) => {
+            if (currentStep === 1) {
+                userName = document.getElementById('userName').value.trim();
+                if (!userName) {
+                    alert('Please enter your name');
+                    return;
+                }
+                
+                // Save name
+                const { data: { user } } = await supabase.auth.getUser();
+                await supabase.from('settings')
+                    .update({ user_name: userName })
+                    .eq('user_id', user.id);
+                
+                document.getElementById('step1').style.display = 'none';
+                document.getElementById('step2').style.display = 'block';
+            } else if (currentStep === 2) {
+                const checkboxes = document.querySelectorAll('.task-template input:checked');
+                selectedTasks = Array.from(checkboxes).map(cb => JSON.parse(cb.value));
+                
+                if (selectedTasks.length === 0) {
+                    alert('Select at least one task');
+                    return;
+                }
+                
+                document.getElementById('step2').style.display = 'none';
+                document.getElementById('step3').style.display = 'block';
+            }
+        };
+        
+        window.finishOnboarding = async () => {
+            try {
+                const dailyMinutes = parseInt(document.getElementById('dailyMinutes').value);
+                
+                // Create all selected tasks
+                for (const task of selectedTasks) {
+                    await createTask(task);
+                }
+                
+                // Save settings
+                await updateSetting('daily_minutes', dailyMinutes);
+                await updateSetting('onboarding_completed', true);
+                
+                showToast('Welcome to Cadence! 🎉');
+                
+                setTimeout(() => {
+                    window.location.href = '/index.html';
+                }, 1000);
+            } catch (error) {
+                console.error('Error finishing onboarding:', error);
+                alert('Something went wrong. Please try again.');
+            }
+        };
+    </script>
+</body>
+</html>

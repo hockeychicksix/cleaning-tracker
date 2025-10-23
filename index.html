@@ -12,7 +12,10 @@
         <header class="header">
             <div class="header-content">
                 <h1>🏠 Cleaning Tracker</h1>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+                <div style="display:flex;gap:0.5rem;">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+                    <button class="theme-toggle" onclick="signOut()" aria-label="Sign out" title="Sign Out">🚪</button>
+                </div>
             </div>
             <p class="header-subtitle" id="greeting">Welcome back!</p>
         </header>
@@ -69,10 +72,8 @@
                 <a href="week.html" class="btn-link">View Week →</a>
             </div>
             <div id="todayTasks" class="task-list">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading today's tasks...</p>
-                </div>
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
             </div>
         </section>
 
@@ -100,16 +101,21 @@
                 <a href="stats.html" class="btn-link">View All →</a>
             </div>
             <div id="recentActivity" class="activity-list">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading recent activity...</p>
-                </div>
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
             </div>
         </section>
 
         <!-- FAB -->
         <button class="fab" onclick="showAddTaskModal()" aria-label="Add task">
             <span>+</span>
+        </button>
+
+        <!-- Feedback FAB -->
+        <button class="fab" onclick="showFeedbackModal()" 
+                style="bottom:100px;background:var(--secondary);width:48px;height:48px;font-size:1.5rem;"
+                aria-label="Send feedback" title="Send Feedback">
+            💬
         </button>
     </div>
 
@@ -178,10 +184,115 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
+    <!-- Feedback Modal -->
+    <div class="modal" id="feedbackModal">
+        <div class="modal-overlay" onclick="closeFeedbackModal()"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Send Feedback</h3>
+                <button class="modal-close" onclick="closeFeedbackModal()">×</button>
+            </div>
+            <form id="feedbackForm" onsubmit="submitFeedback(event)">
+                <div class="form-group">
+                    <label>What kind of feedback?</label>
+                    <select id="feedbackType" required>
+                        <option value="bug">🐛 Bug Report</option>
+                        <option value="feature">💡 Feature Request</option>
+                        <option value="feedback">💬 General Feedback</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="feedbackText">Tell us more</label>
+                    <textarea id="feedbackText" rows="4" required 
+                              style="width:100%;padding:0.75rem;border:2px solid var(--border-color);border-radius:var(--radius-sm);font-family:inherit;font-size:1rem;"
+                              placeholder="Be as detailed as you'd like..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeFeedbackModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Send Feedback</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script type="module" src="js/config.js"></script>
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/app.js"></script>
+    
+    <!-- Auth Check -->
+    <script type="module">
+        import { supabase } from './js/api.js';
+        
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (!session) {
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            const { data: settings } = await supabase
+                .from('settings')
+                .select('onboarding_completed')
+                .eq('user_id', session.user.id)
+                .single();
+            
+            if (settings && !settings.onboarding_completed) {
+                window.location.href = '/onboarding.html';
+                return;
+            }
+        }
+        
+        checkAuth();
+        
+        window.signOut = async () => {
+            await supabase.auth.signOut();
+            window.location.href = '/login.html';
+        };
+    </script>
+    
+    <!-- Feedback Functions -->
+    <script type="module">
+        import { supabase } from './js/api.js';
+        import { showToast } from './js/app.js';
+        
+        window.showFeedbackModal = () => {
+            document.getElementById('feedbackModal').classList.add('show');
+        };
+
+        window.closeFeedbackModal = () => {
+            document.getElementById('feedbackModal').classList.remove('show');
+            document.getElementById('feedbackForm').reset();
+        };
+
+        window.submitFeedback = async (event) => {
+            event.preventDefault();
+            
+            const type = document.getElementById('feedbackType').value;
+            const text = document.getElementById('feedbackText').value;
+            
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                await supabase.from('feedback').insert([{
+                    user_id: user.id,
+                    user_email: user.email,
+                    type: type,
+                    message: text,
+                    page: window.location.pathname
+                }]);
+                
+                showToast('Thanks for your feedback! 🙏');
+                closeFeedbackModal();
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                showToast('Error sending feedback', 'error');
+            }
+        };
+    </script>
+    
+    <!-- Load Data -->
     <script type="module">
         import { loadTodayTasks, loadRecentActivity, updateStats } from './js/app.js';
         

@@ -3,6 +3,18 @@
 
 import { SUPABASE_URL, SUPABASE_KEY } from './config.js';
 
+// Helper to get current user ID
+async function getCurrentUserId() {
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+    });
+    const data = await response.json();
+    return data?.id;
+}
+
 // Initialize Supabase client (using fetch API)
 const supabase = {
     from: (table) => ({
@@ -124,6 +136,7 @@ export async function getTaskById(id) {
 
 export async function createTask(taskData) {
     try {
+        const userId = await getCurrentUserId();
         const { data, error} = await supabase.from('tasks').insert([{
             task_name: taskData.task_name,
             floor: taskData.floor || null,
@@ -132,7 +145,8 @@ export async function createTask(taskData) {
             effort: taskData.effort || 'Medium',
             time_estimate: taskData.time_estimate || 15,
             priority: 100,
-            status: 'Not Started'
+            status: 'Not Started',
+            user_id: userId
         }]);
         
         if (error) throw error;
@@ -173,6 +187,7 @@ export async function deleteTask(id) {
 
 export async function completeTask(id, scheduledDate = null) {
     try {
+        const userId = await getCurrentUserId();
         const task = await getTaskById(id);
         if (!task) throw new Error('Task not found');
         
@@ -198,7 +213,8 @@ export async function completeTask(id, scheduledDate = null) {
             effort: task.effort,
             time_minutes: task.time_estimate,
             scheduled_date: scheduledDate,
-            completed_at: now
+            completed_at: now,
+            user_id: userId
         }]);
         
         if (historyError) throw historyError;
