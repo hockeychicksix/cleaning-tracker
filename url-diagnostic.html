@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Diagnostic Tool</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #667eea; margin-bottom: 1rem; }
+        .info-box {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+        .label {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        .value {
+            color: #2c3e50;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin-top: 0.25rem;
+        }
+        .error { background: #fee; border-left: 4px solid #e74c3c; }
+        .success { background: #d4edda; border-left: 4px solid #27ae60; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        button:hover { background: #5568d3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 URL Diagnostic Tool</h1>
+        <p style="color: #666; margin-bottom: 2rem;">This page will help us figure out the correct URLs for your password reset.</p>
+
+        <div class="info-box">
+            <div class="label">1. Current Full URL:</div>
+            <div class="value" id="fullUrl"></div>
+        </div>
+
+        <div class="info-box">
+            <div class="label">2. Origin (protocol + domain):</div>
+            <div class="value" id="origin"></div>
+        </div>
+
+        <div class="info-box">
+            <div class="label">3. Pathname (path after domain):</div>
+            <div class="value" id="pathname"></div>
+        </div>
+
+        <div class="info-box">
+            <div class="label">4. Directory (folder containing this file):</div>
+            <div class="value" id="directory"></div>
+        </div>
+
+        <div class="info-box success">
+            <div class="label">✅ CORRECT Reset URL Should Be:</div>
+            <div class="value" id="correctResetUrl" style="font-weight: bold; font-size: 1.1rem;"></div>
+        </div>
+
+        <div class="info-box success">
+            <div class="label">✅ CORRECT Login URL Should Be:</div>
+            <div class="value" id="correctLoginUrl" style="font-weight: bold; font-size: 1.1rem;"></div>
+        </div>
+
+        <div class="info-box warning" id="instructions">
+            <h3 style="margin-bottom: 1rem;">📋 What to do next:</h3>
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>Copy the "CORRECT Reset URL" shown above</li>
+                <li>Go to your <strong>Supabase Dashboard</strong></li>
+                <li>Navigate to: <strong>Authentication → URL Configuration</strong></li>
+                <li>Add the URL to <strong>"Redirect URLs"</strong></li>
+                <li>Save the settings</li>
+                <li>Request a NEW password reset email</li>
+            </ol>
+        </div>
+
+        <button onclick="testResetUrl()">🧪 Test If Reset Page Exists</button>
+        <div id="testResult" style="margin-top: 1rem;"></div>
+
+        <div style="margin-top: 2rem; padding: 1rem; background: #e3f2fd; border-radius: 8px;">
+            <h3 style="color: #1976d2; margin-bottom: 0.5rem;">💡 Quick Fix</h3>
+            <p style="color: #1565c0;">Copy this exact URL and add it to your Supabase Redirect URLs:</p>
+            <div style="margin-top: 0.5rem; padding: 1rem; background: white; border-radius: 4px; font-family: monospace; cursor: pointer;" onclick="copyToClipboard()" id="copyUrl">
+                Click to copy
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get all URL information
+        const fullUrl = window.location.href;
+        const origin = window.location.origin;
+        const pathname = window.location.pathname;
+        
+        // Calculate directory (everything up to the last /)
+        const directory = pathname.substring(0, pathname.lastIndexOf('/') + 1);
+        
+        // Build correct URLs
+        const correctResetUrl = origin + directory + 'reset-password.html';
+        const correctLoginUrl = origin + directory + 'login.html';
+
+        // Display information
+        document.getElementById('fullUrl').textContent = fullUrl;
+        document.getElementById('origin').textContent = origin;
+        document.getElementById('pathname').textContent = pathname || '(root - no path)';
+        document.getElementById('directory').textContent = directory || '(root directory)';
+        document.getElementById('correctResetUrl').textContent = correctResetUrl;
+        document.getElementById('correctLoginUrl').textContent = correctLoginUrl;
+        document.getElementById('copyUrl').textContent = correctResetUrl;
+
+        // Log to console
+        console.log('=== URL DIAGNOSTIC INFO ===');
+        console.log('Full URL:', fullUrl);
+        console.log('Origin:', origin);
+        console.log('Pathname:', pathname);
+        console.log('Directory:', directory);
+        console.log('Correct Reset URL:', correctResetUrl);
+        console.log('Correct Login URL:', correctLoginUrl);
+        console.log('========================');
+
+        // Test if reset page exists
+        async function testResetUrl() {
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.innerHTML = '<div class="info-box"><p>Testing...</p></div>';
+            
+            try {
+                const response = await fetch(correctResetUrl, { method: 'HEAD' });
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="info-box success">
+                            <p><strong>✅ Success!</strong> reset-password.html exists at this location.</p>
+                            <p style="margin-top: 0.5rem;">Now you just need to add this URL to Supabase.</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="info-box error">
+                            <p><strong>❌ Not Found (${response.status})</strong></p>
+                            <p style="margin-top: 0.5rem;">The file reset-password.html doesn't exist at: <br><code>${correctResetUrl}</code></p>
+                            <p style="margin-top: 0.5rem;">Make sure you've deployed it to the same directory as this diagnostic page.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="info-box error">
+                        <p><strong>❌ Error testing URL</strong></p>
+                        <p style="margin-top: 0.5rem;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Copy to clipboard
+        function copyToClipboard() {
+            navigator.clipboard.writeText(correctResetUrl).then(() => {
+                const copyDiv = document.getElementById('copyUrl');
+                const originalText = copyDiv.textContent;
+                copyDiv.textContent = '✅ Copied!';
+                copyDiv.style.background = '#d4edda';
+                setTimeout(() => {
+                    copyDiv.textContent = originalText;
+                    copyDiv.style.background = 'white';
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy. Please select and copy manually.');
+            });
+        }
+    </script>
+</body>
+</html>
