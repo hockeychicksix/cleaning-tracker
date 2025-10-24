@@ -20,9 +20,14 @@
                     <nav class="nav-menu" id="navMenu">
                         <a href="index.html" class="nav-link">Dashboard</a>
                         <a href="cleaning.html" class="nav-link active">Cleaning</a>
+                        <a href="settings.html" class="nav-link">Settings</a>
                         <a href="components.html" class="nav-link">Components</a>
-                        <a href="#" class="nav-link">Settings</a>
                     </nav>
+
+                    <button class="btn btn-secondary" id="logoutBtn" style="display: none;">
+                        <span>Logout</span>
+                        <span>🚪</span>
+                    </button>
 
                     <button class="mobile-nav-toggle" id="mobileToggle">☰</button>
                 </div>
@@ -39,7 +44,7 @@
                         <p class="page-subtitle">Manage your home cleaning schedule</p>
                     </div>
                     <div class="header-actions">
-                        <button class="btn btn-secondary">
+                        <button class="btn btn-secondary" id="smartScheduleBtn">
                             <span>⚡</span>
                             <span>Smart Schedule</span>
                         </button>
@@ -51,461 +56,574 @@
                 </section>
 
                 <!-- Filter Bar -->
-                <div class="filter-bar">
+                <div class="filter-bar glass-card">
                     <div class="filter-tabs">
                         <button class="filter-tab active" data-filter="all">All Tasks</button>
-                        <button class="filter-tab" data-filter="due-today">Due Today</button>
                         <button class="filter-tab" data-filter="overdue">Overdue</button>
-                        <button class="filter-tab" data-filter="completed">Completed</button>
+                        <button class="filter-tab" data-filter="due-soon">Due Soon</button>
+                        <button class="filter-tab" data-filter="on-track">On Track</button>
                     </div>
-                    <div class="filter-options">
-                        <select class="group-by form-select">
-                            <option value="none">Group: None</option>
-                            <option value="floor">Group: Floor</option>
-                            <option value="room">Group: Room</option>
-                            <option value="status">Group: Status</option>
-                        </select>
+                    <div class="filter-search">
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            class="form-input" 
+                            placeholder="Search tasks..."
+                        >
                     </div>
                 </div>
 
-                <!-- Task Groups -->
-                <section class="tasks-main">
-                    <!-- Ground Floor Group -->
-                    <div class="task-group">
-                        <div class="group-header">
-                            <h3 class="group-title">Ground Floor</h3>
-                            <span class="group-count">5 tasks</span>
-                        </div>
-                        <div class="task-list">
-                            <div class="task-card" data-status="due-today">
-                                <div class="task-checkbox"></div>
-                                <div class="task-content">
-                                    <div class="task-title">Clean kitchen counters</div>
-                                    <div class="task-meta">
-                                        <span class="task-tag tag-home">Kitchen</span>
-                                        <span class="task-due">⏰ Due in 2 hours</span>
-                                        <span class="task-effort">⚡ 15 min</span>
-                                    </div>
-                                </div>
-                                <div class="task-actions">
-                                    <button class="task-action-btn" title="Edit">✏️</button>
-                                    <button class="task-action-btn" title="More">⋯</button>
-                                </div>
-                            </div>
-
-                            <div class="task-card" data-status="overdue">
-                                <div class="task-checkbox"></div>
-                                <div class="task-content">
-                                    <div class="task-title">Mop kitchen floor</div>
-                                    <div class="task-meta">
-                                        <span class="task-tag tag-home">Kitchen</span>
-                                        <span class="task-due" style="color: var(--danger-coral);">⚠️ Overdue by 1 day</span>
-                                        <span class="task-effort">⚡ 30 min</span>
-                                    </div>
-                                </div>
-                                <div class="task-actions">
-                                    <button class="task-action-btn" title="Edit">✏️</button>
-                                    <button class="task-action-btn" title="More">⋯</button>
-                                </div>
-                            </div>
-
-                            <div class="task-card" data-status="all">
-                                <div class="task-checkbox"></div>
-                                <div class="task-content">
-                                    <div class="task-title">Vacuum living room</div>
-                                    <div class="task-meta">
-                                        <span class="task-tag tag-personal">Living Room</span>
-                                        <span class="task-due">⏰ Due tomorrow</span>
-                                        <span class="task-effort">⚡ 20 min</span>
-                                    </div>
-                                </div>
-                                <div class="task-actions">
-                                    <button class="task-action-btn" title="Edit">✏️</button>
-                                    <button class="task-action-btn" title="More">⋯</button>
-                                </div>
-                            </div>
-
-                            <div class="task-card" data-status="all">
-                                <div class="task-checkbox"></div>
-                                <div class="task-content">
-                                    <div class="task-title">Dust living room shelves</div>
-                                    <div class="task-meta">
-                                        <span class="task-tag tag-personal">Living Room</span>
-                                        <span class="task-due">⏰ Due in 3 days</span>
-                                        <span class="task-effort">⚡ 10 min</span>
-                                    </div>
-                                </div>
-                                <div class="task-actions">
-                                    <button class="task-action-btn" title="Edit">✏️</button>
-                                    <button class="task-action-btn" title="More">⋯</button>
-                                </div>
-                            </div>
-
-                            <div class="task-card" data-status="completed">
-                                <div class="task-checkbox checked"></div>
-                                <div class="task-content">
-                                    <div class="task-title completed">Clean dining table</div>
-                                    <div class="task-meta">
-                                        <span class="task-tag tag-home">Dining Room</span>
-                                        <span class="task-due">✓ Completed today</span>
-                                        <span class="task-effort">⚡ 5 min</span>
-                                    </div>
-                                </div>
-                                <div class="task-actions">
-                                    <button class="task-action-btn" title="Undo">↩️</button>
-                                    <button class="task-action-btn" title="More">⋯</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Upper Floor Group -->
-                    <div class="task-group">
-                        <div class="group-header">
-                            <h3 class="group-title">Upper Floor</h3>
-                            <span class="group-count">4 tasks</span>
-                        </div>
-                        <div class="task-list">
-                            <div class="task-card" data-status="due-today">
-                                <div class="task-checkbox"></div>
-                                <div class="task-content">
-                                    <div class="task-title">Clean master bathroom</div>
-                                    <div class="task-meta">
-                                        <span class="task-tag tag-home">Master Bath</span>
-                                        <span class="task-due">⏰ Due today</span>
-                                        <span class="task-effort">⚡ 45 min</span>
-                                    </div>
-                                </div>
-                                <div class="task-actions">
-                                    <button class="task-action-btn" title="Edit">✏️</button>
-                                    <button class="task-action-btn" title="More">⋯</button>
-                                </div>
-                            </div>
-
-                            <div class="task-card" data-status="all">
-                                <div class="task-checkbox"></div>
-                                <div class="task-content">
-                                    <div class="task-title">Vacuum master bedroom</div>
-                                    <div class="task-meta">
-                                        <span class="task-tag tag-personal">Master Bedroom</span>
-                                        <span class="task-due">⏰ Due in 2 days</span>
-                                        <span class="task-effort">⚡ 25 min</span>
-                                    </div>
-                                </div>
-                                <div class="task-actions">
-                                    <button class="task-action-btn" title="Edit">✏️</button>
-                                    <button class="task-action-btn" title="More">⋯</button>
-                                </div>
-                            </div>
-
-                            <div class="task-card" data-status="all">
-                                <div class="task-checkbox"></div>
-                                <div class="task-content">
-                                    <div class="task-title">Change bedroom linens</div>
-                                    <div class="task-meta">
-                                        <span class="task-tag tag-work">All Bedrooms</span>
-                                        <span class="task-due">⏰ Due in 4 days</span>
-                                        <span class="task-effort">⚡ 60 min</span>
-                                    </div>
-                                </div>
-                                <div class="task-actions">
-                                    <button class="task-action-btn" title="Edit">✏️</button>
-                                    <button class="task-action-btn" title="More">⋯</button>
-                                </div>
-                            </div>
-
-                            <div class="task-card" data-status="completed">
-                                <div class="task-checkbox checked"></div>
-                                <div class="task-content">
-                                    <div class="task-title completed">Clean guest bathroom</div>
-                                    <div class="task-meta">
-                                        <span class="task-tag tag-home">Guest Bath</span>
-                                        <span class="task-due">✓ Completed yesterday</span>
-                                        <span class="task-effort">⚡ 30 min</span>
-                                    </div>
-                                </div>
-                                <div class="task-actions">
-                                    <button class="task-action-btn" title="Undo">↩️</button>
-                                    <button class="task-action-btn" title="More">⋯</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Tasks List -->
+                <section class="tasks-main" id="tasksContainer">
+                    <!-- Loading skeleton -->
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
                 </section>
             </div>
         </main>
     </div>
 
-    <!-- Add Task Modal -->
-    <div class="modal-overlay" id="addTaskModal" style="display: none;">
-        <div class="modal">
+    <!-- Add/Edit Task Modal -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content modal-large">
             <div class="modal-header">
-                <h2 class="modal-title">Add New Task</h2>
-                <button class="modal-close" id="closeModal">✕</button>
+                <h3 id="modalTitle">Add New Task</h3>
+                <button class="modal-close" onclick="closeTaskModal()">×</button>
             </div>
-            <form class="modal-body">
-                <div class="form-group">
-                    <label class="form-label" for="taskName">Task Name</label>
-                    <input type="text" id="taskName" class="form-input" placeholder="e.g., Clean kitchen counters" required>
+            <form id="taskForm">
+                <input type="hidden" id="taskId">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="taskName">Task Name *</label>
+                        <input 
+                            type="text" 
+                            id="taskName" 
+                            class="form-input" 
+                            placeholder="e.g., Clean kitchen counters"
+                            required
+                        >
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="taskFloor">Floor</label>
-                    <select id="taskFloor" class="form-select" required>
-                        <option value="">Select floor...</option>
-                        <option value="ground">Ground Floor</option>
-                        <option value="upper">Upper Floor</option>
-                        <option value="basement">Basement</option>
-                    </select>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="floor">Floor</label>
+                        <select id="floor" class="form-input">
+                            <option value="">Select floor</option>
+                            <option value="Main Floor">Main Floor</option>
+                            <option value="Upstairs">Upstairs</option>
+                            <option value="Basement">Basement</option>
+                            <option value="Garage">Garage</option>
+                            <option value="Outdoor">Outdoor</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="category">Category</label>
+                        <select id="category" class="form-input">
+                            <option value="">Select category</option>
+                            <option value="Kitchen">Kitchen</option>
+                            <option value="Bathroom">Bathroom</option>
+                            <option value="Bedroom">Bedroom</option>
+                            <option value="Living Room">Living Room</option>
+                            <option value="Laundry">Laundry</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="taskRoom">Room</label>
-                    <input type="text" id="taskRoom" class="form-input" placeholder="e.g., Kitchen" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="cadence">Cadence (days) *</label>
+                        <input 
+                            type="number" 
+                            id="cadence" 
+                            class="form-input" 
+                            placeholder="7"
+                            min="1"
+                            required
+                        >
+                        <small class="form-help">How often should this task be done?</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="timeEstimate">Time (minutes)</label>
+                        <input 
+                            type="number" 
+                            id="timeEstimate" 
+                            class="form-input" 
+                            placeholder="15"
+                            min="5"
+                            value="15"
+                        >
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="taskEffort">Effort (minutes)</label>
-                    <input type="number" id="taskEffort" class="form-input" placeholder="15" min="1" required>
-                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="effort">Effort Level</label>
+                        <select id="effort" class="form-input">
+                            <option value="Low">Low - Quick & Easy</option>
+                            <option value="Medium" selected>Medium - Moderate Work</option>
+                            <option value="High">High - Intensive</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="taskCadence">Cadence (days)</label>
-                    <input type="number" id="taskCadence" class="form-input" placeholder="7" min="1" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="taskNotes">Notes (optional)</label>
-                    <textarea id="taskNotes" class="form-textarea" placeholder="Any special instructions..."></textarea>
+                    <div class="form-group">
+                        <label class="form-label" for="priority">Priority</label>
+                        <input 
+                            type="number" 
+                            id="priority" 
+                            class="form-input" 
+                            placeholder="100"
+                            min="1"
+                            max="1000"
+                            value="100"
+                        >
+                        <small class="form-help">Higher = more important</small>
+                    </div>
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Task</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeTaskModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="saveTaskBtn">
+                        Save Task
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <style>
-        /* Page Header */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: var(--space-8);
-            flex-wrap: wrap;
-            gap: var(--space-4);
-        }
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Delete Task?</h3>
+                <button class="modal-close" onclick="closeDeleteModal()">×</button>
+            </div>
+            <p style="margin-bottom: var(--space-6); color: var(--text-secondary);">
+                Are you sure you want to delete "<span id="deleteTaskName"></span>"? This action cannot be undone.
+            </p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    Delete Task
+                </button>
+            </div>
+        </div>
+    </div>
 
-        .header-content-main h1 {
-            font-size: clamp(2rem, 5vw, 2.5rem);
-            margin-bottom: var(--space-2);
-        }
+    <!-- Feedback Button -->
+    <button class="fab" onclick="showFeedbackModal()" title="Send Feedback">
+        💬
+    </button>
 
-        .page-subtitle {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
+    <!-- Feedback Modal -->
+    <div class="modal" id="feedbackModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Send Feedback</h3>
+                <button class="modal-close" onclick="closeFeedbackModal()">×</button>
+            </div>
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label class="form-label">What kind of feedback?</label>
+                    <select id="feedbackType" class="form-input" required>
+                        <option value="bug">🐛 Bug Report</option>
+                        <option value="feature">💡 Feature Request</option>
+                        <option value="feedback">💬 General Feedback</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tell us more</label>
+                    <textarea 
+                        id="feedbackText" 
+                        class="form-input" 
+                        rows="4" 
+                        required
+                        placeholder="Be as detailed as you'd like..."
+                    ></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeFeedbackModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Send Feedback
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-        .header-actions {
-            display: flex;
-            gap: var(--space-3);
-            flex-wrap: wrap;
-        }
+    <!-- Scripts -->
+    <script type="module">
+        import { initAuthCheck } from './js/auth.js';
+        import { tasks, feedback } from './js/api.js';
+        import { 
+            showToast, 
+            getTaskStatus,
+            getStatusIcon,
+            getStatusColor,
+            getNextDueDate,
+            initApp 
+        } from './js/app.js';
 
-        /* Tasks Main */
-        .tasks-main {
-            margin-top: var(--space-8);
-        }
+        // Check authentication
+        const user = await initAuthCheck();
+        document.getElementById('logoutBtn').style.display = 'flex';
 
-        .task-group {
-            margin-bottom: var(--space-10);
-        }
+        // Global variables
+        let allTasks = [];
+        let currentFilter = 'all';
+        let taskToDelete = null;
 
-        .group-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-4);
-            padding-bottom: var(--space-3);
-            border-bottom: 1px solid var(--border-glass);
-        }
+        // Load all tasks
+        async function loadTasks() {
+            try {
+                const result = await tasks.getAll();
+                
+                if (result.error) {
+                    throw result.error;
+                }
 
-        .group-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.01em;
-            margin-bottom: 0;
-        }
-
-        .group-count {
-            font-size: 0.9rem;
-            color: var(--text-tertiary);
-            background: var(--bg-glass);
-            padding: 4px 12px;
-            border-radius: var(--radius-sm);
-        }
-
-        /* Modal Actions */
-        .modal-body {
-            margin-bottom: 0;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: var(--space-3);
-            margin-top: var(--space-6);
-        }
-
-        .modal-actions .btn {
-            flex: 1;
-        }
-
-        @media (max-width: 768px) {
-            .page-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .header-actions {
-                width: 100%;
-            }
-
-            .header-actions .btn {
-                flex: 1;
-            }
-
-            .filter-bar {
-                padding: var(--space-4);
-            }
-
-            .filter-tabs {
-                width: 100%;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .filter-tab {
-                white-space: nowrap;
+                allTasks = result.data || [];
+                renderTasks();
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+                showToast('Failed to load tasks', 'error');
             }
         }
 
-        @media (max-width: 480px) {
-            .task-card {
-                flex-wrap: wrap;
-            }
+        // Render tasks based on current filter
+        function renderTasks() {
+            const container = document.getElementById('tasksContainer');
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
 
-            .task-actions {
-                width: 100%;
-                justify-content: flex-end;
-                opacity: 1;
-            }
-        }
-    </style>
+            // Filter tasks
+            let filteredTasks = allTasks.filter(task => {
+                // Search filter
+                if (searchQuery && !task.task_name.toLowerCase().includes(searchQuery)) {
+                    return false;
+                }
 
-    <script>
-        // Mobile navigation toggle
-        const mobileToggle = document.getElementById('mobileToggle');
-        const navMenu = document.getElementById('navMenu');
+                // Status filter
+                if (currentFilter !== 'all') {
+                    const status = getTaskStatus(task);
+                    if (status !== currentFilter) {
+                        return false;
+                    }
+                }
 
-        mobileToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('open');
-        });
-
-        // Modal handling
-        const addTaskBtn = document.getElementById('addTaskBtn');
-        const addTaskModal = document.getElementById('addTaskModal');
-        const closeModal = document.getElementById('closeModal');
-        const cancelBtn = document.getElementById('cancelBtn');
-
-        addTaskBtn.addEventListener('click', () => {
-            addTaskModal.style.display = 'flex';
-        });
-
-        [closeModal, cancelBtn].forEach(btn => {
-            btn.addEventListener('click', () => {
-                addTaskModal.style.display = 'none';
+                return true;
             });
+
+            // Empty state
+            if (filteredTasks.length === 0) {
+                const emptyMessage = currentFilter === 'all' && !searchQuery
+                    ? "No tasks yet! Click 'Add Task' to get started."
+                    : "No tasks found matching your filters.";
+
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <h3 class="empty-state-title">No Tasks</h3>
+                        <p class="empty-state-text">${emptyMessage}</p>
+                        ${currentFilter === 'all' && !searchQuery ? `
+                            <button class="btn btn-primary" onclick="document.getElementById('addTaskBtn').click()" 
+                                    style="margin-top: var(--space-4);">
+                                Add Your First Task
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+                return;
+            }
+
+            // Group tasks by status
+            const grouped = {
+                overdue: [],
+                'due-soon': [],
+                'on-track': []
+            };
+
+            filteredTasks.forEach(task => {
+                const status = getTaskStatus(task);
+                grouped[status].push(task);
+            });
+
+            // Render grouped tasks
+            let html = '';
+
+            if (grouped.overdue.length > 0) {
+                html += renderTaskGroup('Overdue', grouped.overdue, 'danger');
+            }
+
+            if (grouped['due-soon'].length > 0) {
+                html += renderTaskGroup('Due Soon', grouped['due-soon'], 'warning');
+            }
+
+            if (grouped['on-track'].length > 0) {
+                html += renderTaskGroup('On Track', grouped['on-track'], 'success');
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Render a group of tasks
+        function renderTaskGroup(title, taskList, colorClass) {
+            return `
+                <div class="task-group">
+                    <div class="group-header">
+                        <h2 class="group-title">${title}</h2>
+                        <span class="group-count">${taskList.length} ${taskList.length === 1 ? 'task' : 'tasks'}</span>
+                    </div>
+                    <div class="tasks-grid">
+                        ${taskList.map(task => renderTaskCard(task, colorClass)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render individual task card
+        function renderTaskCard(task, colorClass) {
+            const status = getTaskStatus(task);
+            const dueText = getNextDueDate(task.last_completed, task.cadence);
+            const statusIcon = getStatusIcon(status);
+
+            return `
+                <div class="task-card glass-card-hover" data-task-id="${task.id}">
+                    <div class="task-header">
+                        <div class="task-status status-${colorClass}">
+                            ${statusIcon}
+                        </div>
+                        <h3 class="task-title">${task.task_name}</h3>
+                    </div>
+                    
+                    <div class="task-details">
+                        ${task.floor ? `<div class="task-meta"><span class="meta-icon">📍</span>${task.floor}</div>` : ''}
+                        ${task.category ? `<div class="task-meta"><span class="meta-icon">🏷️</span>${task.category}</div>` : ''}
+                        <div class="task-meta"><span class="meta-icon">🔄</span>Every ${task.cadence} days</div>
+                        <div class="task-meta"><span class="meta-icon">⏱️</span>${task.time_estimate || 15} min</div>
+                    </div>
+
+                    <div class="task-due">
+                        ${dueText}
+                    </div>
+
+                    <div class="task-actions">
+                        <button class="btn btn-sm btn-success" onclick="completeTask(${task.id})" title="Mark Complete">
+                            ✓ Complete
+                        </button>
+                        <button class="btn btn-sm btn-secondary" onclick="editTask(${task.id})" title="Edit">
+                            ✏️
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${task.id}, '${task.task_name.replace(/'/g, "\\'")}')title="Delete">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Complete task
+        window.completeTask = async (taskId) => {
+            try {
+                const result = await tasks.complete(taskId);
+                
+                if (result.error) {
+                    throw result.error;
+                }
+
+                showToast('Task completed! Great work! 🎉', 'success');
+                await loadTasks();
+            } catch (error) {
+                console.error('Error completing task:', error);
+                showToast('Failed to complete task', 'error');
+            }
+        };
+
+        // Edit task
+        window.editTask = async (taskId) => {
+            try {
+                const result = await tasks.getById(taskId);
+                
+                if (result.error || !result.data) {
+                    throw new Error('Task not found');
+                }
+
+                const task = result.data;
+
+                // Populate form
+                document.getElementById('modalTitle').textContent = 'Edit Task';
+                document.getElementById('taskId').value = task.id;
+                document.getElementById('taskName').value = task.task_name;
+                document.getElementById('floor').value = task.floor || '';
+                document.getElementById('category').value = task.category || '';
+                document.getElementById('cadence').value = task.cadence;
+                document.getElementById('timeEstimate').value = task.time_estimate || 15;
+                document.getElementById('effort').value = task.effort || 'Medium';
+                document.getElementById('priority').value = task.priority || 100;
+
+                // Open modal
+                document.getElementById('taskModal').classList.add('show');
+            } catch (error) {
+                console.error('Error loading task:', error);
+                showToast('Failed to load task', 'error');
+            }
+        };
+
+        // Add task button
+        document.getElementById('addTaskBtn').addEventListener('click', () => {
+            document.getElementById('modalTitle').textContent = 'Add New Task';
+            document.getElementById('taskForm').reset();
+            document.getElementById('taskId').value = '';
+            document.getElementById('taskModal').classList.add('show');
         });
 
-        addTaskModal.addEventListener('click', (e) => {
-            if (e.target === addTaskModal) {
-                addTaskModal.style.display = 'none';
+        // Save task
+        document.getElementById('taskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const taskData = {
+                task_name: document.getElementById('taskName').value,
+                floor: document.getElementById('floor').value || null,
+                category: document.getElementById('category').value || null,
+                cadence: parseInt(document.getElementById('cadence').value),
+                time_estimate: parseInt(document.getElementById('timeEstimate').value) || 15,
+                effort: document.getElementById('effort').value,
+                priority: parseInt(document.getElementById('priority').value) || 100
+            };
+
+            const taskId = document.getElementById('taskId').value;
+
+            try {
+                let result;
+                
+                if (taskId) {
+                    // Update existing task
+                    result = await tasks.update(taskId, taskData);
+                    showToast('Task updated successfully!', 'success');
+                } else {
+                    // Create new task
+                    result = await tasks.create(taskData);
+                    showToast('Task created successfully! 🎉', 'success');
+                }
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                closeTaskModal();
+                await loadTasks();
+            } catch (error) {
+                console.error('Error saving task:', error);
+                showToast('Failed to save task', 'error');
+            }
+        });
+
+        // Confirm delete
+        window.confirmDelete = (taskId, taskName) => {
+            taskToDelete = taskId;
+            document.getElementById('deleteTaskName').textContent = taskName;
+            document.getElementById('deleteModal').classList.add('show');
+        };
+
+        // Delete task
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+            if (!taskToDelete) return;
+
+            try {
+                const result = await tasks.delete(taskToDelete);
+                
+                if (result.error) {
+                    throw result.error;
+                }
+
+                showToast('Task deleted', 'success');
+                closeDeleteModal();
+                await loadTasks();
+            } catch (error) {
+                console.error('Error deleting task:', error);
+                showToast('Failed to delete task', 'error');
             }
         });
 
         // Filter tabs
-        const filterTabs = document.querySelectorAll('.filter-tab');
-        const taskCards = document.querySelectorAll('.task-card');
-
-        filterTabs.forEach(tab => {
+        document.querySelectorAll('.filter-tab').forEach(tab => {
             tab.addEventListener('click', () => {
-                // Update active tab
-                filterTabs.forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
-
-                // Filter tasks
-                const filter = tab.dataset.filter;
-                taskCards.forEach(card => {
-                    const status = card.dataset.status;
-                    if (filter === 'all' || status === filter) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+                currentFilter = tab.dataset.filter;
+                renderTasks();
             });
         });
 
-        // Task checkbox interactions
-        document.querySelectorAll('.task-checkbox:not(.checked)').forEach(checkbox => {
-            checkbox.addEventListener('click', function() {
-                this.classList.add('checked');
-                const taskCard = this.closest('.task-card');
-                const taskTitle = taskCard.querySelector('.task-title');
-                taskTitle.classList.add('completed');
-                taskCard.dataset.status = 'completed';
-                
-                // Show success feedback
-                const feedback = document.createElement('div');
-                feedback.textContent = '✓ Task completed!';
-                feedback.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: var(--gradient-primary);
-                    color: var(--bg-space);
-                    padding: var(--space-4) var(--space-6);
-                    border-radius: var(--radius-lg);
-                    font-weight: 600;
-                    box-shadow: var(--shadow-lg);
-                    z-index: 9999;
-                    animation: slideInRight 0.3s ease-out;
-                `;
-                document.body.appendChild(feedback);
-                
-                setTimeout(() => {
-                    feedback.style.animation = 'slideOutRight 0.3s ease-out';
-                    setTimeout(() => feedback.remove(), 300);
-                }, 2000);
+        // Search
+        document.getElementById('searchInput').addEventListener('input', () => {
+            renderTasks();
+        });
+
+        // Smart schedule button
+        document.getElementById('smartScheduleBtn').addEventListener('click', () => {
+            showToast('Smart scheduling coming soon! 🚀', 'info');
+        });
+
+        // Modal functions
+        window.closeTaskModal = () => {
+            document.getElementById('taskModal').classList.remove('show');
+            document.getElementById('taskForm').reset();
+        };
+
+        window.closeDeleteModal = () => {
+            document.getElementById('deleteModal').classList.remove('show');
+            taskToDelete = null;
+        };
+
+        // Feedback functions
+        window.showFeedbackModal = () => {
+            document.getElementById('feedbackModal').classList.add('show');
+        };
+
+        window.closeFeedbackModal = () => {
+            document.getElementById('feedbackModal').classList.remove('show');
+            document.getElementById('feedbackForm').reset();
+        };
+
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const type = document.getElementById('feedbackType').value;
+            const message = document.getElementById('feedbackText').value;
+            
+            try {
+                await feedback.submit({ type, message, page: 'cleaning' });
+                showToast('Thanks for your feedback! 🙏', 'success');
+                closeFeedbackModal();
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                showToast('Failed to send feedback', 'error');
+            }
+        });
+
+        // Close modals on backdrop click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
             });
         });
 
-        // Undo completion
-        document.querySelectorAll('.task-action-btn[title="Undo"]').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const taskCard = this.closest('.task-card');
-                const checkbox = taskCard.querySelector('.task-checkbox');
-                const taskTitle = taskCard.querySelector('.task-title');
-                
-                checkbox.classList.remove('checked');
-                taskTitle.classList.remove('completed');
-                taskCard.dataset.status = 'all';
-            });
-        });
+        // Initialize
+        initApp();
+        loadTasks();
     </script>
 </body>
 </html>

@@ -1,515 +1,349 @@
 // js/app.js
-// Main Application Logic
+// Main Application Utilities & Helpers
 
-import * as API from './api.js';
-
-// Global state
-let allTasks = [];
-export const currentFilters = {
-    status: 'all',
-    floor: 'all',
-    effort: 'all'
-};
+import { auth } from './auth.js';
 
 // ============================================
-// INITIALIZATION
+// TOAST NOTIFICATIONS
 // ============================================
 
-// Theme toggle
-document.addEventListener('DOMContentLoaded', () => {
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
-        loadTheme();
-    }
-});
-
-function loadTheme() {
-    const theme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-    const btn = document.getElementById('themeToggle');
-    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-}
-
-function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    document.getElementById('themeToggle').textContent = next === 'dark' ? '☀️' : '🌙';
-}
-
-// ============================================
-// HOME PAGE FUNCTIONS
-// ============================================
-
-export async function updateStats() {
-    const tasks = await API.getAllTasks();
-    
-    const overdue = tasks.filter(t => t.status === 'OVERDUE').length;
-    const dueSoon = tasks.filter(t => t.status === 'Due Soon').length;
-    const onTrack = tasks.filter(t => t.status === 'On Track').length;
-    
-    const odEl = document.getElementById('overdueCount');
-    const dsEl = document.getElementById('dueSoonCount');
-    const otEl = document.getElementById('onTrackCount');
-    
-    if (odEl) odEl.textContent = overdue;
-    if (dsEl) dsEl.textContent = dueSoon;
-    if (otEl) otEl.textContent = onTrack;
-}
-
-export async function loadTodayTasks() {
-    try {
-        const schedule = await API.getWeekSchedule(0);
-        const todayDay = schedule.schedule.find(d => d.isToday);
-        
-        const container = document.getElementById('todayTasks');
-        if (!container) return;
-        
-        if (!todayDay || todayDay.todoTasks.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">✨</div>
-                    <p>No tasks scheduled for today</p>
-                    <a href="week.html" class="btn btn-primary btn-sm">Schedule Tasks</a>
-                </div>
-            `;
-            return;
-        }
-        
-        container.innerHTML = todayDay.todoTasks.map(task => `
-            <div class="task-item ${task.status.toLowerCase().replace(' ', '-')}">
-                <div class="task-header">
-                    <div class="task-name">${task.task_name}</div>
-                </div>
-                <div class="task-meta">
-                    ${task.floor ? `<span class="task-badge">🏢 ${task.floor}</span>` : ''}
-                    ${task.category ? `<span class="task-badge">📍 ${task.category}</span>` : ''}
-                    <span class="task-badge">⏱️ ${task.time_estimate}m</span>
-                </div>
-                <div class="task-actions">
-                    <button class="btn btn-primary btn-sm" onclick="completeTaskFromHome(${task.id}, '${todayDay.date}')">
-                        ✓ Complete
-                    </button>
-                </div>
-            </div>
-        `).join('');
-    } catch (error) {
-        console.error('Error loading today tasks:', error);
-    }
-}
-
-export async function loadRecentActivity() {
-    try {
-        const activity = await API.getRecentCompletions(5);
-        const container = document.getElementById('recentActivity');
-        if (!container) return;
-        
-        if (activity.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">📋</div>
-                    <p>No recent completions</p>
-                </div>
-            `;
-            return;
-        }
-        
-        container.innerHTML = `
-            <div class="activity-list">
-                ${activity.map(item => `
-                    <div class="activity-item">
-                        <div class="activity-icon">✓</div>
-                        <div class="activity-content">
-                            <div class="activity-name">${item.task_name}</div>
-                            <div class="activity-meta">
-                                ${item.category || 'No category'} • ${formatTimeAgo(item.completed_at)}
-                            </div>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        `;
-    } catch (error) {
-        console.error('Error loading recent activity:', error);
-    }
-}
-
-// ============================================
-// TASKS PAGE FUNCTIONS
-// ============================================
-
-export async function loadAllTasks() {
-    try {
-        allTasks = await API.getAllTasks();
-        applyFilters();
-    } catch (error) {
-        console.error('Error loading tasks:', error);
-        const container = document.getElementById('tasksList');
-        if (container) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">⚠️</div>
-                    <p>Error loading tasks</p>
-                </div>
-            `;
-        }
-    }
-}
-
-export function applyFilters() {
-    let filtered = [...allTasks];
-    
-    // Status filter
-    if (currentFilters.status !== 'all') {
-        if (currentFilters.status === 'overdue') {
-            filtered = filtered.filter(t => t.status === 'OVERDUE');
-        } else if (currentFilters.status === 'due-soon') {
-            filtered = filtered.filter(t => t.status === 'Due Soon');
-        } else if (currentFilters.status === 'on-track') {
-            filtered = filtered.filter(t => t.status === 'On Track');
-        }
-    }
-    
-    // Floor filter
-    if (currentFilters.floor !== 'all') {
-        filtered = filtered.filter(t => 
-            t.floor && t.floor.toLowerCase().includes(currentFilters.floor)
-        );
-    }
-    
-    // Effort filter
-    if (currentFilters.effort !== 'all') {
-        filtered = filtered.filter(t => 
-            t.effort && t.effort.toLowerCase() === currentFilters.effort
-        );
-    }
-    
-    renderTasks(filtered);
-}
-
-function renderTasks(tasks) {
-    const container = document.getElementById('tasksList');
-    const countEl = document.getElementById('taskCount');
-    
-    if (!container) return;
-    
-    if (countEl) countEl.textContent = tasks.length;
-    
-    if (tasks.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">🔍</div>
-                <p>No tasks found</p>
-                <button class="btn btn-secondary btn-sm" onclick="window.location.reload()">
-                    Reset Filters
-                </button>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = tasks.map(task => `
-        <div class="task-item ${task.status.toLowerCase().replace(' ', '-')}">
-            <div class="task-header">
-                <div class="task-name">${task.task_name}</div>
-                <button class="btn btn-secondary btn-sm" onclick="editTaskModal(${task.id})">
-                    ✏️ Edit
-                </button>
-            </div>
-            <div class="task-meta">
-                ${task.floor ? `<span class="task-badge">🏢 ${task.floor}</span>` : ''}
-                ${task.category ? `<span class="task-badge">📍 ${task.category}</span>` : ''}
-                <span class="task-badge">💪 ${task.effort}</span>
-                <span class="task-badge">⏱️ ${task.time_estimate}m</span>
-                <span class="task-badge">🔄 Every ${task.cadence} days</span>
-            </div>
-            <div class="task-info" style="margin-top:0.75rem;font-size:0.875rem;color:var(--text-secondary)">
-                <div>Last: ${task.last_completed ? formatDate(new Date(task.last_completed)) : 'Never'}</div>
-                <div>Next: ${task.next_due ? formatDate(new Date(task.next_due)) : 'Not set'}</div>
-                ${task.completion_count > 0 ? `<div>✓ Completed ${task.completion_count}x</div>` : ''}
-            </div>
-            <div class="task-actions">
-                <button class="btn btn-primary btn-sm" onclick="completeTaskFromList(${task.id})">
-                    ✓ Complete
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
-
-// ============================================
-// STATS PAGE FUNCTIONS
-// ============================================
-
-export async function loadStats() {
-    try {
-        const stats = await API.getStats();
-        
-        document.getElementById('totalValue').textContent = stats.totalValue;
-        document.getElementById('hoursCompleted').textContent = stats.totalHours;
-        document.getElementById('tasksCompleted').textContent = stats.completedThisWeek;
-        document.getElementById('currentStreak').textContent = stats.currentStreak;
-        document.getElementById('completedThisWeek').textContent = stats.completedThisWeek;
-        document.getElementById('completedThisMonth').textContent = stats.completedThisMonth;
-        document.getElementById('avgTimePerTask').textContent = `${stats.avgTimePerTask}m`;
-        document.getElementById('longestStreak').textContent = stats.longestStreak;
-    } catch (error) {
-        console.error('Error loading stats:', error);
-    }
-}
-
-export async function loadTopCategories() {
-    try {
-        const categories = await API.getTopCategories();
-        const container = document.getElementById('topCategories');
-        if (!container) return;
-        
-        if (categories.length === 0) {
-            container.innerHTML = '<div class="empty-state"><p>No data yet</p></div>';
-            return;
-        }
-        
-        container.innerHTML = categories.map(cat => `
-            <div class="category-item">
-                <div class="category-name">${cat.category}</div>
-                <div class="category-count">${cat.count} tasks</div>
-            </div>
-        `).join('');
-    } catch (error) {
-        console.error('Error loading categories:', error);
-    }
-}
-
-export async function loadRecentCompletions() {
-    try {
-        const completions = await API.getRecentCompletions(10);
-        const container = document.getElementById('recentCompletions');
-        if (!container) return;
-        
-        if (completions.length === 0) {
-            container.innerHTML = '<div class="empty-state"><p>No completions yet</p></div>';
-            return;
-        }
-        
-        container.innerHTML = completions.map(item => `
-            <div class="activity-item">
-                <div class="activity-icon">✓</div>
-                <div class="activity-content">
-                    <div class="activity-name">${item.task_name}</div>
-                    <div class="activity-meta">
-                        ${item.category || 'No category'} • ${item.time_minutes}m • ${formatTimeAgo(item.completed_at)}
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    } catch (error) {
-        console.error('Error loading completions:', error);
-    }
-}
-
-// ============================================
-// MODAL FUNCTIONS
-// ============================================
-
-window.showAddTaskModal = function() {
-    const modal = document.getElementById('addTaskModal') || document.getElementById('taskModal');
-    if (modal) {
-        const titleEl = document.getElementById('modalTitle');
-        if (titleEl) titleEl.textContent = 'Add New Task';
-        
-        const form = document.getElementById('addTaskForm') || document.getElementById('taskForm');
-        if (form) form.reset();
-        
-        const taskId = document.getElementById('taskId');
-        if (taskId) taskId.value = '';
-        
-        const deleteBtn = document.getElementById('deleteBtn');
-        if (deleteBtn) deleteBtn.style.display = 'none';
-        
-        modal.classList.add('show');
-    }
-};
-
-window.closeAddTaskModal = function() {
-    const modal = document.getElementById('addTaskModal') || document.getElementById('taskModal');
-    if (modal) modal.classList.remove('show');
-};
-
-window.closeTaskModal = window.closeAddTaskModal;
-
-window.handleAddTask = async function(event) {
-    event.preventDefault();
-    
-    try {
-        const taskData = {
-            task_name: document.getElementById('taskName').value,
-            floor: document.getElementById('taskFloor').value,
-            category: document.getElementById('taskCategory').value,
-            cadence: parseInt(document.getElementById('taskCadence').value),
-            time_estimate: parseInt(document.getElementById('taskTime').value),
-            effort: document.getElementById('taskEffort').value
-        };
-        
-        await API.createTask(taskData);
-        
-        closeAddTaskModal();
-        showToast('Task added successfully!');
-        
-        // Reload current page data
-        if (window.location.pathname.includes('tasks.html')) {
-            await loadAllTasks();
-        } else if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-            await loadTodayTasks();
-            await updateStats();
-        }
-    } catch (error) {
-        console.error('Error adding task:', error);
-        showToast('Error adding task', 'error');
-    }
-};
-
-window.editTaskModal = async function(taskId) {
-    try {
-        const task = await API.getTaskById(taskId);
-        if (!task) return;
-        
-        const modal = document.getElementById('taskModal');
-        const titleEl = document.getElementById('modalTitle');
-        
-        if (titleEl) titleEl.textContent = 'Edit Task';
-        
-        document.getElementById('taskId').value = task.id;
-        document.getElementById('editTaskName').value = task.task_name;
-        document.getElementById('editTaskFloor').value = task.floor || '';
-        document.getElementById('editTaskCategory').value = task.category || '';
-        document.getElementById('editTaskCadence').value = task.cadence;
-        document.getElementById('editTaskTime').value = task.time_estimate;
-        document.getElementById('editTaskEffort').value = task.effort;
-        
-        const deleteBtn = document.getElementById('deleteBtn');
-        if (deleteBtn) deleteBtn.style.display = 'block';
-        
-        modal.classList.add('show');
-    } catch (error) {
-        console.error('Error loading task:', error);
-        showToast('Error loading task', 'error');
-    }
-};
-
-window.saveTask = async function(event) {
-    event.preventDefault();
-    
-    try {
-        const taskId = document.getElementById('taskId').value;
-        const taskData = {
-            task_name: document.getElementById('editTaskName').value,
-            floor: document.getElementById('editTaskFloor').value,
-            category: document.getElementById('editTaskCategory').value,
-            cadence: parseInt(document.getElementById('editTaskCadence').value),
-            time_estimate: parseInt(document.getElementById('editTaskTime').value),
-            effort: document.getElementById('editTaskEffort').value
-        };
-        
-        if (taskId) {
-            await API.updateTask(parseInt(taskId), taskData);
-            showToast('Task updated!');
-        } else {
-            await API.createTask(taskData);
-            showToast('Task added!');
-        }
-        
-        closeTaskModal();
-        await loadAllTasks();
-    } catch (error) {
-        console.error('Error saving task:', error);
-        showToast('Error saving task', 'error');
-    }
-};
-
-window.deleteTask = async function() {
-    if (!confirm('Delete this task? This cannot be undone.')) return;
-    
-    try {
-        const taskId = parseInt(document.getElementById('taskId').value);
-        await API.deleteTask(taskId);
-        
-        closeTaskModal();
-        showToast('Task deleted');
-        await loadAllTasks();
-    } catch (error) {
-        console.error('Error deleting task:', error);
-        showToast('Error deleting task', 'error');
-    }
-};
-
-window.completeTaskFromHome = async function(taskId, scheduledDate) {
-    try {
-        await API.completeTask(taskId, scheduledDate);
-        
-        // Reload to check if all tasks done
-        const schedule = await API.getWeekSchedule(0);
-        const todayDay = schedule.schedule.find(d => d.isToday);
-        
-        if (todayDay && todayDay.todoTasks.length === 0 && todayDay.doneTasks.length > 0) {
-            showToast('🎉 All done for today! Amazing work!');
-        } else {
-            showToast('Task completed! 🎉');
-        }
-        
-        await loadTodayTasks();
-        await updateStats();
-    } catch (error) {
-        console.error('Error completing task:', error);
-        showToast('Error completing task', 'error');
-    }
-};
-
-window.completeTaskFromList = async function(taskId) {
-    try {
-        await API.completeTask(taskId);
-        showToast('Task completed! 🎉');
-        await loadAllTasks();
-    } catch (error) {
-        console.error('Error completing task:', error);
-        showToast('Error completing task', 'error');
-    }
-};
-
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-
+/**
+ * Show toast notification
+ */
 export function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    if (!toast) return;
+    // Remove existing toasts
+    const existing = document.querySelector('.toast-notification');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
     
-    toast.textContent = message;
-    toast.classList.add('show');
+    const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
     
+    toast.innerHTML = `
+        <span class="toast-icon">${icon}</span>
+        <span class="toast-message">${message}</span>
+    `;
+
+    document.body.appendChild(toast);
+
+    // Trigger animation
+    setTimeout(() => toast.classList.add('show'), 10);
+
+    // Remove after 3 seconds
     setTimeout(() => {
         toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
     }, 3000);
 }
 
-function formatDate(date) {
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+// ============================================
+// MODAL MANAGEMENT
+// ============================================
+
+/**
+ * Open modal
+ */
+export function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
 }
 
-function formatTimeAgo(dateString) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMins / 60);
-    const diffDays = Math.floor(diffHours / 24);
+/**
+ * Close modal
+ */
+export function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        
+        // Reset form if exists
+        const form = modal.querySelector('form');
+        if (form) form.reset();
+    }
+}
+
+/**
+ * Close modal when clicking backdrop
+ */
+export function initModalBackdropClose() {
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal') && e.target.classList.contains('show')) {
+            closeModal(e.target.id);
+        }
+    });
+}
+
+// ============================================
+// FORM HELPERS
+// ============================================
+
+/**
+ * Get form data as object
+ */
+export function getFormData(formElement) {
+    const formData = new FormData(formElement);
+    const data = {};
     
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    return formatDate(date);
+    for (let [key, value] of formData.entries()) {
+        // Handle checkboxes
+        if (formElement.elements[key]?.type === 'checkbox') {
+            data[key] = formElement.elements[key].checked;
+        } else {
+            data[key] = value;
+        }
+    }
+    
+    return data;
 }
 
-// Make toast function global
-window.showToast = showToast;
+/**
+ * Validate email
+ */
+export function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+/**
+ * Disable form during submission
+ */
+export function disableForm(formElement) {
+    const inputs = formElement.querySelectorAll('input, button, select, textarea');
+    inputs.forEach(input => input.disabled = true);
+}
+
+/**
+ * Enable form after submission
+ */
+export function enableForm(formElement) {
+    const inputs = formElement.querySelectorAll('input, button, select, textarea');
+    inputs.forEach(input => input.disabled = false);
+}
+
+// ============================================
+// DATE & TIME UTILITIES
+// ============================================
+
+/**
+ * Format date to relative time (e.g., "2 days ago")
+ */
+export function formatRelativeTime(date) {
+    const now = new Date();
+    const past = new Date(date);
+    const diffInSeconds = Math.floor((now - past) / 1000);
+
+    if (diffInSeconds < 60) return 'just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+    if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 604800)} weeks ago`;
+    return past.toLocaleDateString();
+}
+
+/**
+ * Format date to readable string
+ */
+export function formatDate(date) {
+    return new Date(date).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+}
+
+/**
+ * Get days since date
+ */
+export function getDaysSince(date) {
+    const now = new Date();
+    const past = new Date(date);
+    return Math.floor((now - past) / (1000 * 60 * 60 * 24));
+}
+
+/**
+ * Get next due date based on cadence
+ */
+export function getNextDueDate(lastCompleted, cadenceDays) {
+    if (!lastCompleted) return 'Not yet completed';
+    
+    const next = new Date(lastCompleted);
+    next.setDate(next.getDate() + cadenceDays);
+    
+    const now = new Date();
+    const daysUntil = Math.floor((next - now) / (1000 * 60 * 60 * 24));
+    
+    if (daysUntil < 0) return `${Math.abs(daysUntil)} days overdue`;
+    if (daysUntil === 0) return 'Due today';
+    if (daysUntil === 1) return 'Due tomorrow';
+    return `Due in ${daysUntil} days`;
+}
+
+// ============================================
+// STATUS HELPERS
+// ============================================
+
+/**
+ * Get task status (overdue, due-soon, on-track)
+ */
+export function getTaskStatus(task) {
+    if (!task.last_completed) return 'overdue';
+    
+    const daysSince = getDaysSince(task.last_completed);
+    
+    if (daysSince > task.cadence) return 'overdue';
+    if (daysSince > task.cadence - 3) return 'due-soon';
+    return 'on-track';
+}
+
+/**
+ * Get status color class
+ */
+export function getStatusColor(status) {
+    switch (status) {
+        case 'overdue': return 'status-danger';
+        case 'due-soon': return 'status-warning';
+        case 'on-track': return 'status-success';
+        default: return 'status-default';
+    }
+}
+
+/**
+ * Get status icon
+ */
+export function getStatusIcon(status) {
+    switch (status) {
+        case 'overdue': return '🔴';
+        case 'due-soon': return '🟡';
+        case 'on-track': return '🟢';
+        default: return '⚪';
+    }
+}
+
+/**
+ * Get status text
+ */
+export function getStatusText(status) {
+    switch (status) {
+        case 'overdue': return 'Overdue';
+        case 'due-soon': return 'Due Soon';
+        case 'on-track': return 'On Track';
+        default: return 'Unknown';
+    }
+}
+
+// ============================================
+// NUMBER FORMATTING
+// ============================================
+
+/**
+ * Format currency
+ */
+export function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(amount);
+}
+
+/**
+ * Format number with commas
+ */
+export function formatNumber(num) {
+    return new Intl.NumberFormat('en-US').format(num);
+}
+
+// ============================================
+// LOADING STATES
+// ============================================
+
+/**
+ * Show loading spinner
+ */
+export function showLoading(containerId) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.innerHTML = `
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading...</p>
+            </div>
+        `;
+    }
+}
+
+/**
+ * Show empty state
+ */
+export function showEmptyState(containerId, icon, title, message) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">${icon}</div>
+                <h3 class="empty-state-title">${title}</h3>
+                <p class="empty-state-text">${message}</p>
+            </div>
+        `;
+    }
+}
+
+// ============================================
+// MOBILE NAVIGATION
+// ============================================
+
+/**
+ * Initialize mobile navigation toggle
+ */
+export function initMobileNav() {
+    const toggle = document.getElementById('mobileToggle');
+    const menu = document.getElementById('navMenu');
+    
+    if (toggle && menu) {
+        toggle.addEventListener('click', () => {
+            menu.classList.toggle('show');
+        });
+    }
+}
+
+// ============================================
+// LOGOUT FUNCTIONALITY
+// ============================================
+
+/**
+ * Initialize logout button
+ */
+export function initLogout() {
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await auth.signOut();
+        });
+    }
+}
+
+// ============================================
+// GLOBAL INITIALIZATION
+// ============================================
+
+/**
+ * Initialize common app features
+ */
+export function initApp() {
+    initMobileNav();
+    initModalBackdropClose();
+    initLogout();
+}
+
+// Auto-initialize on DOM load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}

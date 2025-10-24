@@ -20,9 +20,14 @@
                     <nav class="nav-menu" id="navMenu">
                         <a href="index.html" class="nav-link active">Dashboard</a>
                         <a href="cleaning.html" class="nav-link">Cleaning</a>
+                        <a href="settings.html" class="nav-link">Settings</a>
                         <a href="components.html" class="nav-link">Components</a>
-                        <a href="#" class="nav-link">Settings</a>
                     </nav>
+
+                    <button class="btn btn-secondary" id="logoutBtn" style="display: none;">
+                        <span>Logout</span>
+                        <span>🚪</span>
+                    </button>
 
                     <button class="mobile-nav-toggle" id="mobileToggle">☰</button>
                 </div>
@@ -35,149 +40,130 @@
                 <!-- Welcome Section -->
                 <section class="welcome-section">
                     <div class="welcome-content">
-                        <h1 class="welcome-title">Welcome back, User</h1>
+                        <h1 class="welcome-title">Welcome back, <span id="userName">User</span></h1>
                         <p class="welcome-subtitle">Here's what's happening with your home today</p>
                     </div>
-                    <button class="btn btn-primary">
-                        <span>Quick Actions</span>
-                        <span>⚡</span>
-                    </button>
+                    <a href="cleaning.html" class="btn btn-primary">
+                        <span>View All Tasks</span>
+                        <span>→</span>
+                    </a>
                 </section>
 
                 <!-- Stats Overview -->
                 <section class="stats-section">
-                    <div class="dashboard-grid">
-                        <div class="dashboard-card">
-                            <div class="card-icon" style="background: linear-gradient(135deg, rgba(252, 211, 77, 0.2) 0%, rgba(252, 211, 77, 0.05) 100%);">
-                                📋
-                            </div>
-                            <div class="card-title">Tasks</div>
-                            <div class="card-subtitle">3 due today</div>
-                            <div class="card-stats">12 active</div>
-                            <div class="card-footer">
-                                <span class="status-badge status-due-soon">⏰ 3 pending</span>
-                            </div>
-                        </div>
-
-                        <div class="dashboard-card">
-                            <div class="card-icon" style="background: linear-gradient(135deg, rgba(134, 239, 172, 0.2) 0%, rgba(134, 239, 172, 0.05) 100%);">
-                                🧹
-                            </div>
-                            <div class="card-title">Cleaning</div>
-                            <div class="card-subtitle">1 room needs attention</div>
-                            <div class="card-stats">Kitchen</div>
-                            <div class="card-footer">
-                                <span class="status-badge status-needs-attention">🔔 Due soon</span>
-                            </div>
-                        </div>
-
-                        <div class="dashboard-card">
-                            <div class="card-icon" style="background: linear-gradient(135deg, rgba(180, 140, 255, 0.2) 0%, rgba(180, 140, 255, 0.05) 100%);">
-                                💰
-                            </div>
-                            <div class="card-title">Value Saved</div>
-                            <div class="card-subtitle">This week</div>
-                            <div class="card-stats">$127</div>
-                            <div class="card-footer">
-                                <span class="status-badge status-fresh">✓ On track</span>
-                            </div>
-                        </div>
-
-                        <div class="dashboard-card">
-                            <div class="card-icon" style="background: linear-gradient(135deg, rgba(230, 183, 78, 0.2) 0%, rgba(230, 183, 78, 0.05) 100%);">
-                                📊
-                            </div>
-                            <div class="card-title">Completion</div>
-                            <div class="card-subtitle">Weekly progress</div>
-                            <div class="card-stats">78%</div>
-                            <div class="card-footer">
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 78%"></div>
+                    <div class="stats-grid">
+                        <!-- Overdue Tasks -->
+                        <div class="stat-card glass-card" style="border-left: 3px solid var(--danger-coral);">
+                            <div class="stat-icon" style="color: var(--danger-coral);">🔴</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="overdueCount">
+                                    <div class="skeleton skeleton-text"></div>
                                 </div>
+                                <div class="stat-label">Overdue Tasks</div>
+                                <div class="stat-change">Need attention</div>
+                            </div>
+                        </div>
+
+                        <!-- Due Soon -->
+                        <div class="stat-card glass-card" style="border-left: 3px solid var(--warning-amber);">
+                            <div class="stat-icon" style="color: var(--warning-amber);">🟡</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="dueSoonCount">
+                                    <div class="skeleton skeleton-text"></div>
+                                </div>
+                                <div class="stat-label">Due Soon</div>
+                                <div class="stat-change">Next 3 days</div>
+                            </div>
+                        </div>
+
+                        <!-- On Track -->
+                        <div class="stat-card glass-card" style="border-left: 3px solid var(--success-green);">
+                            <div class="stat-icon" style="color: var(--success-green);">🟢</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="onTrackCount">
+                                    <div class="skeleton skeleton-text"></div>
+                                </div>
+                                <div class="stat-label">On Track</div>
+                                <div class="stat-change">Looking good!</div>
+                            </div>
+                        </div>
+
+                        <!-- Value Saved -->
+                        <div class="stat-card glass-card-hover">
+                            <div class="stat-icon" style="color: var(--primary-gold);">💰</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="valueSaved">
+                                    <div class="skeleton skeleton-text"></div>
+                                </div>
+                                <div class="stat-label">Value This Week</div>
+                                <div class="stat-change" id="completionsText">Based on completions</div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Today's Tasks -->
-                <section class="tasks-section">
+                <!-- Quick Actions -->
+                <section class="quick-actions-section" style="margin-bottom: var(--space-12);">
                     <div class="section-header">
-                        <h2>Today's Tasks</h2>
-                        <button class="btn btn-secondary btn-sm">View All</button>
+                        <h2>Quick Actions</h2>
                     </div>
-
-                    <div class="task-list">
-                        <div class="task-card">
-                            <div class="task-checkbox"></div>
-                            <div class="task-content">
-                                <div class="task-title">Clean kitchen counters</div>
-                                <div class="task-meta">
-                                    <span class="task-tag tag-home">🏠 Home</span>
-                                    <span class="task-due">⏰ Due in 2 hours</span>
-                                    <span class="task-effort">⚡ 15 min</span>
-                                </div>
+                    <div class="quick-actions-grid">
+                        <a href="cleaning.html?action=add" class="action-card glass-card-hover">
+                            <div class="action-icon">➕</div>
+                            <div class="action-content">
+                                <h3>Add Task</h3>
+                                <p>Create a new cleaning task</p>
                             </div>
-                            <button class="btn-icon btn-secondary">→</button>
-                        </div>
-
-                        <div class="task-card">
-                            <div class="task-checkbox"></div>
-                            <div class="task-content">
-                                <div class="task-title">Vacuum living room</div>
-                                <div class="task-meta">
-                                    <span class="task-tag tag-home">🏠 Home</span>
-                                    <span class="task-due">⏰ Due today</span>
-                                    <span class="task-effort">⚡ 30 min</span>
-                                </div>
+                        </a>
+                        <a href="cleaning.html?view=week" class="action-card glass-card-hover">
+                            <div class="action-icon">📅</div>
+                            <div class="action-content">
+                                <h3>View Week</h3>
+                                <p>See your weekly schedule</p>
                             </div>
-                            <button class="btn-icon btn-secondary">→</button>
-                        </div>
-
-                        <div class="task-card">
-                            <div class="task-checkbox checked">
-                                
+                        </a>
+                        <a href="cleaning.html?action=schedule" class="action-card glass-card-hover">
+                            <div class="action-icon">⚡</div>
+                            <div class="action-content">
+                                <h3>Smart Schedule</h3>
+                                <p>Auto-schedule your week</p>
                             </div>
-                            <div class="task-content">
-                                <div class="task-title completed">Clean bathroom sink</div>
-                                <div class="task-meta">
-                                    <span class="task-tag tag-home">🏠 Home</span>
-                                    <span class="task-due">✓ Completed</span>
-                                    <span class="task-effort">⚡ 10 min</span>
-                                </div>
-                            </div>
-                            <button class="btn-icon btn-secondary">→</button>
-                        </div>
+                        </a>
                     </div>
                 </section>
 
-                <!-- Quick Insights -->
-                <section class="insights-section">
+                <!-- Recent Activity -->
+                <section class="recent-activity-section">
                     <div class="section-header">
-                        <h2>Quick Insights</h2>
+                        <h2>Recent Completions</h2>
+                        <a href="cleaning.html" class="btn btn-secondary btn-sm">View All</a>
                     </div>
+                    <div id="recentCompletions" class="activity-list">
+                        <!-- Loading skeletons -->
+                        <div class="skeleton skeleton-card"></div>
+                        <div class="skeleton skeleton-card"></div>
+                        <div class="skeleton skeleton-card"></div>
+                    </div>
+                </section>
 
+                <!-- Tips & Insights -->
+                <section class="insights-section" style="margin-top: var(--space-12);">
+                    <div class="section-header">
+                        <h2>Smart Tips</h2>
+                    </div>
                     <div class="insights-grid">
-                        <div class="glass-card insight-card">
-                            <div class="insight-icon">🔥</div>
+                        <div class="insight-card glass-card">
+                            <div class="insight-icon">💡</div>
                             <div class="insight-content">
-                                <h3 class="insight-title">7 Day Streak</h3>
-                                <p class="insight-text">You're on fire! Keep up the momentum.</p>
+                                <h3>Efficiency Tip</h3>
+                                <p id="efficiencyTip">Group tasks by floor to minimize movement and save time.</p>
                             </div>
                         </div>
-
-                        <div class="glass-card insight-card">
-                            <div class="insight-icon">⭐</div>
+                        <div class="insight-card glass-card">
+                            <div class="insight-icon">🎯</div>
                             <div class="insight-content">
-                                <h3 class="insight-title">Most Productive Day</h3>
-                                <p class="insight-text">Mondays are your power days!</p>
-                            </div>
-                        </div>
-
-                        <div class="glass-card insight-card">
-                            <div class="insight-icon">💎</div>
-                            <div class="insight-content">
-                                <h3 class="insight-title">Value Generated</h3>
-                                <p class="insight-text">$1,247 saved this month</p>
+                                <h3>Focus Area</h3>
+                                <p id="focusArea">Check your overdue tasks to get back on track.</p>
                             </div>
                         </div>
                     </div>
@@ -186,175 +172,198 @@
         </main>
     </div>
 
-    <style>
-        /* Welcome Section */
-        .welcome-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-8);
-            flex-wrap: wrap;
-            gap: var(--space-4);
-        }
+    <!-- Feedback Button -->
+    <button class="fab" onclick="showFeedbackModal()" title="Send Feedback">
+        💬
+    </button>
 
-        .welcome-title {
-            font-size: clamp(1.75rem, 4vw, 2.5rem);
-            margin-bottom: var(--space-2);
-        }
+    <!-- Feedback Modal -->
+    <div class="modal" id="feedbackModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Send Feedback</h3>
+                <button class="modal-close" onclick="closeFeedbackModal()">×</button>
+            </div>
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label class="form-label">What kind of feedback?</label>
+                    <select id="feedbackType" class="form-input" required>
+                        <option value="bug">🐛 Bug Report</option>
+                        <option value="feature">💡 Feature Request</option>
+                        <option value="feedback">💬 General Feedback</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tell us more</label>
+                    <textarea 
+                        id="feedbackText" 
+                        class="form-input" 
+                        rows="4" 
+                        required
+                        placeholder="Be as detailed as you'd like..."
+                    ></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeFeedbackModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Send Feedback
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-        .welcome-subtitle {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
+    <!-- Scripts -->
+    <script type="module">
+        import { initAuthCheck } from './js/auth.js';
+        import { stats, settings, feedback } from './js/api.js';
+        import { 
+            showToast, 
+            formatRelativeTime, 
+            formatCurrency,
+            initApp 
+        } from './js/app.js';
 
-        /* Stats Section */
-        .stats-section {
-            margin-bottom: var(--space-12);
-        }
+        // Check authentication
+        const user = await initAuthCheck();
+        
+        // Show logout button
+        document.getElementById('logoutBtn').style.display = 'flex';
 
-        .card-footer {
-            margin-top: var(--space-4);
-        }
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                // Load user settings and stats
+                const [dashboardStats, userSettings] = await Promise.all([
+                    stats.getDashboard(),
+                    settings.get()
+                ]);
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-        }
+                // Update user name
+                if (userSettings.data) {
+                    document.getElementById('userName').textContent = 
+                        userSettings.data.user_name || 'there';
+                }
 
-        .progress-fill {
-            height: 100%;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-full);
-            transition: width var(--transition-slow);
-        }
+                // Update stats
+                if (dashboardStats.data) {
+                    const data = dashboardStats.data;
+                    
+                    document.getElementById('overdueCount').textContent = data.overdueCount;
+                    document.getElementById('dueSoonCount').textContent = data.dueSoonCount;
+                    document.getElementById('onTrackCount').textContent = data.onTrackCount;
+                    document.getElementById('valueSaved').textContent = formatCurrency(data.valueSaved || 0);
+                    document.getElementById('completionsText').textContent = 
+                        `${data.completionsThisWeek} ${data.completionsThisWeek === 1 ? 'task' : 'tasks'} completed`;
 
-        /* Section Headers */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-6);
-        }
+                    // Load recent completions
+                    loadRecentCompletions(data.recentCompletions || []);
 
-        .section-header h2 {
-            margin-bottom: 0;
-        }
-
-        /* Tasks Section */
-        .tasks-section {
-            margin-bottom: var(--space-12);
-        }
-
-        /* Insights Section */
-        .insights-section {
-            margin-bottom: var(--space-12);
-        }
-
-        .insights-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--space-6);
-        }
-
-        .insight-card {
-            padding: var(--space-6);
-            display: flex;
-            gap: var(--space-4);
-            align-items: flex-start;
-        }
-
-        .insight-icon {
-            font-size: 2.5rem;
-            flex-shrink: 0;
-        }
-
-        .insight-content {
-            flex: 1;
-        }
-
-        .insight-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: var(--space-2);
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .insight-text {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 0;
-        }
-
-        @media (max-width: 768px) {
-            .welcome-section {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .insights-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .section-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: var(--space-3);
+                    // Update tips based on data
+                    updateSmartTips(data);
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showToast('Failed to load dashboard data', 'error');
             }
         }
-    </style>
 
-    <script>
-        // Mobile navigation toggle
-        const mobileToggle = document.getElementById('mobileToggle');
-        const navMenu = document.getElementById('navMenu');
+        // Load recent completions
+        function loadRecentCompletions(completions) {
+            const container = document.getElementById('recentCompletions');
+            
+            if (completions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <h3 class="empty-state-title">No completions yet</h3>
+                        <p class="empty-state-text">Start completing tasks to see your progress here!</p>
+                        <a href="cleaning.html" class="btn btn-primary" style="margin-top: var(--space-4);">
+                            View Tasks
+                        </a>
+                    </div>
+                `;
+                return;
+            }
 
-        mobileToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('open');
+            container.innerHTML = completions.slice(0, 5).map(completion => `
+                <div class="activity-item glass-card">
+                    <div class="activity-icon">✓</div>
+                    <div class="activity-content">
+                        <h4>${completion.task_name}</h4>
+                        <p>${completion.floor || 'N/A'} • ${completion.category || 'General'}</p>
+                    </div>
+                    <div class="activity-meta">
+                        <span class="activity-time">${formatRelativeTime(completion.completed_at)}</span>
+                        <span class="activity-value">${completion.time_minutes || 15} min</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update smart tips based on data
+        function updateSmartTips(data) {
+            const efficiencyTip = document.getElementById('efficiencyTip');
+            const focusArea = document.getElementById('focusArea');
+
+            // Efficiency tip
+            if (data.completionsThisWeek >= 10) {
+                efficiencyTip.textContent = "You're crushing it! Keep up the great momentum.";
+            } else if (data.completionsThisWeek >= 5) {
+                efficiencyTip.textContent = "You're making great progress this week. A few more tasks and you'll hit your goal!";
+            } else {
+                efficiencyTip.textContent = "Group tasks by floor to minimize movement and save time.";
+            }
+
+            // Focus area
+            if (data.overdueCount > 0) {
+                focusArea.textContent = `You have ${data.overdueCount} overdue ${data.overdueCount === 1 ? 'task' : 'tasks'}. Tackle these first to get back on track!`;
+            } else if (data.dueSoonCount > 0) {
+                focusArea.textContent = `${data.dueSoonCount} ${data.dueSoonCount === 1 ? 'task is' : 'tasks are'} due soon. Stay ahead of the curve!`;
+            } else {
+                focusArea.textContent = "Everything is on track! Great job staying organized.";
+            }
+        }
+
+        // Feedback modal functions
+        window.showFeedbackModal = () => {
+            document.getElementById('feedbackModal').classList.add('show');
+        };
+
+        window.closeFeedbackModal = () => {
+            document.getElementById('feedbackModal').classList.remove('show');
+            document.getElementById('feedbackForm').reset();
+        };
+
+        // Submit feedback
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const type = document.getElementById('feedbackType').value;
+            const message = document.getElementById('feedbackText').value;
+            
+            try {
+                await feedback.submit({ type, message, page: 'dashboard' });
+                showToast('Thanks for your feedback! 🙏', 'success');
+                closeFeedbackModal();
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                showToast('Failed to send feedback', 'error');
+            }
         });
 
-        // Task checkbox interactions
-        document.querySelectorAll('.task-checkbox:not(.checked)').forEach(checkbox => {
-            checkbox.addEventListener('click', function() {
-                this.classList.add('checked');
-                const taskCard = this.closest('.task-card');
-                const taskTitle = taskCard.querySelector('.task-title');
-                taskTitle.classList.add('completed');
-                
-                // Animate out after completion
-                setTimeout(() => {
-                    taskCard.style.opacity = '0';
-                    taskCard.style.transform = 'translateX(-20px)';
-                    setTimeout(() => {
-                        taskCard.style.display = 'none';
-                    }, 300);
-                }, 1000);
-            });
+        // Close modal on backdrop click
+        document.getElementById('feedbackModal').addEventListener('click', (e) => {
+            if (e.target.id === 'feedbackModal') {
+                closeFeedbackModal();
+            }
         });
 
-        // Add ripple effect to buttons
-        document.querySelectorAll('.btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                const ripple = document.createElement('span');
-                ripple.style.position = 'absolute';
-                ripple.style.borderRadius = '50%';
-                ripple.style.background = 'rgba(255, 255, 255, 0.6)';
-                ripple.style.width = ripple.style.height = '100px';
-                ripple.style.left = e.clientX - this.offsetLeft - 50 + 'px';
-                ripple.style.top = e.clientY - this.offsetTop - 50 + 'px';
-                ripple.style.pointerEvents = 'none';
-                ripple.style.animation = 'ripple 0.6s ease-out';
-                
-                this.appendChild(ripple);
-                
-                setTimeout(() => ripple.remove(), 600);
-            });
-        });
+        // Initialize app and load data
+        initApp();
+        loadDashboard();
     </script>
 </body>
 </html>

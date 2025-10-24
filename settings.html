@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Cadence</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="index.html" class="logo">Cadence</a>
+                    
+                    <nav class="nav-menu" id="navMenu">
+                        <a href="index.html" class="nav-link">Dashboard</a>
+                        <a href="cleaning.html" class="nav-link">Cleaning</a>
+                        <a href="settings.html" class="nav-link active">Settings</a>
+                        <a href="components.html" class="nav-link">Components</a>
+                    </nav>
+
+                    <button class="btn btn-secondary" id="logoutBtn" style="display: none;">
+                        <span>Logout</span>
+                        <span>🚪</span>
+                    </button>
+
+                    <button class="mobile-nav-toggle" id="mobileToggle">☰</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="content-wrapper">
+            <div class="container" style="max-width: 800px;">
+                <!-- Page Header -->
+                <section class="page-header">
+                    <div class="header-content-main">
+                        <h1>Settings</h1>
+                        <p class="page-subtitle">Manage your profile and preferences</p>
+                    </div>
+                </section>
+
+                <!-- Settings Sections -->
+                
+                <!-- Profile Settings -->
+                <section class="settings-section glass-card" style="margin-bottom: var(--space-8);">
+                    <div class="settings-header">
+                        <h2>👤 Profile</h2>
+                        <p>Your personal information</p>
+                    </div>
+                    
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label class="form-label" for="userName">Display Name</label>
+                            <input 
+                                type="text" 
+                                id="userName" 
+                                class="form-input" 
+                                placeholder="How should we call you?"
+                            >
+                            <small class="form-help">This appears in your dashboard welcome message</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="userEmail">Email Address</label>
+                            <input 
+                                type="email" 
+                                id="userEmail" 
+                                class="form-input" 
+                                disabled
+                            >
+                            <small class="form-help">Email cannot be changed</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Save Profile
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Value Calculation Settings -->
+                <section class="settings-section glass-card" style="margin-bottom: var(--space-8);">
+                    <div class="settings-header">
+                        <h2>💰 Value Calculation</h2>
+                        <p>Calculate the value of your time spent cleaning</p>
+                    </div>
+                    
+                    <form id="valueForm">
+                        <div class="form-group">
+                            <label class="form-label" for="hourlyRate">Hourly Rate ($)</label>
+                            <input 
+                                type="number" 
+                                id="hourlyRate" 
+                                class="form-input" 
+                                placeholder="35"
+                                min="1"
+                                required
+                            >
+                            <small class="form-help">Used to calculate the dollar value of time you save</small>
+                        </div>
+
+                        <div id="valuePreview" class="info-box" style="display: none;">
+                            <strong>Example:</strong> If you complete 1 hour of cleaning, that's worth 
+                            <span id="exampleValue" class="text-gradient" style="font-weight: 700;">$35</span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Save Value Settings
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Schedule Preferences -->
+                <section class="settings-section glass-card" style="margin-bottom: var(--space-8);">
+                    <div class="settings-header">
+                        <h2>📅 Schedule Preferences</h2>
+                        <p>Control how tasks are scheduled</p>
+                    </div>
+                    
+                    <form id="scheduleForm">
+                        <div class="form-group">
+                            <label class="form-label" for="dailyMinutes">Daily Time Budget (minutes)</label>
+                            <input 
+                                type="number" 
+                                id="dailyMinutes" 
+                                class="form-input" 
+                                placeholder="30"
+                                min="5"
+                                max="480"
+                                required
+                            >
+                            <small class="form-help">Maximum time you want to spend on cleaning per day</small>
+                        </div>
+
+                        <div id="budgetPreview" class="info-box" style="display: none;">
+                            <strong>Your daily budget:</strong> 
+                            <span id="budgetHours" class="text-gradient" style="font-weight: 700;">0.5 hours</span>
+                            (about <span id="budgetPercent" style="font-weight: 600;">2%</span> of your waking day)
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Save Schedule Settings
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Account Actions -->
+                <section class="settings-section glass-card" style="margin-bottom: var(--space-8);">
+                    <div class="settings-header">
+                        <h2>🔐 Account</h2>
+                        <p>Manage your account security</p>
+                    </div>
+                    
+                    <div class="settings-actions">
+                        <button class="btn btn-secondary btn-block" id="changePasswordBtn">
+                            Change Password
+                        </button>
+                        <button class="btn btn-danger btn-block" id="deleteAccountBtn">
+                            Delete Account
+                        </button>
+                    </div>
+                </section>
+
+                <!-- App Info -->
+                <section class="settings-section glass-card">
+                    <div class="settings-header">
+                        <h2>ℹ️ About</h2>
+                        <p>App information and resources</p>
+                    </div>
+                    
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Version</div>
+                            <div class="info-value">1.0.0</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Last Updated</div>
+                            <div class="info-value">January 2025</div>
+                        </div>
+                    </div>
+
+                    <div class="settings-links">
+                        <a href="#" class="settings-link" onclick="showFeedbackModal(); return false;">
+                            💬 Send Feedback
+                        </a>
+                        <a href="components.html" class="settings-link">
+                            🎨 Design System
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="passwordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Change Password</h3>
+                <button class="modal-close" onclick="closePasswordModal()">×</button>
+            </div>
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input 
+                        type="password" 
+                        id="newPassword" 
+                        class="form-input" 
+                        placeholder="Enter new password"
+                        minlength="6"
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        class="form-input" 
+                        placeholder="Confirm new password"
+                        minlength="6"
+                        required
+                    >
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closePasswordModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Update Password
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal" id="deleteAccountModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Delete Account?</h3>
+                <button class="modal-close" onclick="closeDeleteAccountModal()">×</button>
+            </div>
+            <div class="warning-box">
+                <p><strong>⚠️ Warning:</strong> This action cannot be undone!</p>
+                <p style="margin-top: var(--space-3);">All your tasks, completions, and data will be permanently deleted.</p>
+            </div>
+            <div class="form-group" style="margin-top: var(--space-6);">
+                <label class="form-label">Type <strong>DELETE</strong> to confirm</label>
+                <input 
+                    type="text" 
+                    id="deleteConfirmation" 
+                    class="form-input" 
+                    placeholder="DELETE"
+                >
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteAccountModal()">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteAccountBtn">
+                    Delete My Account
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="modal" id="feedbackModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Send Feedback</h3>
+                <button class="modal-close" onclick="closeFeedbackModal()">×</button>
+            </div>
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label class="form-label">What kind of feedback?</label>
+                    <select id="feedbackType" class="form-input" required>
+                        <option value="bug">🐛 Bug Report</option>
+                        <option value="feature">💡 Feature Request</option>
+                        <option value="feedback">💬 General Feedback</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tell us more</label>
+                    <textarea 
+                        id="feedbackText" 
+                        class="form-input" 
+                        rows="4" 
+                        required
+                        placeholder="Be as detailed as you'd like..."
+                    ></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeFeedbackModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Send Feedback
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { initAuthCheck, auth } from './js/auth.js';
+        import { settings, feedback } from './js/api.js';
+        import { showToast, initApp } from './js/app.js';
+
+        // Check authentication
+        const user = await initAuthCheck();
+        document.getElementById('logoutBtn').style.display = 'flex';
+
+        // Load settings
+        async function loadSettings() {
+            try {
+                const result = await settings.get();
+                
+                if (result.data) {
+                    const data = result.data;
+                    
+                    // Profile
+                    document.getElementById('userName').value = data.user_name || '';
+                    document.getElementById('userEmail').value = user.email || '';
+                    
+                    // Value calculation
+                    document.getElementById('hourlyRate').value = data.hourly_rate || 35;
+                    updateValuePreview();
+                    
+                    // Schedule
+                    document.getElementById('dailyMinutes').value = data.daily_minutes || 30;
+                    updateBudgetPreview();
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+                showToast('Failed to load settings', 'error');
+            }
+        }
+
+        // Update value preview
+        function updateValuePreview() {
+            const rate = parseInt(document.getElementById('hourlyRate').value) || 35;
+            document.getElementById('exampleValue').textContent = `$${rate}`;
+            document.getElementById('valuePreview').style.display = 'block';
+        }
+
+        // Update budget preview
+        function updateBudgetPreview() {
+            const minutes = parseInt(document.getElementById('dailyMinutes').value) || 30;
+            const hours = (minutes / 60).toFixed(1);
+            const percent = ((minutes / (16 * 60)) * 100).toFixed(1);
+            
+            document.getElementById('budgetHours').textContent = `${hours} hours`;
+            document.getElementById('budgetPercent').textContent = `${percent}%`;
+            document.getElementById('budgetPreview').style.display = 'block';
+        }
+
+        // Live preview updates
+        document.getElementById('hourlyRate').addEventListener('input', updateValuePreview);
+        document.getElementById('dailyMinutes').addEventListener('input', updateBudgetPreview);
+
+        // Save profile
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const userName = document.getElementById('userName').value;
+                
+                await settings.update({ user_name: userName });
+                showToast('Profile updated successfully! 🎉', 'success');
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                showToast('Failed to save profile', 'error');
+            }
+        });
+
+        // Save value settings
+        document.getElementById('valueForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const hourlyRate = parseInt(document.getElementById('hourlyRate').value);
+                
+                await settings.update({ hourly_rate: hourlyRate });
+                showToast('Value settings saved! 💰', 'success');
+            } catch (error) {
+                console.error('Error saving value settings:', error);
+                showToast('Failed to save settings', 'error');
+            }
+        });
+
+        // Save schedule settings
+        document.getElementById('scheduleForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const dailyMinutes = parseInt(document.getElementById('dailyMinutes').value);
+                
+                await settings.update({ daily_minutes: dailyMinutes });
+                showToast('Schedule settings saved! 📅', 'success');
+            } catch (error) {
+                console.error('Error saving schedule settings:', error);
+                showToast('Failed to save settings', 'error');
+            }
+        });
+
+        // Change password
+        document.getElementById('changePasswordBtn').addEventListener('click', () => {
+            document.getElementById('passwordModal').classList.add('show');
+        });
+
+        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+            
+            showToast('Password change coming soon! 🔐', 'info');
+            closePasswordModal();
+        });
+
+        // Delete account
+        document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+            document.getElementById('deleteAccountModal').classList.add('show');
+        });
+
+        document.getElementById('confirmDeleteAccountBtn').addEventListener('click', async () => {
+            const confirmation = document.getElementById('deleteConfirmation').value;
+            
+            if (confirmation !== 'DELETE') {
+                showToast('Please type DELETE to confirm', 'error');
+                return;
+            }
+            
+            showToast('Account deletion coming soon', 'info');
+            closeDeleteAccountModal();
+        });
+
+        // Modal functions
+        window.closePasswordModal = () => {
+            document.getElementById('passwordModal').classList.remove('show');
+            document.getElementById('passwordForm').reset();
+        };
+
+        window.closeDeleteAccountModal = () => {
+            document.getElementById('deleteAccountModal').classList.remove('show');
+            document.getElementById('deleteConfirmation').value = '';
+        };
+
+        window.showFeedbackModal = () => {
+            document.getElementById('feedbackModal').classList.add('show');
+        };
+
+        window.closeFeedbackModal = () => {
+            document.getElementById('feedbackModal').classList.remove('show');
+            document.getElementById('feedbackForm').reset();
+        };
+
+        // Submit feedback
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const type = document.getElementById('feedbackType').value;
+            const message = document.getElementById('feedbackText').value;
+            
+            try {
+                await feedback.submit({ type, message, page: 'settings' });
+                showToast('Thanks for your feedback! 🙏', 'success');
+                closeFeedbackModal();
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                showToast('Failed to send feedback', 'error');
+            }
+        });
+
+        // Close modals on backdrop click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+
+        // Initialize
+        initApp();
+        loadSettings();
+    </script>
+</body>
+</html>
