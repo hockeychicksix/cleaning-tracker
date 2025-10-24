@@ -5,25 +5,40 @@ import { SUPABASE_URL, SUPABASE_KEY } from './config.js';
 
 // Helper to get current user ID
 async function getCurrentUserId() {
+    const accessToken = localStorage.getItem('supabase.auth.token');
+    if (!accessToken) {
+        throw new Error('Not authenticated');
+    }
+    
     const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
         headers: {
             'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
+            'Authorization': `Bearer ${accessToken}`
         }
     });
-    const data = await response.json();
-    return data?.id;
+    
+    if (!response.ok) {
+        throw new Error('Failed to get user');
+    }
+    
+    const user = await response.json();
+    return user.id;
 }
 
 // Initialize Supabase client (using fetch API)
+const getAuthHeaders = () => {
+    const accessToken = localStorage.getItem('supabase.auth.token');
+    return {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${accessToken || SUPABASE_KEY}`
+    };
+};
+
 const supabase = {
     from: (table) => ({
         select: async (columns = '*') => {
             const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=${columns}`, {
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`
-                }
+                headers: getAuthHeaders()
             });
             const data = await response.json();
             return { data, error: response.ok ? null : data };
@@ -32,8 +47,7 @@ const supabase = {
             const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
                 method: 'POST',
                 headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    ...getAuthHeaders(),
                     'Content-Type': 'application/json',
                     'Prefer': 'return=representation'
                 },
@@ -48,8 +62,7 @@ const supabase = {
                     const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=eq.${value}`, {
                         method: 'PATCH',
                         headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${SUPABASE_KEY}`,
+                            ...getAuthHeaders(),
                             'Content-Type': 'application/json',
                             'Prefer': 'return=representation'
                         },
@@ -64,10 +77,7 @@ const supabase = {
             eq: async (column, value) => {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=eq.${value}`, {
                     method: 'DELETE',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
-                    }
+                    headers: getAuthHeaders()
                 });
                 return { error: response.ok ? null : await response.json() };
             }
@@ -78,10 +88,7 @@ const supabase = {
 // Helper function to get single item
 async function selectSingle(table, column, value) {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=eq.${value}`, {
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-        }
+        headers: getAuthHeaders()
     });
     const data = await response.json();
     if (response.ok && data.length > 0) {
@@ -93,10 +100,7 @@ async function selectSingle(table, column, value) {
 // Helper function for filtered selects
 async function selectWhere(table, column, operator, value) {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${column}=${operator}.${value}`, {
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-        }
+        headers: getAuthHeaders()
     });
     const data = await response.json();
     return { data, error: response.ok ? null : data };
@@ -423,10 +427,7 @@ export async function getRecentCompletions(limit = 10) {
     try {
         // Manual ordering since we're using raw fetch
         const response = await fetch(`${SUPABASE_URL}/rest/v1/completion_history?order=completed_at.desc&limit=${limit}`, {
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`
-            }
+            headers: getAuthHeaders()
         });
         
         const data = await response.json();
