@@ -3,383 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadence - Your Smart Home Companion</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Dashboard - Cadence</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
+    <div class="page-wrapper">
         <!-- Header -->
         <header class="header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-title">
-                        <h1>👋 <span id="greeting">Hello</span>, <span id="userName">there</span></h1>
-                        <p class="header-subtitle" id="currentDate">Today is a great day to get things done</p>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
-                    <button class="icon-btn" onclick="signOut()" aria-label="Sign out" title="Sign Out">🚪</button>
+            <div class="container">
+                <div class="header-content">
+                    <a href="index.html" class="logo">Cadence</a>
+                    
+                    <nav class="nav-menu" id="navMenu">
+                        <a href="index.html" class="nav-link active">Dashboard</a>
+                        <a href="cleaning.html" class="nav-link">Cleaning</a>
+                        <a href="components.html" class="nav-link">Components</a>
+                        <a href="#" class="nav-link">Settings</a>
+                    </nav>
+
+                    <button class="mobile-nav-toggle" id="mobileToggle">☰</button>
                 </div>
             </div>
         </header>
 
-        <!-- Desktop Navigation (hidden on mobile) -->
-        <nav class="top-nav" style="display: none;">
-            <div class="top-nav-content">
-                <a href="index-v2.html" class="nav-item active">
-                    <span class="nav-icon">🏠</span>
-                    <span class="nav-label">Dashboard</span>
-                </a>
-                <a href="cleaning.html" class="nav-item">
-                    <span class="nav-icon">✨</span>
-                    <span class="nav-label">Cleaning</span>
-                </a>
-                <a href="tasks.html" class="nav-item">
-                    <span class="nav-icon">📋</span>
-                    <span class="nav-label">All Tasks</span>
-                </a>
-                <a href="stats.html" class="nav-item">
-                    <span class="nav-icon">📊</span>
-                    <span class="nav-label">Stats</span>
-                </a>
-            </div>
-        </nav>
-
-        <div class="content-wrapper">
-            <!-- Quick Stats -->
-            <section class="dashboard-section">
-                <div class="stats-grid">
-                    <div class="stat-card danger">
-                        <div class="stat-icon">🔴</div>
-                        <div class="stat-value" id="overdueCount">0</div>
-                        <div class="stat-label">Overdue</div>
+        <!-- Main Content -->
+        <main class="content-wrapper">
+            <div class="container">
+                <!-- Welcome Section -->
+                <section class="welcome-section">
+                    <div class="welcome-content">
+                        <h1 class="welcome-title">Welcome back, User</h1>
+                        <p class="welcome-subtitle">Here's what's happening with your home today</p>
                     </div>
-                    <div class="stat-card warning">
-                        <div class="stat-icon">🟡</div>
-                        <div class="stat-value" id="dueSoonCount">0</div>
-                        <div class="stat-label">Due Soon</div>
-                    </div>
-                    <div class="stat-card success">
-                        <div class="stat-icon">🟢</div>
-                        <div class="stat-value" id="onTrackCount">0</div>
-                        <div class="stat-label">On Track</div>
-                    </div>
-                    <div class="stat-card info">
-                        <div class="stat-icon">⚡</div>
-                        <div class="stat-value" id="currentStreak">0</div>
-                        <div class="stat-label">Day Streak</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Main Features -->
-            <section class="dashboard-section">
-                <div class="section-header">
-                    <h2 class="section-title">Your Tools</h2>
-                </div>
-                <div class="card-grid">
-                    <!-- Cleaning Tracker - Main Feature -->
-                    <a href="cleaning.html" class="feature-card" style="grid-column: span 2;">
-                        <div class="feature-card-icon">✨</div>
-                        <h3 class="feature-card-title">Cleaning Tracker</h3>
-                        <p class="feature-card-description">
-                            Smart scheduling for your home cleaning tasks. Never forget what needs to be done with our intelligent weekly planner.
-                        </p>
-                        <span class="feature-card-badge">Active</span>
-                    </a>
-
-                    <!-- Future Feature Placeholders -->
-                    <div class="feature-card" style="opacity: 0.6; cursor: default;" onclick="showComingSoon('Meal Planning')">
-                        <div class="feature-card-icon" style="background: linear-gradient(135deg, #FFE66D, #FF6B6B);">🍽️</div>
-                        <h3 class="feature-card-title">Meal Planning</h3>
-                        <p class="feature-card-description">
-                            Plan your weekly meals, generate shopping lists, and track nutrition goals.
-                        </p>
-                        <span class="feature-card-badge" style="background: var(--text-tertiary);">Coming Soon</span>
-                    </div>
-
-                    <div class="feature-card" style="opacity: 0.6; cursor: default;" onclick="showComingSoon('Budget Tracker')">
-                        <div class="feature-card-icon" style="background: linear-gradient(135deg, #A8E6CF, #4ECDC4);">💰</div>
-                        <h3 class="feature-card-title">Budget Tracker</h3>
-                        <p class="feature-card-description">
-                            Track expenses, set budgets, and reach your financial goals with smart insights.
-                        </p>
-                        <span class="feature-card-badge" style="background: var(--text-tertiary);">Coming Soon</span>
-                    </div>
-
-                    <div class="feature-card" style="opacity: 0.6; cursor: default;" onclick="showComingSoon('Home Maintenance')">
-                        <div class="feature-card-icon" style="background: linear-gradient(135deg, #FFE66D, #A8E6CF);">🔧</div>
-                        <h3 class="feature-card-title">Home Maintenance</h3>
-                        <p class="feature-card-description">
-                            Schedule and track home repairs, maintenance tasks, and warranty information.
-                        </p>
-                        <span class="feature-card-badge" style="background: var(--text-tertiary);">Coming Soon</span>
-                    </div>
-
-                    <div class="feature-card" style="opacity: 0.6; cursor: default;" onclick="showComingSoon('Garden Planner')">
-                        <div class="feature-card-icon" style="background: linear-gradient(135deg, #A8E6CF, #FFE66D);">🌱</div>
-                        <h3 class="feature-card-title">Garden Planner</h3>
-                        <p class="feature-card-description">
-                            Plan your garden layout, track plant care schedules, and harvest tracking.
-                        </p>
-                        <span class="feature-card-badge" style="background: var(--text-tertiary);">Coming Soon</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Today's Cleaning Tasks Preview -->
-            <section class="dashboard-section">
-                <div class="section-header">
-                    <h2 class="section-title">Today's Cleaning Schedule</h2>
-                    <a href="cleaning.html" class="section-link">View All →</a>
-                </div>
-                <div id="todayTasks" class="task-list">
-                    <div class="skeleton skeleton-card"></div>
-                    <div class="skeleton skeleton-card"></div>
-                </div>
-            </section>
-
-            <!-- Quick Actions -->
-            <section class="dashboard-section">
-                <div class="section-header">
-                    <h2 class="section-title">Quick Actions</h2>
-                </div>
-                <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
-                    <a href="cleaning.html" class="btn btn-primary">
-                        ✨ Smart Schedule Week
-                    </a>
-                    <button class="btn btn-secondary" onclick="showAddTaskModal()">
-                        ➕ Add New Task
+                    <button class="btn btn-primary">
+                        <span>Quick Actions</span>
+                        <span>⚡</span>
                     </button>
-                    <a href="stats.html" class="btn btn-ghost">
-                        📊 View Stats
-                    </a>
-                </div>
-            </section>
-        </div>
+                </section>
 
-        <!-- Bottom Navigation (mobile) -->
-        <nav class="bottom-nav">
-            <a href="index-v2.html" class="nav-item active">
-                <span class="nav-icon">🏠</span>
-                <span class="nav-label">Home</span>
-            </a>
-            <a href="cleaning.html" class="nav-item">
-                <span class="nav-icon">✨</span>
-                <span class="nav-label">Cleaning</span>
-            </a>
-            <a href="tasks.html" class="nav-item">
-                <span class="nav-icon">📋</span>
-                <span class="nav-label">Tasks</span>
-            </a>
-            <a href="stats.html" class="nav-item">
-                <span class="nav-icon">📊</span>
-                <span class="nav-label">Stats</span>
-            </a>
-        </nav>
+                <!-- Stats Overview -->
+                <section class="stats-section">
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-icon" style="background: linear-gradient(135deg, rgba(252, 211, 77, 0.2) 0%, rgba(252, 211, 77, 0.05) 100%);">
+                                📋
+                            </div>
+                            <div class="card-title">Tasks</div>
+                            <div class="card-subtitle">3 due today</div>
+                            <div class="card-stats">12 active</div>
+                            <div class="card-footer">
+                                <span class="status-badge status-due-soon">⏰ 3 pending</span>
+                            </div>
+                        </div>
 
-        <!-- FAB -->
-        <button class="fab" onclick="showAddTaskModal()" aria-label="Add task">
-            <span>+</span>
-        </button>
+                        <div class="dashboard-card">
+                            <div class="card-icon" style="background: linear-gradient(135deg, rgba(134, 239, 172, 0.2) 0%, rgba(134, 239, 172, 0.05) 100%);">
+                                🧹
+                            </div>
+                            <div class="card-title">Cleaning</div>
+                            <div class="card-subtitle">1 room needs attention</div>
+                            <div class="card-stats">Kitchen</div>
+                            <div class="card-footer">
+                                <span class="status-badge status-needs-attention">🔔 Due soon</span>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-icon" style="background: linear-gradient(135deg, rgba(180, 140, 255, 0.2) 0%, rgba(180, 140, 255, 0.05) 100%);">
+                                💰
+                            </div>
+                            <div class="card-title">Value Saved</div>
+                            <div class="card-subtitle">This week</div>
+                            <div class="card-stats">$127</div>
+                            <div class="card-footer">
+                                <span class="status-badge status-fresh">✓ On track</span>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-icon" style="background: linear-gradient(135deg, rgba(230, 183, 78, 0.2) 0%, rgba(230, 183, 78, 0.05) 100%);">
+                                📊
+                            </div>
+                            <div class="card-title">Completion</div>
+                            <div class="card-subtitle">Weekly progress</div>
+                            <div class="card-stats">78%</div>
+                            <div class="card-footer">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 78%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Today's Tasks -->
+                <section class="tasks-section">
+                    <div class="section-header">
+                        <h2>Today's Tasks</h2>
+                        <button class="btn btn-secondary btn-sm">View All</button>
+                    </div>
+
+                    <div class="task-list">
+                        <div class="task-card">
+                            <div class="task-checkbox"></div>
+                            <div class="task-content">
+                                <div class="task-title">Clean kitchen counters</div>
+                                <div class="task-meta">
+                                    <span class="task-tag tag-home">🏠 Home</span>
+                                    <span class="task-due">⏰ Due in 2 hours</span>
+                                    <span class="task-effort">⚡ 15 min</span>
+                                </div>
+                            </div>
+                            <button class="btn-icon btn-secondary">→</button>
+                        </div>
+
+                        <div class="task-card">
+                            <div class="task-checkbox"></div>
+                            <div class="task-content">
+                                <div class="task-title">Vacuum living room</div>
+                                <div class="task-meta">
+                                    <span class="task-tag tag-home">🏠 Home</span>
+                                    <span class="task-due">⏰ Due today</span>
+                                    <span class="task-effort">⚡ 30 min</span>
+                                </div>
+                            </div>
+                            <button class="btn-icon btn-secondary">→</button>
+                        </div>
+
+                        <div class="task-card">
+                            <div class="task-checkbox checked">
+                                
+                            </div>
+                            <div class="task-content">
+                                <div class="task-title completed">Clean bathroom sink</div>
+                                <div class="task-meta">
+                                    <span class="task-tag tag-home">🏠 Home</span>
+                                    <span class="task-due">✓ Completed</span>
+                                    <span class="task-effort">⚡ 10 min</span>
+                                </div>
+                            </div>
+                            <button class="btn-icon btn-secondary">→</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Insights -->
+                <section class="insights-section">
+                    <div class="section-header">
+                        <h2>Quick Insights</h2>
+                    </div>
+
+                    <div class="insights-grid">
+                        <div class="glass-card insight-card">
+                            <div class="insight-icon">🔥</div>
+                            <div class="insight-content">
+                                <h3 class="insight-title">7 Day Streak</h3>
+                                <p class="insight-text">You're on fire! Keep up the momentum.</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-card insight-card">
+                            <div class="insight-icon">⭐</div>
+                            <div class="insight-content">
+                                <h3 class="insight-title">Most Productive Day</h3>
+                                <p class="insight-text">Mondays are your power days!</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-card insight-card">
+                            <div class="insight-icon">💎</div>
+                            <div class="insight-content">
+                                <h3 class="insight-title">Value Generated</h3>
+                                <p class="insight-text">$1,247 saved this month</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
     </div>
 
-    <!-- Add Task Modal -->
-    <div class="modal" id="addTaskModal">
-        <div class="modal-overlay" onclick="closeAddTaskModal()"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Add New Task</h3>
-                <button class="modal-close" onclick="closeAddTaskModal()">×</button>
-            </div>
-            <form id="addTaskForm" onsubmit="handleAddTask(event)">
-                <div class="form-group">
-                    <label class="form-label" for="taskName">Task Name</label>
-                    <input class="form-input" type="text" id="taskName" required placeholder="e.g., Clean kitchen counters">
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="taskFloor">Floor</label>
-                        <select class="form-select" id="taskFloor">
-                            <option value="">Select...</option>
-                            <option value="First Floor">First Floor</option>
-                            <option value="Second Floor">Second Floor</option>
-                            <option value="Basement">Basement</option>
-                            <option value="Garage">Garage</option>
-                            <option value="Exterior">Exterior</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="taskCategory">Room</label>
-                        <input class="form-input" type="text" id="taskCategory" placeholder="e.g., Kitchen">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="taskCadence">Frequency</label>
-                        <select class="form-select" id="taskCadence" required>
-                            <option value="1">Daily</option>
-                            <option value="3">Every 3 days</option>
-                            <option value="7" selected>Weekly</option>
-                            <option value="14">Bi-weekly</option>
-                            <option value="30">Monthly</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="taskTime">Time (min)</label>
-                        <input class="form-input" type="number" id="taskTime" value="15" min="1" max="300">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="taskEffort">Effort Level</label>
-                    <select class="form-select" id="taskEffort">
-                        <option value="Low">Low</option>
-                        <option value="Medium" selected>Medium</option>
-                        <option value="High">High</option>
-                    </select>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeAddTaskModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Task</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <style>
+        /* Welcome Section */
+        .welcome-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-8);
+            flex-wrap: wrap;
+            gap: var(--space-4);
+        }
 
-    <!-- Coming Soon Modal -->
-    <div class="modal" id="comingSoonModal">
-        <div class="modal-overlay" onclick="closeComingSoon()"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="comingSoonTitle">Coming Soon</h3>
-                <button class="modal-close" onclick="closeComingSoon()">×</button>
-            </div>
-            <div style="text-align: center; padding: var(--space-8) 0;">
-                <div style="font-size: 4rem; margin-bottom: var(--space-4);">🚀</div>
-                <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
-                    We're working hard to bring you this feature! Sign up for updates to be notified when it launches.
-                </p>
-                <button class="btn btn-primary w-full" onclick="closeComingSoon()">
-                    Got it!
-                </button>
-            </div>
-        </div>
-    </div>
+        .welcome-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            margin-bottom: var(--space-2);
+        }
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
+        .welcome-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
 
-    <!-- Scripts -->
-    <script type="module" src="js/config.js"></script>
-    <script type="module" src="js/api.js"></script>
-    <script type="module" src="js/app.js"></script>
-    
-    <!-- Auth Check -->
-    <script type="module">
-        import { SUPABASE_URL, SUPABASE_KEY } from './js/config.js';
-        
-        async function checkAuth() {
-            const accessToken = localStorage.getItem('supabase.auth.token');
-            if (!accessToken) {
-                window.location.href = './login.html';
-                return;
+        /* Stats Section */
+        .stats-section {
+            margin-bottom: var(--space-12);
+        }
+
+        .card-footer {
+            margin-top: var(--space-4);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+            transition: width var(--transition-slow);
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .section-header h2 {
+            margin-bottom: 0;
+        }
+
+        /* Tasks Section */
+        .tasks-section {
+            margin-bottom: var(--space-12);
+        }
+
+        /* Insights Section */
+        .insights-section {
+            margin-bottom: var(--space-12);
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-6);
+        }
+
+        .insight-card {
+            padding: var(--space-6);
+            display: flex;
+            gap: var(--space-4);
+            align-items: flex-start;
+        }
+
+        .insight-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .insight-content {
+            flex: 1;
+        }
+
+        .insight-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .insight-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: var(--space-3);
             }
         }
-        
-        checkAuth();
-        
-        window.signOut = () => {
-            localStorage.removeItem('supabase.auth.token');
-            window.location.href = './login.html';
-        };
-    </script>
-    
-    <!-- Dashboard Logic -->
-    <script type="module">
-        import { loadTodayTasks, updateStats } from './js/app.js';
-        import { SUPABASE_URL, SUPABASE_KEY } from './js/config.js';
-        
-        // Theme toggle
-        document.addEventListener('DOMContentLoaded', () => {
-            const themeToggle = document.getElementById('themeToggle');
-            if (themeToggle) {
-                themeToggle.addEventListener('click', toggleTheme);
-                loadTheme();
-            }
+    </style>
+
+    <script>
+        // Mobile navigation toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('open');
         });
 
-        function loadTheme() {
-            const theme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-            const btn = document.getElementById('themeToggle');
-            if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            document.getElementById('themeToggle').textContent = next === 'dark' ? '☀️' : '🌙';
-        }
-        
-        // Load data when page loads
-        document.addEventListener('DOMContentLoaded', async () => {
-            await updateStats();
-            await loadTodayTasks();
-            
-            // Set greeting
-            const hour = new Date().getHours();
-            let greeting = 'Good evening';
-            if (hour < 12) greeting = 'Good morning';
-            else if (hour < 18) greeting = 'Good afternoon';
-            document.getElementById('greeting').textContent = greeting;
-            
-            // Set date
-            const today = new Date();
-            const options = { weekday: 'long', month: 'long', day: 'numeric' };
-            document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
-            
-            // Load user name
-            try {
-                const accessToken = localStorage.getItem('supabase.auth.token');
-                const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-                const user = await userResponse.json();
+        // Task checkbox interactions
+        document.querySelectorAll('.task-checkbox:not(.checked)').forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
+                this.classList.add('checked');
+                const taskCard = this.closest('.task-card');
+                const taskTitle = taskCard.querySelector('.task-title');
+                taskTitle.classList.add('completed');
                 
-                // Try to get user name from settings
-                const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/settings?user_id=eq.${user.id}&select=user_name`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-                
-                if (settingsResponse.ok) {
-                    const settings = await settingsResponse.json();
-                    if (settings && settings[0] && settings[0].user_name) {
-                        document.getElementById('userName').textContent = settings[0].user_name;
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading user name:', error);
-            }
+                // Animate out after completion
+                setTimeout(() => {
+                    taskCard.style.opacity = '0';
+                    taskCard.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        taskCard.style.display = 'none';
+                    }, 300);
+                }, 1000);
+            });
         });
-        
-        // Coming Soon Modal
-        window.showComingSoon = (featureName) => {
-            document.getElementById('comingSoonTitle').textContent = featureName + ' - Coming Soon';
-            document.getElementById('comingSoonModal').classList.add('show');
-        };
-        
-        window.closeComingSoon = () => {
-            document.getElementById('comingSoonModal').classList.remove('show');
-        };
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+                ripple.style.width = ripple.style.height = '100px';
+                ripple.style.left = e.clientX - this.offsetLeft - 50 + 'px';
+                ripple.style.top = e.clientY - this.offsetTop - 50 + 'px';
+                ripple.style.pointerEvents = 'none';
+                ripple.style.animation = 'ripple 0.6s ease-out';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
     </script>
 </body>
 </html>

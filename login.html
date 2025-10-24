@@ -3,25 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome - Cadence</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Login - Cadence</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-wrapper">
+        <!-- Animated Background Elements -->
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <div class="bg-orb orb-3"></div>
+        
+        <div class="login-container">
+            <!-- Logo Section -->
+            <div class="login-header">
+                <div class="login-logo">Cadence</div>
+                <p class="login-tagline">Your intelligent home operations system</p>
+            </div>
+
+            <!-- Login Card -->
+            <div class="login-card glass-card-elevated">
+                <h2 class="login-title">Welcome Back</h2>
+                <p class="login-subtitle">Sign in to continue to your dashboard</p>
+
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            class="form-input" 
+                            placeholder="your@email.com"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="form-input" 
+                            placeholder="••••••••"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-link">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">
+                        Sign In
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </form>
+
+                <div class="divider">
+                    <span class="divider-text">or continue with</span>
+                </div>
+
+                <div class="social-login">
+                    <button class="btn-social">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/>
+                            <path d="M10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45c-.86.58-1.97.92-3.46.92-2.65 0-4.88-1.77-5.69-4.15H.89v2.52C2.43 17.75 5.87 20 10 20z"/>
+                            <path d="M4.31 11.9c-.25-.76-.25-1.58 0-2.34V7.04H.89c-.96 1.88-.96 4.06 0 5.94l3.42-2.08z"/>
+                            <path d="M10 3.88c1.45 0 2.73.5 3.75 1.47l2.72-2.72C14.96.99 12.7 0 10 0 5.87 0 2.43 2.25.89 5.58l3.42 2.08c.81-2.38 3.04-3.78 5.69-3.78z"/>
+                        </svg>
+                        Google
+                    </button>
+                    <button class="btn-social">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0110 4.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.137 18.165 20 14.418 20 10c0-5.523-4.477-10-10-10z"/>
+                        </svg>
+                        GitHub
+                    </button>
+                </div>
+
+                <p class="signup-link">
+                    Don't have an account? <a href="#" class="text-gradient">Sign up</a>
+                </p>
+            </div>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p>&copy; 2025 Cadence. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <span>•</span>
+                    <a href="#">Terms</a>
+                    <span>•</span>
+                    <a href="#">Help</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <style>
-        .login-container {
+        .login-wrapper {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
             padding: var(--space-4);
+            position: relative;
+            overflow: hidden;
         }
 
-        .login-card {
-            background: var(--bg-elevated);
-            border-radius: var(--radius-2xl);
-            padding: var(--space-8);
+        /* Animated Background Orbs */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            pointer-events: none;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(230, 183, 78, 0.4) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(180, 140, 255, 0.3) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: 7s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(230, 183, 78, 0.2) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 14s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        .login-container {
             width: 100%;
-            max-width: 400px;
-            box-shadow: var(--shadow-xl);
+            max-width: 440px;
+            z-index: 1;
         }
 
         .login-header {
@@ -29,410 +179,242 @@
             margin-bottom: var(--space-8);
         }
 
-        .login-icon {
-            font-size: 4rem;
-            margin-bottom: var(--space-4);
+        .login-logo {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.03em;
+            margin-bottom: var(--space-2);
+        }
+
+        .login-tagline {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .login-card {
+            padding: var(--space-8);
         }
 
         .login-title {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            color: var(--text-primary);
             margin-bottom: var(--space-2);
-            letter-spacing: -0.02em;
+            text-align: center;
         }
 
         .login-subtitle {
+            text-align: center;
             color: var(--text-secondary);
-            font-size: 0.875rem;
+            margin-bottom: var(--space-8);
+        }
+
+        .login-form {
+            margin-bottom: var(--space-6);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+            flex-wrap: wrap;
+            gap: var(--space-3);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-glass);
+            border-radius: var(--radius-sm);
+            background: var(--bg-glass);
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+            background: var(--gradient-primary);
+            border-color: transparent;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+            content: '✓';
+            color: var(--bg-space);
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .checkbox-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .forgot-link {
+            color: var(--primary-gold);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .btn-arrow {
+            transition: transform var(--transition-fast);
+            display: inline-block;
+        }
+
+        .btn-primary:hover .btn-arrow {
+            transform: translateX(4px);
         }
 
         .divider {
+            position: relative;
+            margin: var(--space-6) 0;
+            text-align: center;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-glass);
+        }
+
+        .divider-text {
+            position: relative;
+            display: inline-block;
+            padding: 0 var(--space-4);
+            background: var(--bg-elevated);
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        .social-login {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3);
+            margin-bottom: var(--space-6);
+        }
+
+        .btn-social {
             display: flex;
             align-items: center;
-            text-align: center;
-            margin: var(--space-6) 0;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .divider span {
-            padding: 0 var(--space-3);
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .alert {
-            padding: var(--space-4);
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3);
+            background: var(--bg-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--border-glass);
             border-radius: var(--radius-lg);
-            font-size: 0.875rem;
-            margin-top: var(--space-4);
-        }
-
-        .alert-error {
-            background: var(--danger-light);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
-
-        .alert-success {
-            background: var(--success-light);
-            color: var(--success);
-            border: 1px solid var(--success);
-        }
-
-        .text-link {
-            background: none;
-            border: none;
-            color: var(--primary);
-            font-size: 0.875rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
             cursor: pointer;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition-base);
+            transition: all var(--transition-fast);
         }
 
-        .text-link:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
+        .btn-social:hover {
+            background: var(--bg-glass-hover);
+            border-color: var(--border-glass-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-social svg {
+            flex-shrink: 0;
+        }
+
+        .signup-link {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .signup-link a {
+            font-weight: 600;
+        }
+
+        .login-footer {
+            margin-top: var(--space-8);
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        .footer-links {
+            margin-top: var(--space-2);
+            display: flex;
+            justify-content: center;
+            gap: var(--space-3);
+        }
+
+        .footer-links a {
+            color: var(--text-tertiary);
+            transition: color var(--transition-fast);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-gold);
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: var(--space-6);
+            }
+
+            .social-login {
+                grid-template-columns: 1fr;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
-</head>
-<body>
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <div class="login-icon">🏠</div>
-                <h1 class="login-title">Cadence</h1>
-                <p class="login-subtitle">Your smart home companion</p>
-            </div>
-            
-            <div id="authMode">
-                <h2 id="authTitle" style="font-size: 1.5rem; font-weight: 600; text-align: center; margin-bottom: var(--space-6);">Welcome Back</h2>
-                
-                <form id="authForm" onsubmit="handleAuth(event)">
-                    <div class="form-group">
-                        <label class="form-label" for="email">Email</label>
-                        <input class="form-input" type="email" id="email" required placeholder="you@example.com" autofocus>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="password">Password</label>
-                        <input class="form-input" type="password" id="password" required minlength="6" placeholder="At least 6 characters">
-                    </div>
-                    
-                    <div id="forgotPasswordSection" style="text-align: right; margin-bottom: var(--space-4);">
-                        <button type="button" onclick="showForgotPassword()" class="text-link">
-                            Forgot password?
-                        </button>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-full" id="authButton">
-                        <span id="authButtonText">Sign In</span>
-                    </button>
-                </form>
-                
-                <div class="divider">
-                    <span id="authTogglePrompt">Don't have an account?</span>
-                </div>
-                
-                <button onclick="toggleAuthMode()" class="btn btn-secondary w-full">
-                    <span id="authToggleText">Create Account</span>
-                </button>
-            </div>
-            
-            <div id="authError" class="alert alert-error" style="display:none;">
-                <span id="authErrorText"></span>
-            </div>
-            
-            <div id="authSuccess" class="alert alert-success" style="display:none;">
-                <span id="authSuccessText"></span>
-            </div>
-            
-            <div id="authLoading" style="display:none; text-align: center; margin-top: var(--space-4);">
-                <div class="spinner" style="margin: 0 auto;"></div>
-                <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: var(--space-2);">Processing...</p>
-            </div>
-        </div>
-    </div>
 
-    <!-- Forgot Password Modal -->
-    <div id="forgotPasswordModal" class="modal">
-        <div class="modal-overlay" onclick="closeForgotPassword()"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Reset Password</h3>
-                <button class="modal-close" onclick="closeForgotPassword()">×</button>
-            </div>
-            <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
-                Enter your email and we'll send you a reset link
-            </p>
-            
-            <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)">
-                <div class="form-group">
-                    <label class="form-label" for="resetEmail">Email</label>
-                    <input class="form-input" type="email" id="resetEmail" required placeholder="you@example.com">
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeForgotPassword()">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary" id="resetButton">
-                        Send Reset Link
-                    </button>
-                </div>
-            </form>
-            
-            <div id="resetError" class="alert alert-error" style="display:none; margin-top: var(--space-4);">
-                <span id="resetErrorText"></span>
-            </div>
-            
-            <div id="resetSuccess" class="alert alert-success" style="display:none; margin-top: var(--space-4);">
-                <span id="resetSuccessText"></span>
-            </div>
-        </div>
-    </div>
-
-    <script type="module">
-        import { SUPABASE_URL, SUPABASE_KEY } from './js/config.js';
-        
-        // Check if already logged in
-        (async () => {
-            const accessToken = localStorage.getItem('supabase.auth.token');
-            if (accessToken) {
-                try {
-                    const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        window.location.href = './index.html';
-                        return;
-                    }
-                } catch (error) {
-                    console.error('Session check failed:', error);
-                }
-                
-                localStorage.removeItem('supabase.auth.token');
-            }
-        })();
-        
-        let isSignUp = false;
-        
-        window.toggleAuthMode = () => {
-            isSignUp = !isSignUp;
-            document.getElementById('authTitle').textContent = isSignUp ? 'Create Account' : 'Welcome Back';
-            document.getElementById('authButtonText').textContent = isSignUp ? 'Sign Up' : 'Sign In';
-            document.getElementById('authTogglePrompt').textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
-            document.getElementById('authToggleText').textContent = isSignUp ? 'Sign In' : 'Create Account';
-            document.getElementById('authError').style.display = 'none';
-            document.getElementById('authSuccess').style.display = 'none';
-            document.getElementById('forgotPasswordSection').style.display = isSignUp ? 'none' : 'block';
-        };
-        
-        window.handleAuth = async (event) => {
-            event.preventDefault();
+    <script>
+        // Form submission handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('authError');
-            const errorText = document.getElementById('authErrorText');
-            const successDiv = document.getElementById('authSuccess');
-            const successText = document.getElementById('authSuccessText');
-            const loadingDiv = document.getElementById('authLoading');
-            const authButton = document.getElementById('authButton');
             
-            errorDiv.style.display = 'none';
-            successDiv.style.display = 'none';
-            loadingDiv.style.display = 'block';
-            authButton.disabled = true;
+            // Add your authentication logic here
+            // For now, redirect to index
+            console.log('Login attempt:', { email });
             
-            try {
-                if (isSignUp) {
-                    const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ email, password })
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (!response.ok) {
-                        throw new Error(result.msg || result.error_description || result.message || 'Sign up failed');
-                    }
-                    
-                    if (result.user && !result.user.email_confirmed_at && !result.access_token) {
-                        loadingDiv.style.display = 'none';
-                        successDiv.style.display = 'block';
-                        successText.innerHTML = `<strong>Check your email!</strong><br><small style="display:block;margin-top:var(--space-2);">We sent a confirmation link to ${email}</small>`;
-                        authButton.disabled = false;
-                        return;
-                    }
-                    
-                    const accessToken = result.access_token || result.session?.access_token;
-                    const userId = result.user?.id || result.id;
-                    
-                    if (!accessToken) {
-                        if (result.user) {
-                            loadingDiv.style.display = 'none';
-                            successDiv.style.display = 'block';
-                            successText.innerHTML = `<strong>Check your email!</strong><br><small style="display:block;margin-top:var(--space-2);">We sent a confirmation link to ${email}</small>`;
-                            authButton.disabled = false;
-                            return;
-                        }
-                        throw new Error('No access token received');
-                    }
-                    
-                    localStorage.setItem('supabase.auth.token', accessToken);
-                    
-                    await fetch(`${SUPABASE_URL}/rest/v1/settings`, {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${accessToken}`,
-                            'Content-Type': 'application/json',
-                            'Prefer': 'return=representation'
-                        },
-                        body: JSON.stringify({
-                            user_id: userId,
-                            user_name: email.split('@')[0],
-                            hourly_rate: 35,
-                            daily_minutes: 30,
-                            onboarding_completed: false
-                        })
-                    });
-                    
-                    window.location.href = './onboarding.html';
-                    
-                } else {
-                    const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ email, password })
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (!response.ok) {
-                        throw new Error(result.error_description || result.msg || result.message || 'Sign in failed');
-                    }
-                    
-                    const accessToken = result.access_token || result.session?.access_token;
-                    const userId = result.user?.id || result.id;
-                    
-                    if (!accessToken) {
-                        throw new Error('No access token received');
-                    }
-                    
-                    localStorage.setItem('supabase.auth.token', accessToken);
-                    
-                    const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/settings?user_id=eq.${userId}&select=onboarding_completed`, {
-                        headers: {
-                            'apikey': SUPABASE_KEY,
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    });
-                    
-                    if (settingsResponse.ok) {
-                        const settings = await settingsResponse.json();
-                        if (settings && settings[0] && !settings[0].onboarding_completed) {
-                            window.location.href = './onboarding.html';
-                            return;
-                        }
-                    }
-                    
-                    window.location.href = './index.html';
-                }
-            } catch (error) {
-                console.error('Auth error:', error);
-                loadingDiv.style.display = 'none';
-                errorDiv.style.display = 'block';
-                errorText.textContent = error.message || 'Something went wrong. Please try again.';
-                authButton.disabled = false;
-            }
-        };
-        
-        window.showForgotPassword = () => {
-            document.getElementById('forgotPasswordModal').classList.add('show');
-            document.getElementById('resetEmail').value = document.getElementById('email').value;
-        };
-        
-        window.closeForgotPassword = () => {
-            document.getElementById('forgotPasswordModal').classList.remove('show');
-            document.getElementById('forgotPasswordForm').reset();
-            document.getElementById('resetError').style.display = 'none';
-            document.getElementById('resetSuccess').style.display = 'none';
-        };
-        
-        window.handleForgotPassword = async (event) => {
-            event.preventDefault();
-            
-            const email = document.getElementById('resetEmail').value;
-            const errorDiv = document.getElementById('resetError');
-            const errorText = document.getElementById('resetErrorText');
-            const successDiv = document.getElementById('resetSuccess');
-            const successText = document.getElementById('resetSuccessText');
-            const resetButton = document.getElementById('resetButton');
-            
-            errorDiv.style.display = 'none';
-            successDiv.style.display = 'none';
-            resetButton.disabled = true;
-            resetButton.textContent = 'Sending...';
-            
-            try {
-                const origin = window.location.origin;
-                const pathname = window.location.pathname;
-                let directory = pathname.substring(0, pathname.lastIndexOf('/') + 1);
-                if (directory === '') directory = '/';
-                const redirectTo = origin + directory + 'reset-password.html';
-                
-                const response = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        email,
-                        redirectTo: redirectTo
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(result.msg || result.error_description || 'Failed to send reset email');
-                }
-                
-                successDiv.style.display = 'block';
-                successText.innerHTML = `<strong>Check your email!</strong><br><small style="display:block;margin-top:var(--space-2);">We sent a password reset link to ${email}</small>`;
-                
-                setTimeout(() => {
-                    closeForgotPassword();
-                }, 5000);
-                
-            } catch (error) {
-                console.error('Reset password error:', error);
-                errorDiv.style.display = 'block';
-                errorText.textContent = error.message || 'Failed to send reset email';
-            } finally {
-                resetButton.disabled = false;
-                resetButton.textContent = 'Send Reset Link';
-            }
-        };
+            // Simulate login
+            window.location.href = 'index.html';
+        });
+
+        // Social login handlers
+        document.querySelectorAll('.btn-social').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const provider = e.currentTarget.textContent.trim();
+                console.log(`Social login with ${provider}`);
+                // Add social login logic here
+            });
+        });
     </script>
 </body>
 </html>

@@ -3,501 +3,528 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Component Showcase - Cadence Design System</title>
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        .showcase-section {
-            margin-bottom: var(--space-12);
-        }
-        .component-demo {
-            background: var(--bg-elevated);
-            padding: var(--space-6);
-            border-radius: var(--radius-lg);
-            margin-bottom: var(--space-4);
-            border: 1px solid var(--border);
-        }
-        .demo-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: var(--space-4);
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .demo-grid {
-            display: grid;
-            gap: var(--space-4);
-        }
-        .code-block {
-            background: var(--bg-tertiary);
-            padding: var(--space-4);
-            border-radius: var(--radius-md);
-            font-family: var(--font-mono);
-            font-size: 0.875rem;
-            overflow-x: auto;
-            margin-top: var(--space-3);
-        }
-        .color-swatch {
-            width: 100px;
-            height: 100px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 0.75rem;
-            box-shadow: var(--shadow-md);
-        }
-    </style>
+    <title>Components - Cadence Design System</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
+    <div class="page-wrapper">
         <!-- Header -->
         <header class="header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-title">
-                        <h1>🎨 Component Showcase</h1>
-                        <p class="header-subtitle">Cadence Design System</p>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <button class="icon-btn" id="themeToggle">🌙</button>
+            <div class="container">
+                <div class="header-content">
+                    <a href="index.html" class="logo">Cadence</a>
+                    
+                    <nav class="nav-menu" id="navMenu">
+                        <a href="index.html" class="nav-link">Dashboard</a>
+                        <a href="cleaning.html" class="nav-link">Cleaning</a>
+                        <a href="components.html" class="nav-link active">Components</a>
+                        <a href="#" class="nav-link">Settings</a>
+                    </nav>
+
+                    <button class="mobile-nav-toggle" id="mobileToggle">☰</button>
                 </div>
             </div>
         </header>
 
-        <div class="content-wrapper">
-            <!-- Colors -->
-            <section class="showcase-section">
-                <h2 class="section-title">🎨 Color Palette</h2>
-                
-                <div class="component-demo">
-                    <div class="demo-title">Brand Colors</div>
-                    <div style="display: flex; gap: var(--space-4); flex-wrap: wrap;">
-                        <div>
-                            <div class="color-swatch" style="background: var(--primary);">Primary</div>
-                            <code style="display: block; margin-top: var(--space-2);">#FF6B6B</code>
-                        </div>
-                        <div>
-                            <div class="color-swatch" style="background: var(--secondary);">Secondary</div>
-                            <code style="display: block; margin-top: var(--space-2);">#4ECDC4</code>
-                        </div>
-                        <div>
-                            <div class="color-swatch" style="background: var(--accent);">Accent</div>
-                            <code style="display: block; margin-top: var(--space-2);">#FFE66D</code>
-                        </div>
-                    </div>
-                </div>
+        <!-- Main Content -->
+        <main class="content-wrapper">
+            <div class="container">
+                <!-- Header -->
+                <section class="components-header">
+                    <h1 class="text-gradient">Cadence Design System</h1>
+                    <p class="components-tagline">A futuristic, warm design language for household operations</p>
+                </section>
 
-                <div class="component-demo">
-                    <div class="demo-title">Semantic Colors</div>
-                    <div style="display: flex; gap: var(--space-4); flex-wrap: wrap;">
-                        <div>
-                            <div class="color-swatch" style="background: var(--success);">Success</div>
-                            <code style="display: block; margin-top: var(--space-2);">#10B981</code>
-                        </div>
-                        <div>
-                            <div class="color-swatch" style="background: var(--warning);">Warning</div>
-                            <code style="display: block; margin-top: var(--space-2);">#F59E0B</code>
-                        </div>
-                        <div>
-                            <div class="color-swatch" style="background: var(--danger);">Danger</div>
-                            <code style="display: block; margin-top: var(--space-2);">#EF4444</code>
-                        </div>
-                        <div>
-                            <div class="color-swatch" style="background: var(--info);">Info</div>
-                            <code style="display: block; margin-top: var(--space-2);">#3B82F6</code>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Buttons -->
-            <section class="showcase-section">
-                <h2 class="section-title">🔘 Buttons</h2>
-                
-                <div class="component-demo">
-                    <div class="demo-title">Button Variants</div>
-                    <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
-                        <button class="btn btn-primary">Primary</button>
-                        <button class="btn btn-secondary">Secondary</button>
-                        <button class="btn btn-success">Success</button>
-                        <button class="btn btn-danger">Danger</button>
-                        <button class="btn btn-ghost">Ghost</button>
-                    </div>
-                    <div class="code-block">
-&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;
-&lt;button class="btn btn-secondary"&gt;Secondary&lt;/button&gt;
-&lt;button class="btn btn-success"&gt;Success&lt;/button&gt;
-&lt;button class="btn btn-danger"&gt;Danger&lt;/button&gt;
-&lt;button class="btn btn-ghost"&gt;Ghost&lt;/button&gt;</div>
-                </div>
-
-                <div class="component-demo">
-                    <div class="demo-title">Button Sizes</div>
-                    <div style="display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap;">
-                        <button class="btn btn-primary btn-sm">Small</button>
-                        <button class="btn btn-primary">Default</button>
-                        <button class="btn btn-primary btn-lg">Large</button>
-                    </div>
-                    <div class="code-block">
-&lt;button class="btn btn-primary btn-sm"&gt;Small&lt;/button&gt;
-&lt;button class="btn btn-primary"&gt;Default&lt;/button&gt;
-&lt;button class="btn btn-primary btn-lg"&gt;Large&lt;/button&gt;</div>
-                </div>
-
-                <div class="component-demo">
-                    <div class="demo-title">Icon Buttons</div>
-                    <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
-                        <button class="icon-btn">🔥</button>
-                        <button class="icon-btn">⚡</button>
-                        <button class="icon-btn">✨</button>
-                        <button class="icon-btn">🚀</button>
-                    </div>
-                    <div class="code-block">
-&lt;button class="icon-btn"&gt;🔥&lt;/button&gt;</div>
-                </div>
-            </section>
-
-            <!-- Cards -->
-            <section class="showcase-section">
-                <h2 class="section-title">💳 Cards</h2>
-                
-                <div class="component-demo">
-                    <div class="demo-title">Feature Card</div>
-                    <div style="max-width: 400px;">
-                        <div class="feature-card">
-                            <div class="feature-card-icon">✨</div>
-                            <h3 class="feature-card-title">Cleaning Tracker</h3>
-                            <p class="feature-card-description">
-                                Smart scheduling for your home cleaning tasks. Never forget what needs to be done.
-                            </p>
-                            <span class="feature-card-badge">Active</span>
-                        </div>
-                    </div>
-                    <div class="code-block">
-&lt;div class="feature-card"&gt;
-    &lt;div class="feature-card-icon"&gt;✨&lt;/div&gt;
-    &lt;h3 class="feature-card-title"&gt;Title&lt;/h3&gt;
-    &lt;p class="feature-card-description"&gt;Description&lt;/p&gt;
-    &lt;span class="feature-card-badge"&gt;Badge&lt;/span&gt;
-&lt;/div&gt;</div>
-                </div>
-
-                <div class="component-demo">
-                    <div class="demo-title">Stat Cards</div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-3);">
-                        <div class="stat-card danger">
-                            <div class="stat-icon">🔴</div>
-                            <div class="stat-value">5</div>
-                            <div class="stat-label">Overdue</div>
-                        </div>
-                        <div class="stat-card warning">
-                            <div class="stat-icon">🟡</div>
-                            <div class="stat-value">3</div>
-                            <div class="stat-label">Due Soon</div>
-                        </div>
-                        <div class="stat-card success">
-                            <div class="stat-icon">🟢</div>
-                            <div class="stat-value">10</div>
-                            <div class="stat-label">On Track</div>
-                        </div>
-                    </div>
-                    <div class="code-block">
-&lt;div class="stat-card danger"&gt;
-    &lt;div class="stat-icon"&gt;🔴&lt;/div&gt;
-    &lt;div class="stat-value"&gt;5&lt;/div&gt;
-    &lt;div class="stat-label"&gt;Overdue&lt;/div&gt;
-&lt;/div&gt;</div>
-                </div>
-
-                <div class="component-demo">
-                    <div class="demo-title">Task Card</div>
-                    <div style="max-width: 500px;">
-                        <div class="task-card overdue">
-                            <div class="task-card-header">
-                                <div class="task-name">Clean kitchen counters</div>
+                <!-- Color Palette -->
+                <section class="component-section">
+                    <h2 class="section-title">Color Palette</h2>
+                    <div class="color-grid">
+                        <div class="color-card">
+                            <div class="color-swatch" style="background: var(--gradient-primary);"></div>
+                            <div class="color-info">
+                                <div class="color-name">Primary Gradient</div>
+                                <div class="color-value">Gold → Purple</div>
                             </div>
-                            <div class="task-meta">
-                                <span class="task-badge">🏢 First Floor</span>
-                                <span class="task-badge">📍 Kitchen</span>
-                                <span class="task-badge">⏱️ 10m</span>
+                        </div>
+                        <div class="color-card">
+                            <div class="color-swatch" style="background: #E6B74E;"></div>
+                            <div class="color-info">
+                                <div class="color-name">Primary Gold</div>
+                                <div class="color-value">#E6B74E</div>
                             </div>
-                            <div class="task-actions">
-                                <button class="btn btn-success btn-sm">✓ Complete</button>
-                                <button class="btn btn-secondary btn-sm">Reschedule</button>
+                        </div>
+                        <div class="color-card">
+                            <div class="color-swatch" style="background: #B48CFF;"></div>
+                            <div class="color-info">
+                                <div class="color-name">Primary Purple</div>
+                                <div class="color-value">#B48CFF</div>
+                            </div>
+                        </div>
+                        <div class="color-card">
+                            <div class="color-swatch" style="background: #0F0F14;"></div>
+                            <div class="color-info">
+                                <div class="color-name">Space Black</div>
+                                <div class="color-value">#0F0F14</div>
+                            </div>
+                        </div>
+                        <div class="color-card">
+                            <div class="color-swatch" style="background: #1A1A24;"></div>
+                            <div class="color-info">
+                                <div class="color-name">Elevated Surface</div>
+                                <div class="color-value">#1A1A24</div>
+                            </div>
+                        </div>
+                        <div class="color-card">
+                            <div class="color-swatch" style="background: #86EFAC;"></div>
+                            <div class="color-info">
+                                <div class="color-name">Success Green</div>
+                                <div class="color-value">#86EFAC</div>
+                            </div>
+                        </div>
+                        <div class="color-card">
+                            <div class="color-swatch" style="background: #FCD34D;"></div>
+                            <div class="color-info">
+                                <div class="color-name">Warning Amber</div>
+                                <div class="color-value">#FCD34D</div>
+                            </div>
+                        </div>
+                        <div class="color-card">
+                            <div class="color-swatch" style="background: #FCA5A5;"></div>
+                            <div class="color-info">
+                                <div class="color-name">Gentle Coral</div>
+                                <div class="color-value">#FCA5A5</div>
                             </div>
                         </div>
                     </div>
-                    <div class="code-block">
-&lt;div class="task-card overdue"&gt;
-    &lt;div class="task-card-header"&gt;
-        &lt;div class="task-name"&gt;Task Name&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="task-meta"&gt;
-        &lt;span class="task-badge"&gt;Badge&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class="task-actions"&gt;
-        &lt;button class="btn btn-sm"&gt;Action&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</div>
-                </div>
-            </section>
+                    <div class="component-notes glass-card-sm">
+                        <h4>Design Philosophy</h4>
+                        <p><strong>Dark mode first:</strong> Deep space blacks with elevated surfaces. <strong>Gradient accents:</strong> Gold-to-purple gradients for premium, futuristic feel. <strong>Glassmorphism:</strong> Frosted glass effects with backdrop-blur. <strong>Glow effects:</strong> Subtle shadows that enhance depth without harshness.</p>
+                    </div>
+                </section>
 
-            <!-- Forms -->
-            <section class="showcase-section">
-                <h2 class="section-title">📝 Form Elements</h2>
-                
-                <div class="component-demo">
-                    <div class="demo-title">Text Input</div>
-                    <div style="max-width: 400px;">
-                        <div class="form-group">
-                            <label class="form-label" for="demo-input">Label</label>
-                            <input class="form-input" type="text" id="demo-input" placeholder="Placeholder text">
+                <!-- Typography -->
+                <section class="component-section">
+                    <h2 class="section-title">Typography</h2>
+                    <div class="glass-card">
+                        <h1>Heading 1 - Plus Jakarta Sans</h1>
+                        <h2>Heading 2 - Clear Hierarchy</h2>
+                        <h3>Heading 3 - Futuristic & Clean</h3>
+                        <p style="font-size: 1.1rem; color: var(--text-primary);">Body Large - Inter font family for excellent readability</p>
+                        <p>Body Regular - Perfect for descriptions and longer content blocks</p>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Body Small - Great for metadata and subtle information</p>
+                    </div>
+                    <div class="component-notes glass-card-sm">
+                        <h4>Font Stack</h4>
+                        <p><strong>Display:</strong> Plus Jakarta Sans (bold, premium feel). <strong>Body:</strong> Inter (clean, highly legible). <strong>Fallback:</strong> System fonts for performance.</p>
+                    </div>
+                </section>
+
+                <!-- Buttons -->
+                <section class="component-section">
+                    <h2 class="section-title">Buttons</h2>
+                    <div class="glass-card">
+                        <div class="button-showcase">
+                            <div class="button-row">
+                                <h4>Primary Buttons</h4>
+                                <div class="button-group">
+                                    <button class="btn btn-primary btn-lg">Large Primary</button>
+                                    <button class="btn btn-primary">Regular Primary</button>
+                                    <button class="btn btn-primary btn-sm">Small Primary</button>
+                                </div>
+                            </div>
+
+                            <div class="button-row">
+                                <h4>Secondary Buttons</h4>
+                                <div class="button-group">
+                                    <button class="btn btn-secondary btn-lg">Large Secondary</button>
+                                    <button class="btn btn-secondary">Regular Secondary</button>
+                                    <button class="btn btn-secondary btn-sm">Small Secondary</button>
+                                </div>
+                            </div>
+
+                            <div class="button-row">
+                                <h4>Outline Buttons</h4>
+                                <div class="button-group">
+                                    <button class="btn btn-outline btn-lg">Large Outline</button>
+                                    <button class="btn btn-outline">Regular Outline</button>
+                                    <button class="btn btn-outline btn-sm">Small Outline</button>
+                                </div>
+                            </div>
+
+                            <div class="button-row">
+                                <h4>Icon Buttons</h4>
+                                <div class="button-group">
+                                    <button class="btn btn-icon btn-primary">+</button>
+                                    <button class="btn btn-icon btn-secondary">✏️</button>
+                                    <button class="btn btn-icon btn-outline">⋯</button>
+                                </div>
+                            </div>
+
+                            <div class="button-row">
+                                <h4>Block Button</h4>
+                                <button class="btn btn-primary btn-block">Full Width Button</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="code-block">
-&lt;div class="form-group"&gt;
-    &lt;label class="form-label" for="input"&gt;Label&lt;/label&gt;
-    &lt;input class="form-input" type="text" id="input" placeholder="Placeholder"&gt;
-&lt;/div&gt;</div>
-                </div>
+                    <div class="component-notes glass-card-sm">
+                        <h4>Button States</h4>
+                        <p><strong>Ripple effect:</strong> Expanding circle on click. <strong>Glass secondary:</strong> Frosted glass with subtle borders. <strong>Smooth transforms:</strong> Cubic-bezier easing for premium feel. <strong>Glow shadows:</strong> Colored shadows that match button color.</p>
+                    </div>
+                </section>
 
-                <div class="component-demo">
-                    <div class="demo-title">Select Dropdown</div>
-                    <div style="max-width: 400px;">
-                        <div class="form-group">
-                            <label class="form-label" for="demo-select">Choose an option</label>
-                            <select class="form-select" id="demo-select">
-                                <option>Option 1</option>
-                                <option>Option 2</option>
-                                <option>Option 3</option>
+                <!-- Status Indicators -->
+                <section class="component-section">
+                    <h2 class="section-title">Status Indicators</h2>
+                    <div class="glass-card">
+                        <div class="status-showcase">
+                            <span class="status-badge status-fresh">✓ Fresh</span>
+                            <span class="status-badge status-due-soon">⏰ Due Soon</span>
+                            <span class="status-badge status-needs-attention">🔔 Needs Attention</span>
+                        </div>
+                    </div>
+                    <div class="component-notes glass-card-sm">
+                        <h4>No Harsh Alerts</h4>
+                        <p>Even in a futuristic design, we keep it compassionate. <strong>Glowing indicators</strong> with transparency instead of solid colors. <strong>Neon accents</strong> that guide, not scold. Status colors are atmospheric — they glow gently in the darkness rather than shout.</p>
+                    </div>
+                </section>
+
+                <!-- Cards -->
+                <section class="component-section">
+                    <h2 class="section-title">Cards</h2>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-icon" style="background: linear-gradient(135deg, rgba(252, 211, 77, 0.2) 0%, rgba(252, 211, 77, 0.05) 100%);">
+                                📋
+                            </div>
+                            <div class="card-title">Dashboard Card</div>
+                            <div class="card-subtitle">Interactive with hover effects</div>
+                            <div class="card-stats">42</div>
+                        </div>
+
+                        <div class="glass-card glass-card-elevated">
+                            <h3>Glass Card</h3>
+                            <p>Elevated glass card with frosted blur effect. Perfect for containing content with subtle depth.</p>
+                        </div>
+
+                        <div class="glass-card">
+                            <h3>Standard Glass</h3>
+                            <p>Standard glass card with minimal elevation. Clean and modern appearance.</p>
+                        </div>
+                    </div>
+                    <div class="component-notes glass-card-sm">
+                        <h4>Card Design — Glassmorphism & Depth</h4>
+                        <p><strong>Frosted glass:</strong> backdrop-filter: blur(20px) for that Apple-esque feel. <strong>Layered depth:</strong> Multiple shadow levels and gradient overlays. <strong>Hover animations:</strong> Lift + glow + border highlight. <strong>Subtle gradients:</strong> Overlay gradients appear on hover for extra dimension.</p>
+                    </div>
+                </section>
+
+                <!-- Forms -->
+                <section class="component-section">
+                    <h2 class="section-title">Form Elements</h2>
+                    <div class="glass-card">
+                        <div class="form-showcase">
+                            <div class="form-group">
+                                <label class="form-label" for="demo-input">Text Input</label>
+                                <input type="text" id="demo-input" class="form-input" placeholder="Enter text...">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="demo-select">Select Dropdown</label>
+                                <select id="demo-select" class="form-select">
+                                    <option value="">Choose an option...</option>
+                                    <option value="1">Option 1</option>
+                                    <option value="2">Option 2</option>
+                                    <option value="3">Option 3</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="demo-textarea">Textarea</label>
+                                <textarea id="demo-textarea" class="form-textarea" placeholder="Enter longer text..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Task Components -->
+                <section class="component-section">
+                    <h2 class="section-title">Task Components</h2>
+                    <div class="task-list">
+                        <div class="task-card">
+                            <div class="task-checkbox"></div>
+                            <div class="task-content">
+                                <div class="task-title">Uncompleted Task</div>
+                                <div class="task-meta">
+                                    <span class="task-tag tag-home">Home</span>
+                                    <span class="task-due">⏰ Due today</span>
+                                    <span class="task-effort">⚡ 15 min</span>
+                                </div>
+                            </div>
+                            <button class="btn-icon btn-secondary">→</button>
+                        </div>
+
+                        <div class="task-card">
+                            <div class="task-checkbox checked"></div>
+                            <div class="task-content">
+                                <div class="task-title completed">Completed Task</div>
+                                <div class="task-meta">
+                                    <span class="task-tag tag-personal">Personal</span>
+                                    <span class="task-due">✓ Done</span>
+                                    <span class="task-effort">⚡ 30 min</span>
+                                </div>
+                            </div>
+                            <button class="btn-icon btn-secondary">→</button>
+                        </div>
+
+                        <div class="task-card">
+                            <div class="task-checkbox"></div>
+                            <div class="task-content">
+                                <div class="task-title">Task with Work Tag</div>
+                                <div class="task-meta">
+                                    <span class="task-tag tag-work">Work</span>
+                                    <span class="task-due">⏰ Tomorrow</span>
+                                    <span class="task-effort">⚡ 45 min</span>
+                                </div>
+                            </div>
+                            <button class="btn-icon btn-secondary">→</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Filters & Tabs -->
+                <section class="component-section">
+                    <h2 class="section-title">Filters & Tabs</h2>
+                    <div class="filter-bar">
+                        <div class="filter-tabs">
+                            <button class="filter-tab active">All Tasks</button>
+                            <button class="filter-tab">Due Today</button>
+                            <button class="filter-tab">Overdue</button>
+                            <button class="filter-tab">Completed</button>
+                        </div>
+                        <div class="filter-options">
+                            <select class="group-by form-select">
+                                <option>Group: None</option>
+                                <option>Group: Floor</option>
+                                <option>Group: Room</option>
                             </select>
                         </div>
                     </div>
-                    <div class="code-block">
-&lt;div class="form-group"&gt;
-    &lt;label class="form-label" for="select"&gt;Label&lt;/label&gt;
-    &lt;select class="form-select" id="select"&gt;
-        &lt;option&gt;Option&lt;/option&gt;
-    &lt;/select&gt;
-&lt;/div&gt;</div>
-                </div>
+                </section>
 
-                <div class="component-demo">
-                    <div class="demo-title">Textarea</div>
-                    <div style="max-width: 400px;">
-                        <div class="form-group">
-                            <label class="form-label" for="demo-textarea">Message</label>
-                            <textarea class="form-textarea" id="demo-textarea" placeholder="Type your message here..."></textarea>
+                <!-- Loading States -->
+                <section class="component-section">
+                    <h2 class="section-title">Loading & Empty States</h2>
+                    <div class="glass-card">
+                        <div class="loading-spinner"></div>
+                    </div>
+                    
+                    <div class="glass-card" style="margin-top: var(--space-6);">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <h3 class="empty-state-title">No tasks found</h3>
+                            <p class="empty-state-text">Get started by adding your first task</p>
+                            <button class="btn btn-primary">Add Task</button>
                         </div>
                     </div>
-                    <div class="code-block">
-&lt;div class="form-group"&gt;
-    &lt;label class="form-label" for="textarea"&gt;Label&lt;/label&gt;
-    &lt;textarea class="form-textarea" id="textarea"&gt;&lt;/textarea&gt;
-&lt;/div&gt;</div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Badges & Tags -->
-            <section class="showcase-section">
-                <h2 class="section-title">🏷️ Badges & Tags</h2>
-                
-                <div class="component-demo">
-                    <div class="demo-title">Task Badges</div>
-                    <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                        <span class="task-badge">🏢 First Floor</span>
-                        <span class="task-badge">📍 Kitchen</span>
-                        <span class="task-badge">💪 Medium</span>
-                        <span class="task-badge">⏱️ 15m</span>
-                        <span class="task-badge">🔄 Weekly</span>
-                    </div>
-                    <div class="code-block">
-&lt;span class="task-badge"&gt;🏢 First Floor&lt;/span&gt;
-&lt;span class="task-badge"&gt;📍 Kitchen&lt;/span&gt;</div>
-                </div>
-
-                <div class="component-demo">
-                    <div class="demo-title">Feature Badges</div>
-                    <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                        <span class="feature-card-badge">Active</span>
-                        <span class="feature-card-badge" style="background: var(--text-tertiary);">Coming Soon</span>
-                        <span class="feature-card-badge" style="background: var(--success);">New</span>
-                    </div>
-                    <div class="code-block">
-&lt;span class="feature-card-badge"&gt;Active&lt;/span&gt;</div>
-                </div>
-            </section>
-
-            <!-- Empty States -->
-            <section class="showcase-section">
-                <h2 class="section-title">🗑️ Empty States</h2>
-                
-                <div class="component-demo">
-                    <div class="demo-title">Empty State</div>
-                    <div class="empty-state">
-                        <div class="empty-icon">📋</div>
-                        <p>No tasks found</p>
-                        <button class="btn btn-primary btn-sm">Add Your First Task</button>
-                    </div>
-                    <div class="code-block">
-&lt;div class="empty-state"&gt;
-    &lt;div class="empty-icon"&gt;📋&lt;/div&gt;
-    &lt;p&gt;No items found&lt;/p&gt;
-    &lt;button class="btn btn-primary btn-sm"&gt;Action&lt;/button&gt;
-&lt;/div&gt;</div>
-                </div>
-            </section>
-
-            <!-- Loading States -->
-            <section class="showcase-section">
-                <h2 class="section-title">⏳ Loading States</h2>
-                
-                <div class="component-demo">
-                    <div class="demo-title">Spinner</div>
-                    <div class="spinner"></div>
-                    <div class="code-block">
-&lt;div class="spinner"&gt;&lt;/div&gt;</div>
-                </div>
-
-                <div class="component-demo">
-                    <div class="demo-title">Skeleton Loader</div>
-                    <div class="skeleton skeleton-card"></div>
-                    <div class="code-block">
-&lt;div class="skeleton skeleton-card"&gt;&lt;/div&gt;</div>
-                </div>
-            </section>
-
-            <!-- Navigation -->
-            <section class="showcase-section">
-                <h2 class="section-title">🧭 Navigation</h2>
-                
-                <div class="component-demo">
-                    <div class="demo-title">Bottom Navigation (Mobile)</div>
-                    <div style="background: var(--bg-secondary); border-radius: var(--radius-lg); padding: var(--space-4);">
-                        <p style="text-align: center; color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--space-4);">
-                            This appears at the bottom on mobile devices
-                        </p>
-                        <div style="display: flex; justify-content: space-around; background: var(--bg-elevated); padding: var(--space-2); border-radius: var(--radius-md);">
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5rem;">🏠</div>
-                                <div style="font-size: 0.75rem; color: var(--primary);">Home</div>
+                <!-- Utilities -->
+                <section class="component-section">
+                    <h2 class="section-title">Utility Classes</h2>
+                    <div class="glass-card">
+                        <div class="utilities-showcase">
+                            <div>
+                                <p class="text-gradient">Gradient Text Effect</p>
+                                <div class="divider"></div>
+                                <p>Divider between sections</p>
                             </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5rem;">✨</div>
-                                <div style="font-size: 0.75rem;">Clean</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5rem;">📋</div>
-                                <div style="font-size: 0.75rem;">Tasks</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5rem;">📊</div>
-                                <div style="font-size: 0.75rem;">Stats</div>
+                            
+                            <div style="margin-top: var(--space-6);">
+                                <h4>Spacing Utilities</h4>
+                                <div class="mt-4 p-4 glass-card-sm">Margin Top 4 + Padding 4</div>
+                                <div class="mt-6 p-6 glass-card-sm">Margin Top 6 + Padding 6</div>
+                                <div class="mt-8 p-8 glass-card-sm">Margin Top 8 + Padding 8</div>
                             </div>
                         </div>
                     </div>
-                    <div class="code-block">
-&lt;nav class="bottom-nav"&gt;
-    &lt;a href="/" class="nav-item active"&gt;
-        &lt;span class="nav-icon"&gt;🏠&lt;/span&gt;
-        &lt;span class="nav-label"&gt;Home&lt;/span&gt;
-    &lt;/a&gt;
-    &lt;!-- More nav items --&gt;
-&lt;/nav&gt;</div>
-                </div>
-            </section>
-
-            <!-- Typography -->
-            <section class="showcase-section">
-                <h2 class="section-title">✏️ Typography</h2>
-                
-                <div class="component-demo">
-                    <div class="demo-title">Type Scale</div>
-                    <div style="display: flex; flex-direction: column; gap: var(--space-4);">
-                        <div>
-                            <h1 style="font-size: 2rem; font-weight: 700;">Display (2rem)</h1>
-                        </div>
-                        <div>
-                            <h2 style="font-size: 1.75rem; font-weight: 700;">H1 (1.75rem)</h2>
-                        </div>
-                        <div>
-                            <h3 style="font-size: 1.25rem; font-weight: 600;">H2 (1.25rem)</h3>
-                        </div>
-                        <div>
-                            <p style="font-size: 1rem;">Body (1rem) - This is the default text size used for paragraphs and most content.</p>
-                        </div>
-                        <div>
-                            <p style="font-size: 0.875rem; color: var(--text-secondary);">Small (0.875rem) - Used for secondary information and metadata.</p>
-                        </div>
-                        <div>
-                            <p style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">Tiny (0.75rem) - Labels and micro-copy</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Spacing -->
-            <section class="showcase-section">
-                <h2 class="section-title">📐 Spacing Scale</h2>
-                
-                <div class="component-demo">
-                    <div class="demo-title">Visual Scale</div>
-                    <div style="display: flex; flex-direction: column; gap: var(--space-2);">
-                        <div style="display: flex; align-items: center; gap: var(--space-4);">
-                            <div style="width: var(--space-1); height: 40px; background: var(--primary);"></div>
-                            <code>--space-1: 0.25rem (4px)</code>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: var(--space-4);">
-                            <div style="width: var(--space-2); height: 40px; background: var(--primary);"></div>
-                            <code>--space-2: 0.5rem (8px)</code>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: var(--space-4);">
-                            <div style="width: var(--space-3); height: 40px; background: var(--primary);"></div>
-                            <code>--space-3: 0.75rem (12px)</code>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: var(--space-4);">
-                            <div style="width: var(--space-4); height: 40px; background: var(--primary);"></div>
-                            <code>--space-4: 1rem (16px)</code>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: var(--space-4);">
-                            <div style="width: var(--space-6); height: 40px; background: var(--primary);"></div>
-                            <code>--space-6: 1.5rem (24px)</code>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: var(--space-4);">
-                            <div style="width: var(--space-8); height: 40px; background: var(--primary);"></div>
-                            <code>--space-8: 2rem (32px)</code>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
+                </section>
+            </div>
+        </main>
     </div>
 
-    <!-- Theme Toggle Script -->
+    <style>
+        /* Components Page Specific Styles */
+        .components-header {
+            text-align: center;
+            margin-bottom: var(--space-12);
+            padding: var(--space-8) 0;
+        }
+
+        .components-tagline {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-top: var(--space-3);
+        }
+
+        .component-section {
+            margin-bottom: var(--space-16);
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            margin-bottom: var(--space-6);
+            padding-bottom: var(--space-3);
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .component-notes {
+            margin-top: var(--space-6);
+            background: var(--bg-elevated);
+        }
+
+        .component-notes h4 {
+            font-size: 1rem;
+            margin-bottom: var(--space-3);
+            color: var(--primary-gold);
+        }
+
+        .component-notes p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        /* Color Grid */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        .color-card {
+            background: var(--bg-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all var(--transition-base);
+        }
+
+        .color-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-glass-hover);
+            box-shadow: var(--shadow-md);
+        }
+
+        .color-swatch {
+            height: 120px;
+            width: 100%;
+        }
+
+        .color-info {
+            padding: var(--space-3);
+        }
+
+        .color-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-1);
+        }
+
+        .color-value {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Button Showcase */
+        .button-showcase {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+
+        .button-row {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .button-row h4 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: var(--space-3);
+            flex-wrap: wrap;
+        }
+
+        /* Status Showcase */
+        .status-showcase {
+            display: flex;
+            gap: var(--space-4);
+            flex-wrap: wrap;
+        }
+
+        /* Form Showcase */
+        .form-showcase {
+            max-width: 500px;
+        }
+
+        /* Utilities Showcase */
+        .utilities-showcase {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+
+        @media (max-width: 768px) {
+            .color-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button-group .btn {
+                width: 100%;
+            }
+        }
+    </style>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const themeToggle = document.getElementById('themeToggle');
-            
-            function loadTheme() {
-                const theme = localStorage.getItem('theme') || 'light';
-                document.documentElement.setAttribute('data-theme', theme);
-                themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
-            }
+        // Mobile navigation toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
 
-            function toggleTheme() {
-                const current = document.documentElement.getAttribute('data-theme');
-                const next = current === 'dark' ? 'light' : 'dark';
-                document.documentElement.setAttribute('data-theme', next);
-                localStorage.setItem('theme', next);
-                themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
-            }
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('open');
+        });
 
-            themeToggle.addEventListener('click', toggleTheme);
-            loadTheme();
+        // Interactive checkbox demo
+        document.querySelectorAll('.task-checkbox:not(.checked)').forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
+                this.classList.toggle('checked');
+                const taskTitle = this.closest('.task-card').querySelector('.task-title');
+                taskTitle.classList.toggle('completed');
+            });
+        });
+
+        // Filter tabs demo
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
         });
     </script>
 </body>
