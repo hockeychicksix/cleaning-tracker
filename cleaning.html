@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleaning - Cadence</title>
+    <link rel="stylesheet" href="css/style-v2.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="index-v2.html" class="back-btn">←</a>
+                    <div class="header-title">
+                        <h1>✨ Cleaning Tracker</h1>
+                        <div style="display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-2);">
+                            <button class="nav-arrow" id="prevWeek" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: var(--radius-full); cursor: pointer; font-size: 1.25rem;">‹</button>
+                            <span class="header-subtitle" id="weekRange" style="font-weight: 600; min-width: 150px; text-align: center;">Loading...</span>
+                            <button class="nav-arrow" id="nextWeek" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: var(--radius-full); cursor: pointer; font-size: 1.25rem;">›</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" id="themeToggle">🌙</button>
+                    <button class="icon-btn" onclick="signOut()">🚪</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Desktop Navigation -->
+        <nav class="top-nav" style="display: none;">
+            <div class="top-nav-content">
+                <a href="index-v2.html" class="nav-item">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+                <a href="cleaning.html" class="nav-item active">
+                    <span class="nav-icon">✨</span>
+                    <span class="nav-label">Cleaning</span>
+                </a>
+                <a href="tasks.html" class="nav-item">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-label">All Tasks</span>
+                </a>
+                <a href="stats.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Stats</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="content-wrapper">
+            <!-- Settings Bar -->
+            <section class="dashboard-section" style="padding-top: var(--space-4);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); padding: var(--space-4); background: var(--bg-elevated); border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+                    <div style="display: flex; align-items: center; gap: var(--space-2);">
+                        <span style="color: var(--text-secondary); font-size: 0.875rem;">Daily Budget:</span>
+                        <span style="color: var(--primary); font-weight: 600;" id="dailyBudget">30 min</span>
+                        <button class="btn-icon btn-ghost" onclick="showSettingsModal()">⚙️</button>
+                    </div>
+                    <button class="btn btn-primary" onclick="smartSchedule()">
+                        ✨ Smart Schedule Week
+                    </button>
+                </div>
+            </section>
+
+            <!-- Week Grid -->
+            <section class="dashboard-section">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-3);" id="weekGrid">
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                </div>
+            </section>
+
+            <!-- Selected Day Details -->
+            <section class="dashboard-section" id="dayDetails" style="display:none;">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title" id="selectedDayTitle">Today</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: var(--space-1);" id="selectedDayMeta">0 tasks • 0 min</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="showScheduleTaskPicker()">
+                        ➕ Add Task
+                    </button>
+                </div>
+
+                <!-- Smart Tip -->
+                <div id="smartTip" style="display:none; background: var(--info-light); padding: var(--space-4); border-radius: var(--radius-lg); margin-bottom: var(--space-4); border-left: 4px solid var(--info);">
+                    <span style="font-size: 1.25rem; margin-right: var(--space-2);">💡</span>
+                    <span id="tipText" style="font-weight: 500; color: var(--text-primary);"></span>
+                </div>
+
+                <!-- Schedule Columns -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4);">
+                    <!-- To Do -->
+                    <div style="background: var(--bg-elevated); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-light);">
+                        <div style="padding: var(--space-4); display: flex; justify-content: space-between; align-items: center; background: var(--info-light); border-bottom: 1px solid var(--border-light);">
+                            <h3 style="font-size: 1rem; margin: 0; font-weight: 600;">To Do</h3>
+                            <span style="background: var(--bg-elevated); padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.875rem; font-weight: 600;" id="todoCount">0</span>
+                        </div>
+                        <div style="padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); min-height: 200px;" id="todoColumn">
+                            <div class="empty-state">
+                                <div class="empty-icon">✨</div>
+                                <p>No tasks scheduled</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Done -->
+                    <div style="background: var(--bg-elevated); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-light);">
+                        <div style="padding: var(--space-4); display: flex; justify-content: space-between; align-items: center; background: var(--success-light); border-bottom: 1px solid var(--border-light);">
+                            <h3 style="font-size: 1rem; margin: 0; font-weight: 600;">Done</h3>
+                            <span style="background: var(--bg-elevated); padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.875rem; font-weight: 600;" id="doneCount">0</span>
+                        </div>
+                        <div style="padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); min-height: 200px;" id="doneColumn">
+                            <div class="empty-state">
+                                <div class="empty-icon">🎯</div>
+                                <p>No completions yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="index-v2.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="cleaning.html" class="nav-item active">
+                <span class="nav-icon">✨</span>
+                <span class="nav-label">Cleaning</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Tasks</span>
+            </a>
+            <a href="stats.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Stats</span>
+            </a>
+        </nav>
+
+        <!-- FAB -->
+        <button class="fab" onclick="showScheduleTaskPicker()">
+            <span>+</span>
+        </button>
+    </div>
+
+    <!-- Schedule Task Modal -->
+    <div class="modal" id="scheduleTaskModal">
+        <div class="modal-overlay" onclick="closeScheduleTaskPicker()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Task to Day</h3>
+                <button class="modal-close" onclick="closeScheduleTaskPicker()">×</button>
+            </div>
+            <div style="max-height: 60vh; overflow-y: auto;">
+                <div id="unscheduledTasksList" style="display: flex; flex-direction: column; gap: var(--space-3);">
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeScheduleTaskPicker()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-overlay" onclick="closeSettingsModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Daily Time Budget</h3>
+                <button class="modal-close" onclick="closeSettingsModal()">×</button>
+            </div>
+            <form id="settingsForm" onsubmit="saveSettings(event)">
+                <div class="form-group">
+                    <label class="form-label" for="dailyMinutes">Minutes per day</label>
+                    <select class="form-select" id="dailyMinutes">
+                        <option value="15">15 minutes</option>
+                        <option value="30" selected>30 minutes</option>
+                        <option value="45">45 minutes</option>
+                        <option value="60">1 hour</option>
+                        <option value="90">1.5 hours</option>
+                        <option value="120">2 hours</option>
+                    </select>
+                    <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: var(--space-2);">
+                        This helps the smart scheduler fit tasks into your daily routine.
+                    </p>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeSettingsModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/config.js"></script>
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/schedule.js"></script>
+    
+    <!-- Auth Check -->
+    <script type="module">
+        import { SUPABASE_URL, SUPABASE_KEY } from './js/config.js';
+        
+        async function checkAuth() {
+            const accessToken = localStorage.getItem('supabase.auth.token');
+            if (!accessToken) {
+                window.location.href = './login.html';
+                return;
+            }
+        }
+        
+        checkAuth();
+        
+        window.signOut = () => {
+            localStorage.removeItem('supabase.auth.token');
+            window.location.href = './login.html';
+        };
+    </script>
+    
+    <!-- Theme Toggle -->
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+                loadTheme();
+            }
+        });
+
+        function loadTheme() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            const btn = document.getElementById('themeToggle');
+            if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            document.getElementById('themeToggle').textContent = next === 'dark' ? '☀️' : '🌙';
+        }
+    </script>
+    
+    <!-- Load Week View -->
+    <script type="module">
+        import { loadWeekView, initWeekNavigation } from './js/schedule.js';
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadWeekView();
+            initWeekNavigation();
+        });
+    </script>
+    
+    <!-- Custom Week Grid Styles -->
+    <style>
+        .day-card {
+            background: var(--bg-elevated);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-base);
+            border: 2px solid transparent;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .day-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .day-card.selected {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .day-card.today {
+            background: linear-gradient(135deg, rgba(255,107,107,0.1), rgba(78,205,196,0.1));
+        }
+
+        .day-card.past {
+            opacity: 0.6;
+        }
+
+        .day-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-1);
+        }
+
+        .day-date {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: var(--space-3);
+        }
+
+        .day-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 1rem;
+            background: var(--primary);
+            color: white;
+        }
+
+        .day-count.empty {
+            background: var(--bg-tertiary);
+            color: var(--text-tertiary);
+        }
+
+        .day-count.done {
+            background: var(--success);
+        }
+
+        .task-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+            transition: var(--transition-base);
+        }
+
+        .task-card:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .task-card.done {
+            opacity: 0.7;
+        }
+
+        .task-name.done {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+    </style>
+</body>
+</html>

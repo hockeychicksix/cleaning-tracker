@@ -3,119 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Cleaning Tracker</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Cadence - Your Smart Home Companion</title>
+    <link rel="stylesheet" href="css/style-v2.css">
 </head>
 <body>
     <div class="app-container">
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <h1>🏠 Cleaning Tracker</h1>
-                <div style="display:flex;gap:0.5rem;">
-                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
-                    <button class="theme-toggle" onclick="signOut()" aria-label="Sign out" title="Sign Out">🚪</button>
+                <div class="header-left">
+                    <div class="header-title">
+                        <h1>👋 <span id="greeting">Hello</span>, <span id="userName">there</span></h1>
+                        <p class="header-subtitle" id="currentDate">Today is a great day to get things done</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
+                    <button class="icon-btn" onclick="signOut()" aria-label="Sign out" title="Sign Out">🚪</button>
                 </div>
             </div>
-            <p class="header-subtitle" id="greeting">Welcome back!</p>
         </header>
 
-        <!-- Navigation -->
-        <nav class="main-nav">
-            <a href="index.html" class="nav-link active">
-                <span class="nav-icon">🏠</span>
-                <span class="nav-text">Home</span>
-            </a>
-            <a href="week.html" class="nav-link">
-                <span class="nav-icon">📅</span>
-                <span class="nav-text">Week</span>
-            </a>
-            <a href="tasks.html" class="nav-link">
-                <span class="nav-icon">📋</span>
-                <span class="nav-text">Tasks</span>
-            </a>
-            <a href="stats.html" class="nav-link">
-                <span class="nav-icon">📊</span>
-                <span class="nav-text">Stats</span>
-            </a>
+        <!-- Desktop Navigation (hidden on mobile) -->
+        <nav class="top-nav" style="display: none;">
+            <div class="top-nav-content">
+                <a href="index-v2.html" class="nav-item active">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+                <a href="cleaning.html" class="nav-item">
+                    <span class="nav-icon">✨</span>
+                    <span class="nav-label">Cleaning</span>
+                </a>
+                <a href="tasks.html" class="nav-item">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-label">All Tasks</span>
+                </a>
+                <a href="stats.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Stats</span>
+                </a>
+            </div>
         </nav>
 
-        <!-- Quick Stats -->
-        <section class="stats-grid">
-            <div class="stat-card stat-overdue">
-                <div class="stat-icon">🔴</div>
-                <div class="stat-content">
-                    <div class="stat-value" id="overdueCount">0</div>
-                    <div class="stat-label">Overdue</div>
+        <div class="content-wrapper">
+            <!-- Quick Stats -->
+            <section class="dashboard-section">
+                <div class="stats-grid">
+                    <div class="stat-card danger">
+                        <div class="stat-icon">🔴</div>
+                        <div class="stat-value" id="overdueCount">0</div>
+                        <div class="stat-label">Overdue</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-icon">🟡</div>
+                        <div class="stat-value" id="dueSoonCount">0</div>
+                        <div class="stat-label">Due Soon</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-icon">🟢</div>
+                        <div class="stat-value" id="onTrackCount">0</div>
+                        <div class="stat-label">On Track</div>
+                    </div>
+                    <div class="stat-card info">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-value" id="currentStreak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
                 </div>
-            </div>
-            <div class="stat-card stat-due-soon">
-                <div class="stat-icon">🟡</div>
-                <div class="stat-content">
-                    <div class="stat-value" id="dueSoonCount">0</div>
-                    <div class="stat-label">Due Soon</div>
+            </section>
+
+            <!-- Main Features -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">Your Tools</h2>
                 </div>
-            </div>
-            <div class="stat-card stat-on-track">
-                <div class="stat-icon">🟢</div>
-                <div class="stat-content">
-                    <div class="stat-value" id="onTrackCount">0</div>
-                    <div class="stat-label">On Track</div>
+                <div class="card-grid">
+                    <!-- Cleaning Tracker - Main Feature -->
+                    <a href="cleaning.html" class="feature-card" style="grid-column: span 2;">
+                        <div class="feature-card-icon">✨</div>
+                        <h3 class="feature-card-title">Cleaning Tracker</h3>
+                        <p class="feature-card-description">
+                            Smart scheduling for your home cleaning tasks. Never forget what needs to be done with our intelligent weekly planner.
+                        </p>
+                        <span class="feature-card-badge">Active</span>
+                    </a>
+
+                    <!-- Future Feature Placeholders -->
+                    <div class="feature-card" style="opacity: 0.6; cursor: default;" onclick="showComingSoon('Meal Planning')">
+                        <div class="feature-card-icon" style="background: linear-gradient(135deg, #FFE66D, #FF6B6B);">🍽️</div>
+                        <h3 class="feature-card-title">Meal Planning</h3>
+                        <p class="feature-card-description">
+                            Plan your weekly meals, generate shopping lists, and track nutrition goals.
+                        </p>
+                        <span class="feature-card-badge" style="background: var(--text-tertiary);">Coming Soon</span>
+                    </div>
+
+                    <div class="feature-card" style="opacity: 0.6; cursor: default;" onclick="showComingSoon('Budget Tracker')">
+                        <div class="feature-card-icon" style="background: linear-gradient(135deg, #A8E6CF, #4ECDC4);">💰</div>
+                        <h3 class="feature-card-title">Budget Tracker</h3>
+                        <p class="feature-card-description">
+                            Track expenses, set budgets, and reach your financial goals with smart insights.
+                        </p>
+                        <span class="feature-card-badge" style="background: var(--text-tertiary);">Coming Soon</span>
+                    </div>
+
+                    <div class="feature-card" style="opacity: 0.6; cursor: default;" onclick="showComingSoon('Home Maintenance')">
+                        <div class="feature-card-icon" style="background: linear-gradient(135deg, #FFE66D, #A8E6CF);">🔧</div>
+                        <h3 class="feature-card-title">Home Maintenance</h3>
+                        <p class="feature-card-description">
+                            Schedule and track home repairs, maintenance tasks, and warranty information.
+                        </p>
+                        <span class="feature-card-badge" style="background: var(--text-tertiary);">Coming Soon</span>
+                    </div>
+
+                    <div class="feature-card" style="opacity: 0.6; cursor: default;" onclick="showComingSoon('Garden Planner')">
+                        <div class="feature-card-icon" style="background: linear-gradient(135deg, #A8E6CF, #FFE66D);">🌱</div>
+                        <h3 class="feature-card-title">Garden Planner</h3>
+                        <p class="feature-card-description">
+                            Plan your garden layout, track plant care schedules, and harvest tracking.
+                        </p>
+                        <span class="feature-card-badge" style="background: var(--text-tertiary);">Coming Soon</span>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Today's Tasks -->
-        <section class="section">
-            <div class="section-header">
-                <h2>Today's Schedule</h2>
-                <a href="week.html" class="btn-link">View Week →</a>
-            </div>
-            <div id="todayTasks" class="task-list">
-                <div class="skeleton skeleton-card"></div>
-                <div class="skeleton skeleton-card"></div>
-            </div>
-        </section>
+            <!-- Today's Cleaning Tasks Preview -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">Today's Cleaning Schedule</h2>
+                    <a href="cleaning.html" class="section-link">View All →</a>
+                </div>
+                <div id="todayTasks" class="task-list">
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                </div>
+            </section>
 
-        <!-- Quick Actions -->
-        <section class="section">
-            <div class="section-header">
-                <h2>Quick Actions</h2>
-            </div>
-            <div class="quick-actions">
-                <button class="action-btn action-primary" onclick="window.location.href='week.html'">
-                    <span class="action-icon">✨</span>
-                    <span class="action-text">Smart Schedule Week</span>
-                </button>
-                <button class="action-btn action-secondary" onclick="showAddTaskModal()">
-                    <span class="action-icon">➕</span>
-                    <span class="action-text">Add New Task</span>
-                </button>
-            </div>
-        </section>
+            <!-- Quick Actions -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">Quick Actions</h2>
+                </div>
+                <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+                    <a href="cleaning.html" class="btn btn-primary">
+                        ✨ Smart Schedule Week
+                    </a>
+                    <button class="btn btn-secondary" onclick="showAddTaskModal()">
+                        ➕ Add New Task
+                    </button>
+                    <a href="stats.html" class="btn btn-ghost">
+                        📊 View Stats
+                    </a>
+                </div>
+            </section>
+        </div>
 
-        <!-- Recent Activity -->
-        <section class="section">
-            <div class="section-header">
-                <h2>Recent Completions</h2>
-                <a href="stats.html" class="btn-link">View All →</a>
-            </div>
-            <div id="recentActivity" class="activity-list">
-                <div class="skeleton skeleton-card"></div>
-                <div class="skeleton skeleton-card"></div>
-            </div>
-        </section>
+        <!-- Bottom Navigation (mobile) -->
+        <nav class="bottom-nav">
+            <a href="index-v2.html" class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="cleaning.html" class="nav-item">
+                <span class="nav-icon">✨</span>
+                <span class="nav-label">Cleaning</span>
+            </a>
+            <a href="tasks.html" class="nav-item">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Tasks</span>
+            </a>
+            <a href="stats.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Stats</span>
+            </a>
+        </nav>
 
         <!-- FAB -->
         <button class="fab" onclick="showAddTaskModal()" aria-label="Add task">
             <span>+</span>
-        </button>
-
-        <!-- Feedback FAB -->
-        <button class="fab" onclick="showFeedbackModal()" 
-                style="bottom:100px;background:var(--secondary);width:48px;height:48px;font-size:1.5rem;"
-                aria-label="Send feedback" title="Send Feedback">
-            💬
         </button>
     </div>
 
@@ -124,18 +190,18 @@
         <div class="modal-overlay" onclick="closeAddTaskModal()"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Add New Task</h3>
+                <h3 class="modal-title">Add New Task</h3>
                 <button class="modal-close" onclick="closeAddTaskModal()">×</button>
             </div>
             <form id="addTaskForm" onsubmit="handleAddTask(event)">
                 <div class="form-group">
-                    <label for="taskName">Task Name</label>
-                    <input type="text" id="taskName" required placeholder="e.g., Clean kitchen counters">
+                    <label class="form-label" for="taskName">Task Name</label>
+                    <input class="form-input" type="text" id="taskName" required placeholder="e.g., Clean kitchen counters">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="taskFloor">Floor</label>
-                        <select id="taskFloor">
+                        <label class="form-label" for="taskFloor">Floor</label>
+                        <select class="form-select" id="taskFloor">
                             <option value="">Select...</option>
                             <option value="First Floor">First Floor</option>
                             <option value="Second Floor">Second Floor</option>
@@ -145,14 +211,14 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="taskCategory">Room</label>
-                        <input type="text" id="taskCategory" placeholder="e.g., Kitchen">
+                        <label class="form-label" for="taskCategory">Room</label>
+                        <input class="form-input" type="text" id="taskCategory" placeholder="e.g., Kitchen">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="taskCadence">Frequency</label>
-                        <select id="taskCadence" required>
+                        <label class="form-label" for="taskCadence">Frequency</label>
+                        <select class="form-select" id="taskCadence" required>
                             <option value="1">Daily</option>
                             <option value="3">Every 3 days</option>
                             <option value="7" selected>Weekly</option>
@@ -161,13 +227,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="taskTime">Time (min)</label>
-                        <input type="number" id="taskTime" value="15" min="1" max="300">
+                        <label class="form-label" for="taskTime">Time (min)</label>
+                        <input class="form-input" type="number" id="taskTime" value="15" min="1" max="300">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="taskEffort">Effort Level</label>
-                    <select id="taskEffort">
+                    <label class="form-label" for="taskEffort">Effort Level</label>
+                    <select class="form-select" id="taskEffort">
                         <option value="Low">Low</option>
                         <option value="Medium" selected>Medium</option>
                         <option value="High">High</option>
@@ -181,39 +247,28 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
-    <!-- Feedback Modal -->
-    <div class="modal" id="feedbackModal">
-        <div class="modal-overlay" onclick="closeFeedbackModal()"></div>
-        <div class="modal-content modal-small">
+    <!-- Coming Soon Modal -->
+    <div class="modal" id="comingSoonModal">
+        <div class="modal-overlay" onclick="closeComingSoon()"></div>
+        <div class="modal-content">
             <div class="modal-header">
-                <h3>Send Feedback</h3>
-                <button class="modal-close" onclick="closeFeedbackModal()">×</button>
+                <h3 class="modal-title" id="comingSoonTitle">Coming Soon</h3>
+                <button class="modal-close" onclick="closeComingSoon()">×</button>
             </div>
-            <form id="feedbackForm" onsubmit="submitFeedback(event)">
-                <div class="form-group">
-                    <label>What kind of feedback?</label>
-                    <select id="feedbackType" required>
-                        <option value="bug">🐛 Bug Report</option>
-                        <option value="feature">💡 Feature Request</option>
-                        <option value="feedback">💬 General Feedback</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="feedbackText">Tell us more</label>
-                    <textarea id="feedbackText" rows="4" required 
-                              style="width:100%;padding:0.75rem;border:2px solid var(--border-color);border-radius:var(--radius-sm);font-family:inherit;font-size:1rem;"
-                              placeholder="Be as detailed as you'd like..."></textarea>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeFeedbackModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Send Feedback</button>
-                </div>
-            </form>
+            <div style="text-align: center; padding: var(--space-8) 0;">
+                <div style="font-size: 4rem; margin-bottom: var(--space-4);">🚀</div>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
+                    We're working hard to bring you this feature! Sign up for updates to be notified when it launches.
+                </p>
+                <button class="btn btn-primary w-full" onclick="closeComingSoon()">
+                    Got it!
+                </button>
+            </div>
         </div>
     </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
 
     <!-- Scripts -->
     <script type="module" src="js/config.js"></script>
@@ -226,30 +281,9 @@
         
         async function checkAuth() {
             const accessToken = localStorage.getItem('supabase.auth.token');
-            
             if (!accessToken) {
                 window.location.href = './login.html';
                 return;
-            }
-            
-            // Verify token is valid
-            try {
-                const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-                
-                if (!response.ok) {
-                    localStorage.removeItem('supabase.auth.token');
-                    window.location.href = './login.html';
-                    return;
-                }
-            } catch (error) {
-                console.error('Auth check failed:', error);
-                localStorage.removeItem('supabase.auth.token');
-                window.location.href = './login.html';
             }
         }
         
@@ -261,30 +295,55 @@
         };
     </script>
     
-    <!-- Feedback Functions -->
+    <!-- Dashboard Logic -->
     <script type="module">
+        import { loadTodayTasks, updateStats } from './js/app.js';
         import { SUPABASE_URL, SUPABASE_KEY } from './js/config.js';
-        import { showToast } from './js/app.js';
         
-        window.showFeedbackModal = () => {
-            document.getElementById('feedbackModal').classList.add('show');
-        };
+        // Theme toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+                loadTheme();
+            }
+        });
 
-        window.closeFeedbackModal = () => {
-            document.getElementById('feedbackModal').classList.remove('show');
-            document.getElementById('feedbackForm').reset();
-        };
+        function loadTheme() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            const btn = document.getElementById('themeToggle');
+            if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
 
-        window.submitFeedback = async (event) => {
-            event.preventDefault();
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            document.getElementById('themeToggle').textContent = next === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            await updateStats();
+            await loadTodayTasks();
             
-            const type = document.getElementById('feedbackType').value;
-            const text = document.getElementById('feedbackText').value;
+            // Set greeting
+            const hour = new Date().getHours();
+            let greeting = 'Good evening';
+            if (hour < 12) greeting = 'Good morning';
+            else if (hour < 18) greeting = 'Good afternoon';
+            document.getElementById('greeting').textContent = greeting;
             
+            // Set date
+            const today = new Date();
+            const options = { weekday: 'long', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
+            
+            // Load user name
             try {
                 const accessToken = localStorage.getItem('supabase.auth.token');
-                
-                // Get user info
                 const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -293,50 +352,34 @@
                 });
                 const user = await userResponse.json();
                 
-                // Insert feedback
-                await fetch(`${SUPABASE_URL}/rest/v1/feedback`, {
-                    method: 'POST',
+                // Try to get user name from settings
+                const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/settings?user_id=eq.${user.id}&select=user_name`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify({
-                        user_id: user.id,
-                        user_email: user.email,
-                        type: type,
-                        message: text,
-                        page: window.location.pathname
-                    })
+                        'Authorization': `Bearer ${accessToken}`
+                    }
                 });
                 
-                showToast('Thanks for your feedback! 🙏');
-                closeFeedbackModal();
+                if (settingsResponse.ok) {
+                    const settings = await settingsResponse.json();
+                    if (settings && settings[0] && settings[0].user_name) {
+                        document.getElementById('userName').textContent = settings[0].user_name;
+                    }
+                }
             } catch (error) {
-                console.error('Error submitting feedback:', error);
-                showToast('Error sending feedback', 'error');
+                console.error('Error loading user name:', error);
             }
-        };
-    </script>
-    
-    <!-- Load Data -->
-    <script type="module">
-        import { loadTodayTasks, loadRecentActivity, updateStats } from './js/app.js';
-        
-        // Load data when page loads
-        document.addEventListener('DOMContentLoaded', async () => {
-            await updateStats();
-            await loadTodayTasks();
-            await loadRecentActivity();
-            
-            // Set greeting
-            const hour = new Date().getHours();
-            let greeting = 'Good evening';
-            if (hour < 12) greeting = 'Good morning';
-            else if (hour < 18) greeting = 'Good afternoon';
-            document.getElementById('greeting').textContent = greeting + '!';
         });
+        
+        // Coming Soon Modal
+        window.showComingSoon = (featureName) => {
+            document.getElementById('comingSoonTitle').textContent = featureName + ' - Coming Soon';
+            document.getElementById('comingSoonModal').classList.add('show');
+        };
+        
+        window.closeComingSoon = () => {
+            document.getElementById('comingSoonModal').classList.remove('show');
+        };
     </script>
 </body>
 </html>
