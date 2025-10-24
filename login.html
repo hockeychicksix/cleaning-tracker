@@ -299,6 +299,13 @@
             resetButton.textContent = 'Sending...';
             
             try {
+                // FIXED: Dynamically construct the redirect URL based on current location
+                const currentUrl = window.location.href;
+                const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+                const redirectTo = baseUrl + 'reset-password.html';
+                
+                console.log('Password reset redirect URL:', redirectTo);
+                
                 const response = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
                     method: 'POST',
                     headers: {
@@ -307,7 +314,7 @@
                     },
                     body: JSON.stringify({ 
                         email,
-                        redirectTo: window.location.origin + '/cleaning-tracker/reset-password.html'
+                        redirectTo: redirectTo
                     })
                 });
                 
