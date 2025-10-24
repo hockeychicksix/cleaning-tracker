@@ -91,7 +91,7 @@
                 <h3 id="modalTitle">Add New Task</h3>
                 <button class="modal-close" onclick="closeTaskModal()">×</button>
             </div>
-            <form id="taskForm">
+            <form id="taskForm" autocomplete="off">
                 <input type="hidden" id="taskId">
                 
                 <div class="form-row">
@@ -103,6 +103,7 @@
                             class="form-input" 
                             placeholder="e.g., Clean kitchen counters"
                             required
+                            autocomplete="off"
                         >
                     </div>
                 </div>
