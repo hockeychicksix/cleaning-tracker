@@ -299,12 +299,26 @@
             resetButton.textContent = 'Sending...';
             
             try {
-                // FIXED: Dynamically construct the redirect URL based on current location
-                const currentUrl = window.location.href;
-                const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
-                const redirectTo = baseUrl + 'reset-password.html';
+                // CRITICAL FIX FOR YOUR GITHUB PAGES SETUP
+                // Build the correct URL for your specific GitHub Pages configuration
+                const origin = window.location.origin; // https://hockeychicksix.github.io
+                const pathname = window.location.pathname; // e.g., /login.html or /subfolder/login.html
                 
-                console.log('Password reset redirect URL:', redirectTo);
+                // Get directory by removing the filename
+                let directory = pathname.substring(0, pathname.lastIndexOf('/') + 1);
+                // If at root, directory will be '/'
+                if (directory === '') directory = '/';
+                
+                // Build complete reset URL
+                const redirectTo = origin + directory + 'reset-password.html';
+                
+                // Log for debugging
+                console.log('=== PASSWORD RESET DEBUG ===');
+                console.log('Origin:', origin);
+                console.log('Pathname:', pathname);
+                console.log('Directory:', directory);
+                console.log('Redirect URL:', redirectTo);
+                console.log('==========================');
                 
                 const response = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
                     method: 'POST',
@@ -325,11 +339,17 @@
                 }
                 
                 successDiv.style.display = 'block';
-                successText.textContent = `Password reset link sent to ${email}! Check your inbox.`;
+                successText.innerHTML = `
+                    <strong>Password reset link sent to ${email}!</strong><br>
+                    <small style="display:block;margin-top:0.5rem;opacity:0.8;">
+                        Check your inbox. The link will redirect to:<br>
+                        <code style="font-size:0.75rem;">${redirectTo}</code>
+                    </small>
+                `;
                 
                 setTimeout(() => {
                     closeForgotPassword();
-                }, 3000);
+                }, 5000);
                 
             } catch (error) {
                 console.error('Reset password error:', error);
