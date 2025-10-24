@@ -31,6 +31,12 @@
                     </button>
                 </form>
                 
+                <div id="forgotPasswordSection" style="text-align:center;margin-top:1rem;display:block;">
+                    <button onclick="showForgotPassword()" style="background:none;border:none;color:var(--primary);font-size:0.875rem;cursor:pointer;text-decoration:underline;">
+                        Forgot password?
+                    </button>
+                </div>
+                
                 <p style="text-align:center;margin-top:1.5rem;color:var(--text-secondary);font-size:0.875rem;">
                     <span id="authTogglePrompt">Don't have an account?</span>
                     <button onclick="toggleAuthMode()" style="background:none;border:none;color:var(--primary);font-weight:600;cursor:pointer;text-decoration:underline;margin-left:0.25rem;">
@@ -46,6 +52,43 @@
             <div id="authLoading" style="display:none;text-align:center;margin-top:1rem;">
                 <div class="spinner" style="margin:0 auto;"></div>
                 <p style="color:var(--text-secondary);font-size:0.875rem;margin-top:0.5rem;">Processing...</p>
+            </div>
+            
+            <div id="authSuccess" style="display:none;padding:1rem;background:#d4edda;border-radius:8px;color:#155724;margin-top:1rem;font-size:0.875rem;">
+                <span id="authSuccessText"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;">
+        <div class="modal-content" style="position:relative;max-width:400px;margin:1rem;">
+            <div style="text-align:center;margin-bottom:1.5rem;">
+                <h2 style="font-size:1.5rem;margin-bottom:0.5rem;">Reset Password</h2>
+                <p style="color:var(--text-secondary);font-size:0.875rem;">Enter your email and we'll send you a reset link</p>
+            </div>
+            
+            <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)">
+                <div class="form-group">
+                    <label for="resetEmail">Email</label>
+                    <input type="email" id="resetEmail" required placeholder="you@example.com">
+                </div>
+                <div style="display:flex;gap:0.75rem;margin-top:1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeForgotPassword()" style="flex:1;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="resetButton" style="flex:1;">
+                        Send Reset Link
+                    </button>
+                </div>
+            </form>
+            
+            <div id="resetError" style="display:none;padding:1rem;background:#fee;border-radius:8px;color:#e74c3c;margin-top:1rem;font-size:0.875rem;">
+                <span id="resetErrorText"></span>
+            </div>
+            
+            <div id="resetSuccess" style="display:none;padding:1rem;background:#d4edda;border-radius:8px;color:#155724;margin-top:1rem;font-size:0.875rem;">
+                <span id="resetSuccessText"></span>
             </div>
         </div>
     </div>
@@ -64,7 +107,6 @@
         (async () => {
             const accessToken = localStorage.getItem('supabase.auth.token');
             if (accessToken) {
-                // Verify token is still valid
                 try {
                     const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
                         headers: {
@@ -81,7 +123,6 @@
                     console.error('Session check failed:', error);
                 }
                 
-                // Token invalid, clear it
                 localStorage.removeItem('supabase.auth.token');
             }
         })();
@@ -95,6 +136,10 @@
             document.getElementById('authTogglePrompt').textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
             document.getElementById('authToggleText').textContent = isSignUp ? 'Sign In' : 'Sign Up';
             document.getElementById('authError').style.display = 'none';
+            document.getElementById('authSuccess').style.display = 'none';
+            
+            const forgotSection = document.getElementById('forgotPasswordSection');
+            forgotSection.style.display = isSignUp ? 'none' : 'block';
         };
         
         window.handleAuth = async (event) => {
@@ -104,19 +149,18 @@
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('authError');
             const errorText = document.getElementById('authErrorText');
+            const successDiv = document.getElementById('authSuccess');
+            const successText = document.getElementById('authSuccessText');
             const loadingDiv = document.getElementById('authLoading');
             const authButton = document.getElementById('authButton');
             
-            // Hide error, show loading
             errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
             loadingDiv.style.display = 'block';
             authButton.disabled = true;
             
             try {
                 if (isSignUp) {
-                    console.log('Attempting sign up...');
-                    
-                    // Sign up
                     const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
                         method: 'POST',
                         headers: {
@@ -127,28 +171,37 @@
                     });
                     
                     const result = await response.json();
-                    console.log('Sign up response:', result);
                     
                     if (!response.ok) {
                         throw new Error(result.msg || result.error_description || result.message || 'Sign up failed');
                     }
                     
-                    // Extract token - Supabase returns it in different places
+                    // Check if email confirmation is required
+                    if (result.user && !result.user.email_confirmed_at && !result.access_token) {
+                        loadingDiv.style.display = 'none';
+                        successDiv.style.display = 'block';
+                        successText.innerHTML = `<strong>Check your email!</strong><br>We sent a confirmation link to ${email}. Click it to activate your account.`;
+                        authButton.disabled = false;
+                        return;
+                    }
+                    
                     const accessToken = result.access_token || result.session?.access_token;
                     const userId = result.user?.id || result.id;
                     
                     if (!accessToken) {
-                        console.error('Full response:', result);
+                        if (result.user) {
+                            loadingDiv.style.display = 'none';
+                            successDiv.style.display = 'block';
+                            successText.innerHTML = `<strong>Check your email!</strong><br>We sent a confirmation link to ${email}. Click it to activate your account.`;
+                            authButton.disabled = false;
+                            return;
+                        }
                         throw new Error('No access token received from server');
                     }
                     
-                    console.log('Got token, user ID:', userId);
-                    
-                    // Store token
                     localStorage.setItem('supabase.auth.token', accessToken);
                     
-                    // Create settings row for new user
-                    const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/settings`, {
+                    await fetch(`${SUPABASE_URL}/rest/v1/settings`, {
                         method: 'POST',
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -165,17 +218,9 @@
                         })
                     });
                     
-                    if (!settingsResponse.ok) {
-                        const settingsError = await settingsResponse.json();
-                        console.error('Settings creation failed:', settingsError);
-                    }
-                    
                     window.location.href = './onboarding.html';
                     
                 } else {
-                    console.log('Attempting sign in...');
-                    
-                    // Sign in
                     const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
                         method: 'POST',
                         headers: {
@@ -186,27 +231,20 @@
                     });
                     
                     const result = await response.json();
-                    console.log('Sign in response:', result);
                     
                     if (!response.ok) {
                         throw new Error(result.error_description || result.msg || result.message || 'Sign in failed');
                     }
                     
-                    // Extract token
                     const accessToken = result.access_token || result.session?.access_token;
                     const userId = result.user?.id || result.id;
                     
                     if (!accessToken) {
-                        console.error('Full response:', result);
                         throw new Error('No access token received from server');
                     }
                     
-                    console.log('Got token, user ID:', userId);
-                    
-                    // Store token
                     localStorage.setItem('supabase.auth.token', accessToken);
                     
-                    // Check if onboarding done
                     const settingsResponse = await fetch(`${SUPABASE_URL}/rest/v1/settings?user_id=eq.${userId}&select=onboarding_completed`, {
                         headers: {
                             'apikey': SUPABASE_KEY,
@@ -216,8 +254,6 @@
                     
                     if (settingsResponse.ok) {
                         const settings = await settingsResponse.json();
-                        console.log('Settings:', settings);
-                        
                         if (settings && settings[0] && !settings[0].onboarding_completed) {
                             window.location.href = './onboarding.html';
                             return;
@@ -232,6 +268,68 @@
                 errorDiv.style.display = 'block';
                 errorText.textContent = error.message || 'Something went wrong. Please try again.';
                 authButton.disabled = false;
+            }
+        };
+        
+        window.showForgotPassword = () => {
+            document.getElementById('forgotPasswordModal').style.display = 'flex';
+            document.getElementById('resetEmail').value = document.getElementById('email').value;
+        };
+        
+        window.closeForgotPassword = () => {
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+            document.getElementById('forgotPasswordForm').reset();
+            document.getElementById('resetError').style.display = 'none';
+            document.getElementById('resetSuccess').style.display = 'none';
+        };
+        
+        window.handleForgotPassword = async (event) => {
+            event.preventDefault();
+            
+            const email = document.getElementById('resetEmail').value;
+            const errorDiv = document.getElementById('resetError');
+            const errorText = document.getElementById('resetErrorText');
+            const successDiv = document.getElementById('resetSuccess');
+            const successText = document.getElementById('resetSuccessText');
+            const resetButton = document.getElementById('resetButton');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            resetButton.disabled = true;
+            resetButton.textContent = 'Sending...';
+            
+            try {
+                const response = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        email,
+                        redirectTo: window.location.origin + '/cleaning-tracker/reset-password.html'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.msg || result.error_description || 'Failed to send reset email');
+                }
+                
+                successDiv.style.display = 'block';
+                successText.textContent = `Password reset link sent to ${email}! Check your inbox.`;
+                
+                setTimeout(() => {
+                    closeForgotPassword();
+                }, 3000);
+                
+            } catch (error) {
+                console.error('Reset password error:', error);
+                errorDiv.style.display = 'block';
+                errorText.textContent = error.message || 'Failed to send reset email';
+                resetButton.disabled = false;
+                resetButton.textContent = 'Send Reset Link';
             }
         };
     </script>
