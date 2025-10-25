@@ -25,6 +25,13 @@
 @import url('./components/modals.css');
 @import url('./components/status.css');
 
+/* Page-Specific Styles */
+@import url('./login.css');
+
+/* Utilities */
+@import url('./04-utilities.css');
+@import url('./05-utilities.css');
+
 /* ========================================
    UTILITY CLASSES
    ======================================== */
@@ -158,10 +165,11 @@
     }
 }
 
-/* Calendar/Week View */
+/* Calendar/Week View Styles */
 .week-view {
     display: grid;
     gap: var(--space-3);
+    grid-template-columns: 1fr;
 }
 
 @media (min-width: 768px) {
@@ -170,20 +178,33 @@
     }
 }
 
-.day-column {
+.week-day {
+    min-height: 120px;
+    padding: var(--space-3);
     background: var(--bg-glass);
     backdrop-filter: var(--blur-glass);
     border: 1px solid var(--border-glass);
     border-radius: var(--radius-lg);
-    padding: var(--space-3);
-    min-height: 200px;
 }
 
-.day-header {
-    font-weight: 600;
-    margin-bottom: var(--space-3);
-    padding-bottom: var(--space-2);
-    border-bottom: 1px solid var(--border-glass);
+.week-day--today {
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 0 1px var(--primary-gold);
+}
+
+/* Task Item */
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.task-item:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 /* ========================================
@@ -191,15 +212,42 @@
    ======================================== */
 
 @media (max-width: 768px) {
-    .hide-mobile {
-        display: none !important;
-    }
+    .hide-mobile { display: none !important; }
 }
 
 @media (min-width: 769px) {
-    .hide-desktop {
-        display: none !important;
-    }
+    .hide-desktop { display: none !important; }
+}
+
+@media (min-width: 1024px) {
+    .hide-lg { display: none !important; }
+}
+
+/* ========================================
+   SCROLL BEHAVIOR
+   ======================================== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-space);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-glass);
+    border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-glass-hover);
 }
 
 /* ========================================
@@ -237,6 +285,16 @@
     }
 }
 
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Animation Classes */
 .animate-fadeIn {
     animation: fadeIn 0.3s ease-out;
 }
@@ -249,26 +307,26 @@
     animation: slideDown 0.4s ease-out;
 }
 
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 /* ========================================
    PRINT STYLES
    ======================================== */
 
 @media print {
-    .header,
-    .nav-menu,
-    .fab,
-    .btn,
     .no-print {
         display: none !important;
     }
-    
+
     body {
         background: white;
         color: black;
     }
-    
+
     .glass-card {
-        border: 1px solid #ccc;
-        background: white;
+        border: 1px solid #ddd;
+        box-shadow: none;
     }
 }
