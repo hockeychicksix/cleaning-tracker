@@ -1,0 +1,502 @@
+/* ========================================
+   CADENCE - UTILITIES
+   Helper classes for quick styling
+   ======================================== */
+
+/* ========================================
+   VISIBILITY
+   ======================================== */
+.visible { visibility: visible; }
+.invisible { visibility: hidden; }
+.collapse { display: none; }
+
+/* ========================================
+   OPACITY
+   ======================================== */
+.opacity-0 { opacity: 0; }
+.opacity-25 { opacity: 0.25; }
+.opacity-50 { opacity: 0.5; }
+.opacity-75 { opacity: 0.75; }
+.opacity-100 { opacity: 1; }
+
+/* ========================================
+   CURSOR
+   ======================================== */
+.cursor-auto { cursor: auto; }
+.cursor-pointer { cursor: pointer; }
+.cursor-not-allowed { cursor: not-allowed; }
+.cursor-move { cursor: move; }
+.cursor-grab { cursor: grab; }
+.cursor-grabbing { cursor: grabbing; }
+
+/* ========================================
+   POINTER EVENTS
+   ======================================== */
+.pointer-events-none { pointer-events: none; }
+.pointer-events-auto { pointer-events: auto; }
+
+/* ========================================
+   USER SELECT
+   ======================================== */
+.select-none { user-select: none; }
+.select-text { user-select: text; }
+.select-all { user-select: all; }
+.select-auto { user-select: auto; }
+
+/* ========================================
+   BORDER RADIUS
+   ======================================== */
+.rounded-none { border-radius: 0; }
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded { border-radius: var(--radius-md); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-xl { border-radius: var(--radius-xl); }
+.rounded-2xl { border-radius: var(--radius-2xl); }
+.rounded-full { border-radius: var(--radius-full); }
+
+/* ========================================
+   BORDERS
+   ======================================== */
+.border { border: 1px solid var(--border-glass); }
+.border-0 { border: none; }
+.border-2 { border-width: 2px; }
+.border-t { border-top: 1px solid var(--border-glass); }
+.border-b { border-bottom: 1px solid var(--border-glass); }
+.border-l { border-left: 1px solid var(--border-glass); }
+.border-r { border-right: 1px solid var(--border-glass); }
+
+/* Border Colors */
+.border-glass { border-color: var(--border-glass); }
+.border-gold { border-color: var(--primary-gold); }
+.border-purple { border-color: var(--primary-purple); }
+.border-success { border-color: var(--success-green); }
+.border-warning { border-color: var(--warning-amber); }
+.border-danger { border-color: var(--danger-coral); }
+
+/* ========================================
+   SHADOWS
+   ======================================== */
+.shadow-none { box-shadow: none; }
+.shadow-xs { box-shadow: var(--shadow-xs); }
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow { box-shadow: var(--shadow-md); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+.shadow-xl { box-shadow: var(--shadow-xl); }
+.shadow-2xl { box-shadow: var(--shadow-2xl); }
+
+/* Glow Shadows */
+.shadow-glow-gold { box-shadow: var(--shadow-glow-gold); }
+.shadow-glow-purple { box-shadow: var(--shadow-glow-purple); }
+.shadow-glow-success { box-shadow: var(--shadow-glow-success); }
+.shadow-glow-warning { box-shadow: var(--shadow-glow-warning); }
+.shadow-glow-danger { box-shadow: var(--shadow-glow-danger); }
+
+/* ========================================
+   BACKGROUND
+   ======================================== */
+.bg-space { background: var(--bg-space); }
+.bg-elevated { background: var(--bg-elevated); }
+.bg-elevated-2 { background: var(--bg-elevated-2); }
+.bg-glass { background: var(--bg-glass); }
+.bg-transparent { background: transparent; }
+.bg-gradient { background: var(--gradient-primary); }
+
+/* ========================================
+   BACKDROP FILTER
+   ======================================== */
+.backdrop-blur { backdrop-filter: var(--blur-glass); }
+.backdrop-blur-none { backdrop-filter: none; }
+
+/* ========================================
+   TRANSFORM
+   ======================================== */
+.scale-90 { transform: scale(0.9); }
+.scale-95 { transform: scale(0.95); }
+.scale-100 { transform: scale(1); }
+.scale-105 { transform: scale(1.05); }
+.scale-110 { transform: scale(1.1); }
+
+.rotate-45 { transform: rotate(45deg); }
+.rotate-90 { transform: rotate(90deg); }
+.rotate-180 { transform: rotate(180deg); }
+.-rotate-45 { transform: rotate(-45deg); }
+.-rotate-90 { transform: rotate(-90deg); }
+.-rotate-180 { transform: rotate(-180deg); }
+
+/* ========================================
+   TRANSITION
+   ======================================== */
+.transition-none { transition: none; }
+.transition-fast { transition: all var(--transition-fast); }
+.transition { transition: all var(--transition-base); }
+.transition-slow { transition: all var(--transition-slow); }
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce {
+    animation: bounce 1s infinite;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-in;
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-down {
+    animation: slide-down 0.3s ease-out;
+}
+
+/* ========================================
+   OBJECT FIT
+   ======================================== */
+.object-contain { object-fit: contain; }
+.object-cover { object-fit: cover; }
+.object-fill { object-fit: fill; }
+.object-none { object-fit: none; }
+.object-scale-down { object-fit: scale-down; }
+
+/* ========================================
+   WHITESPACE
+   ======================================== */
+.whitespace-normal { white-space: normal; }
+.whitespace-nowrap { white-space: nowrap; }
+.whitespace-pre { white-space: pre; }
+.whitespace-pre-line { white-space: pre-line; }
+.whitespace-pre-wrap { white-space: pre-wrap; }
+
+/* ========================================
+   WORD BREAK
+   ======================================== */
+.break-normal { word-break: normal; overflow-wrap: normal; }
+.break-words { overflow-wrap: break-word; }
+.break-all { word-break: break-all; }
+
+/* ========================================
+   LISTS
+   ======================================== */
+.list-inside { list-style-position: inside; }
+.list-outside { list-style-position: outside; }
+
+/* ========================================
+   VERTICAL ALIGN
+   ======================================== */
+.align-baseline { vertical-align: baseline; }
+.align-top { vertical-align: top; }
+.align-middle { vertical-align: middle; }
+.align-bottom { vertical-align: bottom; }
+.align-text-top { vertical-align: text-top; }
+.align-text-bottom { vertical-align: text-bottom; }
+
+/* ========================================
+   HOVER EFFECTS
+   ======================================== */
+.hover-lift {
+    transition: transform var(--transition-fast);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+.hover-glow {
+    transition: box-shadow var(--transition-fast);
+}
+
+.hover-glow:hover {
+    box-shadow: var(--shadow-glow-gold);
+}
+
+.hover-scale {
+    transition: transform var(--transition-fast);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* ========================================
+   INTERACTIVE STATES
+   ======================================== */
+.clickable {
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.clickable:hover {
+    opacity: 0.8;
+}
+
+.clickable:active {
+    transform: scale(0.98);
+}
+
+/* ========================================
+   FOCUS RING
+   ======================================== */
+.focus-ring:focus-visible {
+    outline: 2px solid var(--primary-gold);
+    outline-offset: 2px;
+}
+
+.focus-ring-inset:focus-visible {
+    outline: 2px solid var(--primary-gold);
+    outline-offset: -2px;
+}
+
+/* ========================================
+   DISABLED STATE
+   ======================================== */
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   SCROLLBAR HIDE
+   ======================================== */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* ========================================
+   ASPECT RATIOS
+   ======================================== */
+.aspect-ratio-box {
+    position: relative;
+    width: 100%;
+}
+
+.aspect-ratio-box::before {
+    content: '';
+    display: block;
+}
+
+.aspect-ratio-1-1::before { padding-top: 100%; }
+.aspect-ratio-16-9::before { padding-top: 56.25%; }
+.aspect-ratio-4-3::before { padding-top: 75%; }
+.aspect-ratio-3-2::before { padding-top: 66.666%; }
+
+.aspect-ratio-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ========================================
+   GRADIENT BACKGROUNDS
+   ======================================== */
+.bg-gradient-primary {
+    background: var(--gradient-primary);
+}
+
+.bg-gradient-subtle {
+    background: var(--gradient-subtle);
+}
+
+/* ========================================
+   GLASS EFFECT
+   ======================================== */
+.glass-effect {
+    background: var(--bg-glass);
+    backdrop-filter: var(--blur-glass);
+    -webkit-backdrop-filter: var(--blur-glass);
+}
+
+/* ========================================
+   NO SELECT
+   ======================================== */
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* ========================================
+   SMOOTH SCROLL
+   ======================================== */
+.smooth-scroll {
+    scroll-behavior: smooth;
+}
+
+/* ========================================
+   PRINT UTILITIES
+   ======================================== */
+@media print {
+    .print-hidden {
+        display: none !important;
+    }
+    
+    .print-visible {
+        display: block !important;
+    }
+}
+
+/* ========================================
+   SCREEN READER ONLY
+   ======================================== */
+.sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* ========================================
+   RESPONSIVE SHOW/HIDE
+   ======================================== */
+@media (max-width: 479px) {
+    .xs-hidden { display: none !important; }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+    .sm-only { display: block !important; }
+    .sm-hidden { display: none !important; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .md-only { display: block !important; }
+    .md-hidden { display: none !important; }
+}
+
+@media (min-width: 1024px) {
+    .lg-only { display: block !important; }
+    .lg-hidden { display: none !important; }
+}
+
+/* ========================================
+   CLEARFIX
+   ======================================== */
+.clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+/* ========================================
+   CENTERING
+   ======================================== */
+.center-absolute {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.center-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========================================
+   FULL BLEED
+   ======================================== */
+.full-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+}
+
+/* ========================================
+   FILTER
+   ======================================== */
+.blur-sm { filter: blur(4px); }
+.blur { filter: blur(8px); }
+.blur-lg { filter: blur(16px); }
+.blur-xl { filter: blur(24px); }
+
+.grayscale { filter: grayscale(100%); }
+.grayscale-0 { filter: grayscale(0); }
+
+.brightness-50 { filter: brightness(0.5); }
+.brightness-75 { filter: brightness(0.75); }
+.brightness-100 { filter: brightness(1); }
+.brightness-125 { filter: brightness(1.25); }
+.brightness-150 { filter: brightness(1.5); }
+
+/* ========================================
+   MISCELLANEOUS
+   ======================================== */
+.will-change-transform {
+    will-change: transform;
+}
+
+.will-change-scroll {
+    will-change: scroll-position;
+}
+
+.will-change-auto {
+    will-change: auto;
+}
+
+.snap-start { scroll-snap-align: start; }
+.snap-center { scroll-snap-align: center; }
+.snap-end { scroll-snap-align: end; }
+
+.snap-x {
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+}
+
+.snap-y {
+    scroll-snap-type: y mandatory;
+    overflow-y: auto;
+}

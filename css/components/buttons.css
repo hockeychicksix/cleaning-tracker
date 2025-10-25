@@ -1,0 +1,265 @@
+/* ========================================
+   CADENCE BUTTONS
+   Based on Ideal Visuals
+   ======================================== */
+
+/* Base Button */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: 12px 24px;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    border: none;
+    transition: 
+        transform var(--transition-base),
+        background var(--transition-base),
+        box-shadow var(--transition-base),
+        border-color var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    font-family: inherit;
+}
+
+/* Ripple Effect */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Primary Button (Gold Gradient) */
+.btn--primary {
+    background: var(--gradient-gold);
+    color: var(--bg-space);
+    box-shadow: var(--shadow-glow-gold);
+}
+
+.btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow-gold-hover);
+}
+
+/* Secondary Button (Glass) */
+.btn--secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    backdrop-filter: var(--blur-light);
+    border: 1px solid var(--border-glass);
+}
+
+.btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Outline Button */
+.btn--outline {
+    background: transparent;
+    border: 2px solid var(--border-gold);
+    color: var(--primary-gold);
+}
+
+.btn--outline:hover {
+    background: var(--gradient-gold);
+    color: var(--bg-space);
+    border-color: transparent;
+    box-shadow: var(--shadow-glow-gold);
+}
+
+/* Ghost Button */
+.btn--ghost {
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+.btn--ghost:hover {
+    background: var(--bg-glass);
+    color: var(--text-primary);
+}
+
+/* Danger Button */
+.btn--danger {
+    background: var(--danger-bg);
+    color: var(--danger-coral);
+    border: 1px solid var(--danger-border);
+}
+
+.btn--danger:hover {
+    background: rgba(252, 165, 165, 0.25);
+    border-color: var(--danger-coral);
+}
+
+/* Success Button */
+.btn--success {
+    background: var(--success-bg);
+    color: var(--success-green);
+    border: 1px solid var(--success-border);
+}
+
+.btn--success:hover {
+    background: rgba(134, 239, 172, 0.25);
+    border-color: var(--success-green);
+}
+
+/* Button Sizes */
+.btn--xs {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: var(--radius-md);
+}
+
+.btn--sm {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: var(--radius-md);
+}
+
+.btn--lg {
+    padding: 16px 32px;
+    font-size: 16px;
+    border-radius: var(--radius-xl);
+}
+
+.btn--xl {
+    padding: 20px 40px;
+    font-size: 18px;
+    border-radius: var(--radius-xl);
+}
+
+/* Button Modifiers */
+.btn--block {
+    width: 100%;
+}
+
+.btn--icon {
+    padding: 12px;
+    aspect-ratio: 1;
+}
+
+/* Icon in Button */
+.btn-icon {
+    font-size: 1.25em;
+    transition: transform var(--transition-fast);
+}
+
+.btn:hover .btn-icon {
+    transform: translateX(4px);
+}
+
+/* Button Group */
+.btn-group {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.btn-group .btn {
+    flex: 1;
+    min-width: max-content;
+}
+
+@media (max-width: 640px) {
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        width: 100%;
+    }
+}
+
+/* Loading State */
+.btn--loading {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+.btn--loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: button-spin 0.6s linear infinite;
+}
+
+@keyframes button-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Focus State */
+.btn:focus-visible {
+    outline: 2px solid var(--primary-gold);
+    outline-offset: 2px;
+}
+
+/* Floating Action Button (FAB) */
+.fab {
+    position: fixed;
+    bottom: var(--space-8);
+    right: var(--space-8);
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-gold);
+    color: var(--bg-space);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-xl), var(--shadow-glow-gold);
+    cursor: pointer;
+    transition: 
+        transform var(--transition-base),
+        box-shadow var(--transition-base);
+    z-index: var(--z-fixed);
+    font-size: 24px;
+    border: none;
+}
+
+.fab:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: var(--shadow-2xl), var(--shadow-glow-gold-hover);
+}
+
+@media (max-width: 768px) {
+    .fab {
+        bottom: var(--space-6);
+        right: var(--space-6);
+    }
+}
